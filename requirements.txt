@@ -1,0 +1,12 @@
+django
+pillow
+ckeditor
+bootstrap_datepicker_plus
+bootstrap_modal_forms
+bootstrap4
+crispy_forms
+django_tables2
+django_filters
+import_export
+bootstrap3_datetime
+pwa
