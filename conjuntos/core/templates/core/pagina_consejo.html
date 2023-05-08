@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% load static %}
+{% block content %}
+
+<title>{% block tittle %}{% endblock %}Inicio | CONDOMINIUM</title>
+
+<style>
+ .container-consejo{
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 10px;
+ }
+ .container-titulo{
+  background-color: rgb(175, 155, 155);
+  color: aliceblue;
+  width: 60%;
+  margin-left: auto;
+  margin-right: auto;
+ }
+ body{
+        background-image: url({% static "core/img/ciudad.jpg" %}) ;
+        background-repeat: no-repeat;
+        height: 500px;
+        width: 480px;
+        background-size: cover;
+         /* margin-left: 50px; */
+        
+ }
+</style>
+  <div class="navbar-fixed">  
+    <nav>
+      <div class="nav-wrapper">
+        <a style="font-size: calc(10px + 1vw);" href="#!" class="brand-logo"><i class="material-icons">people</i>CONSEJO DE ADMINISTRACION</a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'lista_reuniones_consejo' %}">Reuniones Consejo</a></li>
+          <li><a href="{% url 'lista_informes_revisor' %}">Informes Revisor Fiscal</a></li>
+          <li><a href="{% url 'lista_procesos_juridicos' %}">Procesos Jurídicos</a></li>
+          <li><a href="{% url 'lista_asambleas' %}">Asambleas</a></li>
+          <li><a href="{% url 'reporte_pendientes_consejo_pdf' %}">Reporte Pendientes</a></li>
+          <li><a href="{% url 'user_home' tipo_usuario=2 %}">Regresar</a></li>
+          <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+        </ul>
+      </div>
+    </nav>  
+  </div>    
+        <ul class="sidenav" id="mobile-demo">
+          <li><a href="{% url 'lista_reuniones_consejo' %}">Reuniones Consejo</a></li>
+          <li><a href="{% url 'lista_informes_revisor' %}">Informes Revisor Fiscal</a></li>
+          <li><a href="{% url 'lista_procesos_juridicos' %}">Procesos Jurídicos</a></li>
+          <li><a href="{% url 'lista_asambleas' %}">Asambleas</a></li>
+          <li><a href="{% url 'reporte_pendientes_consejo_pdf' %}">Reporte Pendientes</a></li>
+          <li><a href="{% url 'user_home' tipo_usuario=2 %}">Regresar</a></li>
+          <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+        </ul>
+  
+
+<head>
+</head>
+<body>
+</body>
+{% block javascript %}
+<script>
+
+  $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+</script>  
+{% endblock %}  
+{% endblock %}

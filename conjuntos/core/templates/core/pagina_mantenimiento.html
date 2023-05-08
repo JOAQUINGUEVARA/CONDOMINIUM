@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% comment %} {% load material_form %}
+{% form form=form %}{% endform %} {% endcomment %}
+{% load static %}
+{% block content %}
+
+<title>{% block tittle %}{% endblock %}Mantenimiento | CONDOMINIUM</title>
+
+
+<body>
+  <nav>
+      <div class="nav-wrapper">
+        <a href="#!" class="brand-logo"><i class="material-icons">cloud</i>Logo</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'bitacora_mantenimiento' %}">Bitácora de Trabajos</a></li>
+          <li><a href="{% url 'seguimiento_mantenimiento' %}">Seguimiento de Mantenimiento Equipos</a></li>
+          <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+        </ul>
+      </div>
+  </nav>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "core/base.html" %}
+{% load render_table from django_tables2 %}
+{% block content %}
+<!doctype html>
+<style>
+.titulo-entidad{
+    display: flex;
+    align-content: center;
+    width: 70vw;
+    color: white;
+    padding-left: 110px;
+    padding-top: 15px;
+    background-color:#08088A;
+    
+    
+}
+.card{
+    font-size: 12px;
+    width: 70vw;
+    /* margin-left: -200px; */
+
+}
+#order_item_container{
+    margin-left: 5px;
+}
+.table{
+    font-size: 0.8rem;
+    /* margin-left: 5px; */
+}
+.caja{
+        background-color:rgb(236, 234, 234);
+        padding: 8px 8px 8px 8px;
+        width: 72vw;
+    }
+.container{
+    margin-left: 5px
+}    
+</style>
+<div class='caja'>
+    
+        <body style=" height:100vh;width:100vw" >
+            <div class="titulo-entidad">
+            <h3>USUARIOS</h3>
+            </div>
+            <div class="card" >
+                <div id='order_item_container' class="card-body">
+                    {% render_table table1 %}
+                </div>
+            </div>
+        </body>
+        <a type="button" class="btn btn-primary" href="{% url 'main' %}" value="salir" >Salir</a>
+    
+</div> 
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "core/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+.container-doc{
+    background-color:rgb(236, 234, 234);
+    width:100%;
+    margin-top:30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+main{
+    background:white;
+}
+
+h3{
+    font-weight: bold;
+}
+</style>
+<main role="main">
+    <div class="container-doc">
+        <div class="row mt-3x">
+            <h3>{{ mensaje }}</h3>
+        </div>
+        <div class="intro-button mx-auto">
+            <a id ="btnSalir" class="btn btn-primary btn-xl" >Regresar</a>
+        </div> 
+    </div>
+</main>
+
+{% block javascript %}
+<script>
+    $(document).on("click","#btnSalir", function(e) {
+        window.location.href = "{% url 'direcciona_reserva_zonas_comunes' %}";
+       
+    })
+
+</script>
+{% endblock %}    
+{% endblock %}

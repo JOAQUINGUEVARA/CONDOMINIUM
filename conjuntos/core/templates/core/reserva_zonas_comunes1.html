@@ -1,0 +1,200 @@
+{% extends "core/base.html" %}
+{% load render_table from django_tables2 %}
+{% load django_tables2 %}
+{% load static %}
+
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+{{ form.media }} 
+
+{% block content %}
+<!doctype html>
+<style>
+  .container{
+      background-color: #d1f8e4;
+      font-size: small;
+      margin-top: 1vh;
+      width: 80vw;
+      
+  }
+  .table{
+      background-color: white;
+    }
+  label{
+      color:black;
+       font-weight: bold;
+  }
+  .nav-wrapper{
+    display:flex;
+    justify-content: space-evenly;
+  }
+  .img-fluid{
+  width: 100%;
+  height: auto;
+  }
+  .foto{
+    width: 80%;
+    height: auto;
+    align-items: center;
+  }
+  #id{
+    visibility: hidden
+  }
+  #titulos{
+    display:flex;align-items:baseline;justify-content:center;flex-direction:row;justify-content: space-between;
+    width:50vh;
+    font-size: calc(1em + 1vw);
+  }
+  #botones{
+    display: flex;
+    flex-direction: column;
+  }
+  #container-derecha{
+    display:flex;
+    flex-direction:column;
+    width: 25vw;
+    height: 40vh;
+    max-height: 40vh;
+
+  }
+  .table-container{
+    overflow:scroll;
+  }
+  #container-all-col{
+    width: 60vw;
+    display:flex;flex-direction: column;"
+  }
+  #container-reserva{
+      display:flex;
+      flex-direction: column;
+      width: 60vw;
+      height: 50vh;
+      max-height: 50vh;
+  }  
+  @media (max-width:320px){
+    #titulos{display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      justify-content: space-between;
+    }
+    #container-reserva{
+      display:flex;
+      flex-direction: column;
+      width: 10vw;
+      height: 20vh;
+      max-height: 20vh;
+    }
+    #container-all-col{
+    width: 60vw;
+    display:flex;flex-direction: column;"
+    }
+  }
+  
+</style>
+<head>
+  
+</head>
+<body>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="js/materialize.min.js"></script>
+    <nav>
+      <div class="nav-wrapper">
+          <div>
+          <a style="font-size: calc(1em + 1vw);" href="#!" class="brand-logo"><i class="material-icons">sports_tennis</i>Reservas Zonas Comunes</a>
+          </div>
+          <div>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+              <li class="active"><a href="{% url 'home' %}" >Regresar</a></li>
+          </ul>
+          </div>
+      </div>
+    </nav>
+</body>
+
+</html>
+<body>
+
+  <div class="container">
+      <div id="container-all-col" >
+          <div id="container-reserva" style="display:flex;flex-direction: row;" >
+              <div id="container-derecha">
+                <div id="titulos" style="display:flex;align-items:baseline;justify-content:flex-start;margin-top:10px;color:forestgreen;flex-direction: column">
+                    <div>
+                      <h6 style="display:flex;color:firebrick;margin-top:5px;">Usuario: {{user}}</h6>
+                    </div>   
+                    <div style="display:flex;align-items:baseline;flex-direction:row;justify-content:center;" >  
+                        <div style="display:flex;width:50px;color:midnightblue;"><h5>Zona:</div>
+                        <div style="display:flex;color:floralwhite;margin-left:10px;color:midnightblue"><h5>{{ nombreZona }}</h5></div>    
+                    </div>
+                    <div class="fecha" style="display:flex;margin-top: 20px;color:sienna;background-color: papayawhip ;font-weight: bold;">
+                      <h6>Ingrese Fecha<input type="text" class="datepicker"></h6>
+                    </div>
+                    <div class="foto">
+                      {% if foto %}
+                        <img src="{{foto.url}}" class="img-fluid">
+                      {% else %}
+                        <img src="{% static 'core/img/placeholder.png' %}" class="avatar">
+                      {% endif %}
+                    </div>
+                </div>
+              </div>
+              <!-- <table class="table table-bordered"> -->
+              {% render_table reserva_zonas_comunes %}
+              <!-- </table> -->
+              <div id="botones">
+               
+                <a class="waves-effect waves-light btn modal-trigger" href="#ZonaComunModal">Modal</a>
+                <a style="margin-top: 20px;" type="button" id="reserva" type="submit" class="btn btn-secces" href="{% url 'crear_reserva_zonas_comunes' %}" value="filtros" >Reservar</span></a>
+                
+              </div>
+          </div>  
+      </div> 
+  </div>  
+  <!-- Modal Structure -->
+  <div id="ZonaComunModal" class="modal">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="modal-content">
+      <h4>Zonas Comunes</h4>
+      {% render_table zonas_comunes %}
+    </div>
+  </div>
+      
+  
+
+{% block javascript %}
+  
+<script>
+  
+    $(function(){
+	    $('.datepicker').pickadate({
+      autoClose: false,
+      format: 'dd mmm, yyyy',  
+			monthsFull: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+			monthsShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+			weekdaysFull: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+			weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+      weekdaysAbbrev:	['D','L','M','M','J','V','S'],
+		    selectMonths: true,
+		    selectYears: 100, // Puedes cambiarlo para mostrar más o menos años
+		    today: 'Hoy',
+		    clear: 'Limpiar',
+		    close: 'Ok',
+		    labelMonthNext: 'Siguiente mes',
+			labelMonthPrev: 'Mes anterior',
+			labelMonthSelect: 'Selecciona un mes',
+			labelYearSelect: 'Selecciona un año',
+		  });
+    });
+  
+    $('.datepicker').on('mousedown',function(event){ event.preventDefault(); })
+
+    $(document).ready(function(){
+    $('.modal').modal();
+    });
+  </script>
+  {% endblock %}
+  {% endblock %}

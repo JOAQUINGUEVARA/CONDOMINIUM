@@ -1,0 +1,39 @@
+{% load crispy_forms_tags %}
+{% load static %}
+{% block javascript %}
+<style>
+    label{
+        font-size: calc(0.4em + 0.4vw);
+    }
+</style>
+<script>
+    jQuery(document).ready(function() {
+        $.ajax({
+        url: "{% url 'carga_datos_autorizado' %}",
+        method: "GET",
+        Type: 'json',
+        success:function(data) {
+        document.getElementById("id_identificacion").value=data.identificacion;
+        document.getElementById("id_nombre").value=data.nombre;
+        document.getElementById("id_interior").value=data.interior;
+        document.getElementById("id_apartamento").value=data.apartamento;
+        document.getElementById("id_tipo_autoriza").value=data.tipo_autoriza;
+        }
+        });
+      });
+</script>
+{% endblock%}      
+<div class="container1">
+<form method="post" >
+  {% csrf_token %}
+  <div class="modal-body">
+    {{ form|crispy }}
+  </div>
+  <div class="modal-footer">
+    
+    <button id="btnGuardaAutorizadoEditar" type="submit" class="btn btn-primary">Guardar</button>
+    <button  type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
+  </div>  
+</form>
+</div>
+

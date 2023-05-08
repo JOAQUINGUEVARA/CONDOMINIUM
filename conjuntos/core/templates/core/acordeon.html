@@ -1,0 +1,95 @@
+
+    <formenctype="multipart/form-data"method="POST">
+            {% csrf_token %}
+    
+        {% if user.user_type == 'O' %}
+    
+                {% bootstrap_form form exclude="first_name,last_name,gender,biography,date_of_birth,speak_languages,country_of_origin,city_of_origin,city_current_residence,entertainment_activities,is_student,is_professor,is_executive,is_study_host,is_hosting_host" %}
+    
+                {% bootstrap_field form.first_name %}
+    
+                <p><strong>Mis roles de usuario</strong></p>
+                {% bootstrap_field form.is_study_host %}
+                {% bootstrap_field form.is_hosting_host %}
+    
+            {% else %}
+    
+                <divclass="config-container">
+                  <divclass="tabConfiguracion">
+                    <buttontype="button"class="tablinks"onclick="openCity(event, 'usuario')">Detalles de usuario</button>
+                    <buttontype="button"class="tablinks"onclick="openCity(event, 'perfil')">Perfil</button>
+                    <buttontype="button"class="tablinks"onclick="openCity(event, 'localizacion')">Localización</button>
+                    <buttontype="button"class="tablinks"onclick="openCity(event, 'roles')">Roles</button>
+                  </div>
+    
+                  <divid="usuario"class="tabcontent">
+                    {% bootstrap_field form.first_name %}
+                    {% bootstrap_field form.last_name %}
+                    {% bootstrap_field form.gender %}
+                    {% bootstrap_field form.date_of_birth %}
+                    {% bootstrap_field form.speak_languages %}
+                    {% bootstrap_field form.entertainment_activities %}
+                  </div>
+    
+                  <divid="perfil"class="tabcontent">
+                    {% bootstrap_field form.biography %}
+                    {% bootstrap_field form.avatar %}
+                  </div>
+    
+                  <divid="localizacion"class="tabcontent">
+                    {% bootstrap_field form.country_of_origin %}
+                    {% bootstrap_field form.city_of_origin %}
+                    {% bootstrap_field form.city_current_residence %}
+                    {% bootstrap_field form.phone_number %}
+                    {% bootstrap_field form.address %}
+                  </div>
+    
+                  <divid="roles"class="tabcontent">
+                    {% bootstrap_field form.is_study_host %}
+                    {% bootstrap_field form.is_hosting_host %}
+                  </div>
+                </div>
+    
+                <!-- Accordion application -->
+                <divclass="config-container-low">
+                  <buttontype="button"class="accordion">Detalles de usuario</button>
+                  <divclass="panel">
+                    {% bootstrap_field form.first_name %}
+                    {% bootstrap_field form.last_name %}
+                    {% bootstrap_field form.gender %}
+                    {% bootstrap_field form.date_of_birth %}
+                    {% bootstrap_field form.speak_languages %}
+                    {% bootstrap_field form.entertainment_activities %}
+                  </div>
+    
+                  <buttontype="button"class="accordion">Perfil</button>
+                  <divclass="panel">
+                    {% bootstrap_field form.biography %}
+                    {% bootstrap_field form.avatar %}
+                  </div>
+    
+                  <buttontype="button"class="accordion">Localización</button>
+                  <divclass="panel">
+                    {% bootstrap_field form.country_of_origin %}
+                    {% bootstrap_field form.city_of_origin %}
+                    {% bootstrap_field form.city_current_residence %}
+                    {% bootstrap_field form.phone_number %}
+                    {% bootstrap_field form.address %}
+                  </div>
+    
+                  <buttontype="button"class="accordion">Roles</button>
+                  <divclass="panel">
+                    {% bootstrap_field form.is_study_host %}
+                    {% bootstrap_field form.is_hosting_host %}
+                  </div>
+                </div>
+    
+            {% endif %}
+    
+            <divclass="submit-button-config">
+                <div>
+                  <inputtype="image"src="{% static 'img/icons/ok.png' %}"alt="Submit"width="48"height="48">
+                  <inputtype="submit"value="Guardar"class="submit-button">
+                </div>
+            </div>
+        </form>

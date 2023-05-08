@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang='es'>
+{% extends "core/base.html" %}
+
+<meta charset='UTF-8'>
+{% block content %}
+
+<form action="" enctype="multipart/form-data" method="POST">{% csrf_token %}
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <div class="row">
+          <h1 class="site-heading text-center text-white d-none d-lg-block">
+          <div class="card-content white-text">
+            <span class="site-heading-upper text-primary mb-3">INGRESO PEATONAL</span>
+          </div>  
+          </h1>
+        </div>
+        <div class="row">  
+          {% comment %} <div class="row"> {% endcomment %}
+            <div class=" col s12 m8 offset-m6 l6 offset-l3">
+              <div class="card  blue-grey lighten-3">
+                  <div class="card-content white-text">
+                      <span class = "white-text white-lighten-1">
+                      <h7>Tipo de Ingreso: </h7>{{form.tipoingreso}}        
+                      <h7>Interior: </h7>{{form.interior}}
+                      <h7>Apartamento: </h7>{{form.apartamento}}
+                  </div>
+                  <button class="btn waves-effect waves-light  blue-grey" type="submit" name="crear" value="crear">Enviar</button>       
+              </div>
+            </div>  
+          {% comment %}  {% endcomment %}</div>
+        </div>      
+      </div>    
+    </div>
+  </div>
+</form>
+  
+<script>
+  // Para el correcto funcionamiento de los desplegables presentes en el formulario select
+  // se debe de incluir este script
+  $(document).ready(function() {
+    $('select').material_select();
+  });
+</script>
+{% endblock content %}

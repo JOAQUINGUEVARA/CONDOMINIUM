@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+<title>{% block tittle %}Ingreso Peatonal | CONDOMINIUM{% endblock %}</title>
+{% block content %}
+{% csrf_token %}
+<!DOCTYPE html>
+<html lang="en">
+
+<body class="">
+ 
+      <div class="container-fluid">
+        <div class="row">
+         <div class="col-md-8">  
+            <div id="accordion" role="tablist">
+
+                <form method="POST" action="/acceso_peatonal" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-md-4 ml-auto mr-auto">
+                          <div class="form-group">                                
+                            <video id="video" autoplay ></video>                               
+                            <canvas id="canvas"></canvas>                                
+                          </div>
+                          <button id="startbutton1" class="btn btn-outline-secondary btn-sm">Take Photo</button>
+                          <script src="{% static 'media/capture.js' %}"></script> 
+                        </div>
+                          .....
+                        <div class="img  pull-center" >
+                          <inout></inout>                                            
+                          <img id ="photo" name="photo" alt="The screen capture will appear in this box.">
+                        </div>
+                        <button type="submit" class="button" id="submit">Submit</button>
+                      </div>
+                    </div>                       
+                </form>
+                <img src="{{ path }}" alt="The screen capture will appear in this box.">
+          </div>                
+        </div>  
+     </div>
+  </div>
+	
+{% endblock %}

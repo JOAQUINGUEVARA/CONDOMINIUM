@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% comment %} {% load material_form %}
+{% form form=form %}{% endform %} {% endcomment %}
+{% load static %}
+{% block content %}
+
+<title>{% block tittle %}{% endblock %}Proveedoes | CONDOMINIUM</title>
+
+
+<body>
+  <nav>
+      <div class="nav-wrapper">
+        <a style="font-size: calc(12px + 1vw);transform:translate(3vw,0)" href="#!" class="brand-logo"><i class="material-icons">contact_phone</i>Proveedores</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'lista_proveedores' %}">Información Proveedores</a></li>
+          
+          <li><a href="{% url 'pagina_administrador' %}">Regresar</a></li>
+          <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+        </ul>
+      </div>
+  </nav>
+
+  <ul class="sidenav" id="mobile-demo">
+    <li><a href="{% url 'lista_proveedores' %}">Información Proveedores</a></li>
+    <li><a href="{% url 'lista_contratos' %}">Contratos</a></li>
+    <li><a href="{% url 'pagina_administrador' %}">Regresar</a></li>
+    <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+  </ul>
+  <div><h6 style="color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
+    ">Usuario:{{request.user.username}}</h6></div>
+</body>
+</html>
+{% endblock %}

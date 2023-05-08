@@ -1,0 +1,43 @@
+{% extends "core/base.html" %}
+{% load staticfiles %}
+{% load material_form %}
+{% form form=form %}{% endform %}
+{% block content %}
+{% comment %} {% load humanize %} {% endcomment %}
+<h4>Consulta Correspondencia</h4>
+{% for form in filter.qs %}
+<div class="container"></div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Remitente</th>
+                <th>Destinatario</th>
+                <th>Clase Correspondencia</th>
+                <th>Tipo Corresponcencia</th>
+                <th>Detalle</th>
+                <th>Vigilante</th>
+                <th>Fecha de Recibo</th>
+                <th>Fecha de Notificación</th>
+                <th>Interior</th>
+                <th>Apartamento</th>
+            </tr>
+        </thead>
+            
+        <tbody>
+            <tr>       
+                <td>{{ form.remitente }}</td> 
+                <td>{{ form.destinatario }}</td>
+                <td>{{ form.clase_corresponcencia  }}</td>
+                <td>{{ form.tipo_correspondencia }}</td>
+                <td>{{ form.detalle }}</td>
+                <td>{{ form.vigilante }}</td>
+                <td>{{ form.fecha_recibo }}</td>
+                <td>{{ form.fechahora_notifica }}</td>
+                <td>{{ form.interior }}</td>
+                <td>{{ form.apartamento }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endfor %}        
+{% endblock %}

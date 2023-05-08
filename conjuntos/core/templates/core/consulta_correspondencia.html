@@ -1,0 +1,89 @@
+{% extends "core/base.html" %}
+{% load staticfiles %}
+{% block content %}
+{% load materializecss %}
+
+<div class="card orange darken-1" class="card small">
+    <h2 class="center black-text"><i class="material-icons">mail</i>Consulta Correspondencia</h2>
+</div>
+<div class="col s12 m8 l9">    
+    <div class="card indigo lighten-5 center " class="card small">
+        <h2>Ingrese una opcion</h2>
+    </div>
+</div>
+<div class="col s12 m8 l9">  
+<div class="card indigo lighten-5" class="card small">
+<div class="card-content black-darken-4-text" >
+<form action="" method="get">
+<div class="card-content">
+    <table class="table">
+        <thead>
+            <tr>
+            <th>Remitente</th>
+            <th>Clase de Correspondencia</th>
+            <th>Tipo de Correspondencia</th>
+            <th>Fecha de Recibo</th>
+            <th>Fecha de Notificacion</th>
+            <th>interior</th>
+            <th>Apartamento</th>
+            <th>Entregado</th>                            
+            </tr>
+        </thead>
+        <tbody>
+            <td>{{filter.form.remitente}}</td>
+            <td>{{filter.form.clase_correspondencia}}</td>
+            <td>{{filter.form.tipo_correspondencia}}</td>
+            <td>{{filter.form.fecha_recibo}}</td>
+            <td>{{filter.form.fechahora_notifica}}</td>
+            <td>{{filter.form.interior}}</td>
+            <td>{{filter.form.apartamento}}</td>
+            <td>{{filter.form.entregado}}</td>
+        </tbody> 
+    </table>
+    <input class="btn btn-primary" value="Filtrar" type="submit">
+</div>
+</form>
+</div>
+</div>         
+</div>
+
+<div class="container"></div>
+    <table class="table">
+    <thead>
+        <tr>
+            <th>Remitente</th>
+            <th>Destinatario</th>
+            <th>Clase Correspondencia</th>
+            <th>Tipo Corresponcencia</th>
+            <th>Detalle</th>
+            <th>Vigilante</th>
+            <th>Fecha de Recibo</th>
+            <th>Fecha de Notificación</th>
+            <th>Interior</th>
+            <th>Apartamento</th>
+            <th>Entregado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for obj in filter.qs %}
+            <tr>
+            <td>{{ obj.remitente }}</td> 
+            <td>{{ obj.destinatario }}</td>
+            <td>{{ obj.clase_corresponcencia  }}</td>
+            <td>{{ obj.tipo_correspondencia }}</td>
+            <td>{{ obj.detalle }}</td>
+            <td>{{ obj.vigilante }}</td>
+            <td>{{ obj.fecha_recibo }}</td>
+            <td>{{ obj.fechahora_notifica }}</td>
+            <td>{{ obj.interior }}</td>
+            <td>{{ obj.apartamento }}</td>
+            <td>{{ obj.entregado }}</td>
+            </tr>
+        {% endfor %}    
+    </tbody>
+    </table>
+</div>    
+</form>
+{% endblock %}        
+
+

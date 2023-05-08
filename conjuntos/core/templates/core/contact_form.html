@@ -1,0 +1,115 @@
+{% extends "core/base_sin_material.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{{ form.media }}            {# Adds date-picker required JS and CSS #}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+
+<title>{% block tittle %}{% endblock %}Contacto | CONDOMINIUM</title>
+
+<style>
+ @media (min-width:768px){    
+ .container {
+    width: 30%;
+    margin-top: 30px;
+    position: relative;
+	margin:auto;
+	display:-webkit-flex; 
+	display: -ms-flexbox; 
+	display: flex;
+	-webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+	box-sizing: border-box;
+    background:ghostwhite ;
+	box-shadow:1px 1px 2px #333;
+	-webkit-filter: drop-shadow(0px 0px 5px #333);
+	filter: drop-shadow(0px 0px 5px #333);
+	font-family:Georgia, "Times New Roman", Times, serif;
+	font-size: 2vh;
+	text-align: center;
+	white-space: normal;
+    margin-top: 60px;
+ }
+ .titulo{
+    font-size: calc(5px + 2vh);
+    margin-top: 10px;
+}
+  body{
+        background-image: url({% static "core/img/ciudad.jpg" %}) ;
+        background-repeat: no-repeat;
+        /* height: 400px;
+        width: 480px; */
+        background-size: cover;
+         /* margin-left: 50px; */
+        
+  }
+}
+@media (max-width:320px){
+    .container {
+    width: 80%;
+    margin-top: 30px;
+    position: relative;
+	margin:auto;
+	display:-webkit-flex; 
+	display: -ms-flexbox; 
+	display: flex;
+	-webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+	box-sizing: border-box;
+    background:ghostwhite ;
+	box-shadow:1px 1px 2px #333;
+	-webkit-filter: drop-shadow(0px 0px 5px #333);
+	filter: drop-shadow(0px 0px 5px #333);
+	font-family:Georgia, "Times New Roman", Times, serif;
+	font-size: 2vh;
+	text-align: center;
+	white-space: normal;
+    margin-top: 60px;
+ }
+ .titulo{
+    font-size: calc(5px + 2vh);
+    margin-top: 10px;
+}
+}
+</style>
+<!DOCTYPE html>
+<html lang='es'>
+
+<head>
+        
+</head>
+<body>
+
+    <div class="container" >
+        <div class="col-md-12 mx-auto mb-6">
+            <div class="titulo">
+                CONTACTO
+            </div>
+            </br>
+            <div style="width: 100%;">
+                <form role="form" method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button id="btnObra" type="submit" class="btn btn-primary" value="Submit">Guardar</button>
+                    <button id="btnSalir" class="btn btn-warning" data-dismiss="modal">Salir</button>
+                </form>
+            </div>
+        </div>    
+    </div>
+</body>       
+{% block javascript %}
+<script>
+    $(document).on("click","#btnSalir", function(e) {
+          window.location.href = "{% url 'user_home' tipo_usuario=0 %}";
+    })
+    
+    
+</script>
+
+{% endblock %}
+{% endblock %}

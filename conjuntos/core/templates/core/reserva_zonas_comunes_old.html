@@ -1,0 +1,277 @@
+
+
+{% load render_table from django_tables2 %}
+{% load django_tables2 %}
+{% load static %}
+
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+{{ form.media }} 
+
+{% block content %}
+<!doctype html>
+<style>
+.modal{
+  width: 50%;
+  length: 50%;
+}
+.container {
+  display: grid;
+  grid-template-columns: 500px 400px ;
+ 
+  background:rgb(211, 253, 200);
+  width: 50%;
+  
+  }
+  .usuario {
+  grid-column: 1;
+  grid-row: 1;
+  background:rgb(211, 253, 200);
+  font-family: sans-serif, "Helvetica Neue", "Lucida Grande", Arial;
+  }
+  .zona {
+  grid-column: 2;
+  grid-row: 1;
+  background:rgb(211, 253, 200);
+  font-family: sans-serif, "Helvetica Neue", "Lucida Grande", Arial;
+  }
+  .foto{
+    grid-column: 1;
+    grid-row: 2/4;
+    height: 50%;
+  }
+  .table{
+    grid-column: 2;
+    grid-row: 2/5;
+
+  }
+  .picker_table{
+    grid-column: 2;
+    grid-row: 4;
+  }
+  .botones{
+    grid-column: 1;
+    grid-row: 5;
+  }
+  .fecha{
+    grid-column: 1;
+    grid-row: 6;
+  }
+  .btn-filtro{
+    grid-column: 1;
+    grid-row: 6;
+  }
+  .reglamento{
+    
+    grid-column: 2;
+    grid-row: 6;
+    margin-left: 60px;
+  }
+  .text{
+    background-color: rgba(153, 194, 100, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+  }
+  .table{
+    overflow:scroll;
+    height: 110%;
+    font-family: sans-serif, "Helvetica Neue", "Lucida Grande", Arial;
+    font-stretch: condensed;
+    background:navajowhite;
+    
+  }
+  
+  tr:nth-child(even) {background-color: #f2f2f2;}
+  .img-fluid {
+    max-width: 90%;
+  }
+  div#modal1 {
+  width: 50%
+  }
+  textarea.materialize-textarea {
+    overflow-y: hidden;
+    border: none;
+    border: 1px solid #2F3B59;
+    padding: .8rem 0 1.6rem 0;
+    resize: none;
+    min-height: 3rem;
+    border-radius: 7px;
+    background: #f9f9f9;
+  }
+  #table td > *:nth-child(6) {
+    display: none;
+  }
+  thead{
+    background-color:aquamarine;
+  }
+  body {
+    font-family: 'Lora';
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+  }
+ /*  #id {
+    display: none
+  }
+  ID {
+    visibility: hidden
+  } */
+</style>
+<head>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.0.45/css/materialdesignicons.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+ 
+  
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.css" integrity="sha512-t38vG/f94E72wz6pCsuuhcOPJlHKwPy+PY+n1+tJFzdte3hsIgYE7iEpgg/StngunGszVMrRfvwZinrza0vMTA==" crossorigin="anonymous" referrerpolicy="no-referrer"/> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.js" integrity="sha512-m2PhLxj2N91eYrIGU2cmIu2d0SkaE4A14bCjVb9zykvp6WtsdriFCiXQ/8Hdj0kssUB/Nz0dMBcoLsJkSCto0Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" integrity="sha512-NiWqa2rceHnN3Z5j6mSAvbwwg3tiwVNxiAQaaSMSXnRRDh5C2mk/+sKQRw8qjV1vN4nf8iK2a0b048PnHbyx+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+
+</head>
+<body style="background-image: url({% static '/img/ciudad.jpg' %});"></body>
+       
+    <nav>
+      <div class="nav-wrapper">
+          <div>
+            <a style="font-size: calc(1em + 1vw);" href="#!" class="brand-logo"><i class="material-icons">sports_tennis</i>Reserva Zonas Comunes</a>
+          </div>
+          <div>
+              <ul id="nav-mobile" class="right hide-on-med-and-down">
+              <li  class="active"><a href="{% url 'residente' %}" >Regresar</a></li>
+              </ul>
+          </div>
+      </div>
+    </nav>
+</body>
+
+</html>
+
+<div class="container">
+    
+    <div class="usuario"><h5 style="color:firebrick;">Usuario: {{user}}</h5></div>
+    <div class="zona" style="color:midnightblue;"><h5>Zona:{{ nombreZona }}</h5></div>
+    <div class="fecha" style="display:flex;align-items:center;justify-content:space-around;">
+      <div><span class="material-icons">date_range</span></div>Fecha<div style="margin-left: 20px;"><input id="datepicker" type="text" ></div>
+      <div style="display:flex;margin-bottom: 10px;"><a id="filtro" style="margin-top: 20px;" type="button" type="submit" class="btn btn-secces" >Filtro Fecha</span></a></div>
+    </div>
+    
+    <div class="foto">
+          {% if foto %}
+            <img src="{{foto.url}}" class="img-fluid">
+          {% else %}
+            <img src="{% static 'core/img/placeholder.png' %}" class="avatar">
+          {% endif %}
+    </div>
+    <div class="table">
+        {% render_table reserva_zonas_comunes %}
+    </div>
+    <div class="botones" style="display:flex;align-items:center;justify-content:space-around;margin-bottom: 10px;">
+        <button style="margin-top: 20px;" type="submit" class="waves-effect waves-light btn modal-trigger" id="btnZonaComun" data-toggle="modal" href="#modal1" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Sel. Zona</button>
+        <a style="margin-top: 20px;" type="button" id="reserva" type="submit" class="btn btn-secces" href="{% url 'crear_reserva_zonas_comunes' %}" value="filtros" >Reservar</span></a>
+    </div>
+         
+    <div class="reglamento" >
+      <button style="margin-top: 20px;" type="submit" class="waves-effect waves-light btn modal-trigger" id="btnReglamento" data-toggle="modal" href="#reglamento" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Reglamento</button>
+    </div>
+</div>
+      
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="modal-content">
+      <h4>Zonas Comunes</h4>
+      {% render_table zonas_comunes %}
+    </div>
+  </div>
+  <div id="reglamento" class="modal">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="modal-content">
+      <h4>Reglamento</h4>
+      {{observaciones|lower|safe|capfirst}}
+    </div>
+    
+  </div>
+  
+  <div id="fechaModal" class="modal">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="modal-content">
+      
+    </div>
+    
+  </div>
+</div>  
+
+{% block javascript %}
+  
+<script>
+$(function () {
+$("#datepicker").datepicker();
+});
+
+jQuery(function ($) {
+$.datepicker.regional['es'] = {
+closeText: 'Cerrar',
+monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié;', 'Juv', 'Vie', 'Sáb'],
+dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+weekHeader: 'Sm',
+dateFormat: 'yy-mm-dd',
+firstDay: 1,
+isRTL: false,
+showMonthAfterYear: false,
+yearSuffix: ''
+};
+$.datepicker.setDefaults($.datepicker.regional['es']);
+});
+
+$(document).on("click","#filtro", function(e) {
+  e.stopImmediatePropagation();
+  var fecha = document.getElementById('datepicker')
+  $.ajax({
+  url: "{% url 'filtrar_fecha_reserva_zonas_comunes' %}",
+  data: {'fecha':fecha.value},
+  method: "GET",
+  dataType: 'json',
+  success: function (data) {
+  if (data.estado == 0){
+    alert('No hay reservas ese día')
+  } 
+  else{  
+  window.location.href="{% url 'reserva_zonas_comunes' %}"
+  }
+  }
+  });
+  });
+
+  $(document).ready(function () {
+    document.getElementById('filtro').disabled=true;
+  });
+
+$(document).on("click","#datepicker", function(e) {
+  document.getElementById('filtro').disabled=false;
+})
+</script>
+{% endblock %}
+{% endblock %}

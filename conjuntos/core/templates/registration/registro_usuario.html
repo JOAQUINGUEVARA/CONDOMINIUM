@@ -1,0 +1,30 @@
+{% extends "core/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+    label,p{
+        color: black;
+        font-weight: 600;
+        font-size: medium;
+    }
+    .container{
+        background-color:lightyellow;
+        width: 50%;
+        
+    }
+</style>
+<div class="container">
+	<h1>Registro</h1>
+    <!-- <p class="text-center">Si ya tiene cuenta registrese aquí ==> <a href="core:login">login</a></p> -->
+	<form method="POST">
+		{% csrf_token %}
+		{{ register_form|crispy }}
+        {{ register_perfil|crispy }}                 
+		<button class="btn btn-primary" type="submit">Aceptar</button>
+	</form>
+	
+</div>
+{% endblock %}
+
+
+       

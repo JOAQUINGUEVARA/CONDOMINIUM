@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+{% include 'core/mensajes.html' %}
+<html lang="en" class="no-js">
+
+{% load static %}
+{% load humanize %}
+
+<style>
+    p{
+        font-size: calc(1em + .2vw);
+    }
+    #main-sec{
+        background-image: url({% static "core/img/Conjunto.png" %}) ;
+        background-repeat: no-repeat;
+        height: 800px;
+        width: 1900px;
+        background-size: cover;
+         /* margin-left: 50px; */
+        
+    }
+    .vertical-line{
+        width: 1px; /* Line width */
+        background-color: white; /* Line color */
+        height: 100%; /* Override in-line if you want specific height. */
+        /* float: right; */ /* Causes the line to float to left of content. 
+        You can instead use position:absolute or display:inline-block
+        if this fits better with your design */
+        transform:traslate(-50vw,0);
+        border: 1px inset;
+    }
+
+.data_footer{
+    display:flex;
+    flex-direction:column;
+    align-content:flex-start;
+    color:white;
+    background-color: #0d3f35;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    height: 280px;
+    
+  }
+.gen-footer{
+    display: flex;
+    flex-direction:row;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    width:80%;
+  }
+.mapa{
+    width: 50%;
+  }
+.modal-body{
+    width:50%;
+}  
+.box_footer{
+    display: flex;
+    flex-direction: row;
+    transform:translate(5vh,-6vh)
+}
+.box-title{
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    background-color: rgb(59, 58, 58);
+    opacity:.5;
+    margin-left: auto;
+    margin-right: auto;
+    width: 110vh;
+    height:30vh;
+    margin-top: 15%;
+ 
+}
+    
+.title{
+    transform:translate(-20vh,0);
+}  
+.box_footer{
+    display: flex;flex-direction: column;
+
+}
+#loginModal{
+    display: none;
+}  
+.comunicados{
+    width:80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.clasificados{
+    background-color:#e8fcef;
+    width:80%;margin-left: auto;
+    margin-right: auto;
+}
+#pqr{
+    background-color:#fad6f1;
+    width:80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.legislacion{
+    background-color:#fce8ec;
+    width:80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+#consejo{
+    font-size: 2vh;
+    width:80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.staff{
+    font-size: 2vh;
+    width:80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.zonas_comunes{
+    font-size: 2vh;
+    width:80%;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+/* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
+@media screen and (max-width: 600px) {
+  
+#main-sec{
+        background-image: url({% static "core/img/Conjunto.png" %}) ;
+        background-repeat: no-repeat;
+        height: 400px;
+        width: 480px;
+        background-size: cover;
+         /* margin-left: 50px; */
+        
+}
+
+.box-title{
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    background-color: rgb(59, 58, 58);
+    opacity:.5;
+    margin-left: auto;
+    margin-right: auto;
+    width: 90vh;
+    height:20vh;
+    margin-top: 35%;
+    color:white;
+ 
+}
+.gen-footer{
+    flex-direction:column;
+    width: 100%;
+}
+.data_footer{
+    width: 100%;
+}
+.mapa{
+    width: 100%;
+  }
+  .modal-body{
+    width:100%;
+} 
+.comunicados{
+    width:100%;
+}
+.clasificados{
+    width:100%;
+}
+#pqr{
+    width: 100%;
+}
+.legislacion{
+    width: 100%;
+}
+#consejo{
+    width: 100%;
+}
+.staff{
+    width: 100%;
+}
+.zonas_comunes{
+    width: 100%;
+}
+} 
+/**********************/
+
+body {margin:0;font-family:Arial}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 17px;    
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.topnav a:hover, .dropdown:hover .dropbtn {
+  background-color: #555;
+  color: white;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child), .dropdown .dropbtn {
+    display: none;
+  }
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+  
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  .topnav.responsive .dropdown {float: none;}
+  .topnav.responsive .dropdown-content {position: relative;}
+  .topnav.responsive .dropdown .dropbtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+/* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
+
+</style>
+    
+<head>
+    
+    <!-- meta charec set -->
+    <meta charset="utf-8">
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- Page Title -->
+    <title>Condominium|Solución para Conjuntos Residenciales</title>
+    <!-- Meta Description -->
+    <meta name="description" content="Blue One Page Creative HTML5 Template">
+    <meta name="keywords"
+        content="one page, single page, onepage, responsive, parallax, creative, business, html5, css3, css3 animation">
+    <meta name="author" content="Muhammad Morshed">
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Google Font -->
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+    
+    <!-- CSS
+		================================================== -->
+    <!-- Fontawesome Icon font -->
+    <link href="{% static 'core/css/font-awesome.min.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="css/font-awesome.min.css"> -->
+    <!-- Twitter Bootstrap css -->
+    <link href="{% static 'core/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+    <!-- jquery.fancybox  -->
+    <link href="{% static 'core/css/jquery.fancybox.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="css/jquery.fancybox.css"> -->
+    <!-- animate -->
+    <link href="{% static 'core/css/animate.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="css/animate.css"> -->
+    <!-- Main Stylesheet -->
+    <link href="{% static 'core/css/main.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="css/main.css"> -->
+    <!-- media-queries -->
+    <link href="{% static 'core/css/media-queries.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="css/media-queries.css"> -->
+
+    <!-- Modernizer Script for old Browsers -->
+    <script src="{% static 'core/js/modernizr-2.6.2.min.js' %}"></script>
+    <!-- <script src="js/modernizr-2.6.2.min.js"></script> -->
+
+    
+
+    <style>
+        .dropdown {
+            position: static !important;
+        }
+          
+        .dropdown-menu {
+            box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15)!important;
+            margin-top: 0px !important;
+            width: 100% !important;
+        }
+    </style>
+    
+    {% load pwa %}
+    {% progressive_web_app_meta %}
+</head>
+
+<body id="body">
+
+    <!-- preloader -->
+    <div id="preloader">
+      <img src="{% static 'core/img/condominium.png' %}" alt="Preloader">
+    </div>
+    <!-- end preloader -->
+    <body>
+        <div style='display:flex;flex-direction:row;align-items: center;' class="fluid-container">
+            <center>
+                
+                <div class="topnav" id="myTopnav">
+                    
+                    <a href="#ubicacion">Ubicacion/Info</a>
+                    <a href="#legislacion">Legislación</a>
+                    <a href="#normatividad">Normatividad Interna</a>
+                    <div class="dropdown">
+                        <button class="dropbtn">Comunidad
+                          <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                          <a href="#comunicados">Comunicados</a>
+                          <a href="#clasificados">Clasificados</a>
+                          {% if tipo_usuario == 1 or tipo_usuario == 2 or tipo_usuario == 5 %}
+                          <a href="#pqr">PQR</a>
+                          {% endif %}
+                        </div>
+                    </div>
+                    <a href="#zonas_comunes">Zonas Comunes</a>
+                    {% if tipo_usuario == 4 %}
+                        <a href="{% url 'pagina_vigilancia' %}">Control Accesos</a>
+                    {% endif %}
+                    <a href="#vigilancia">Vigilancia</a>
+                    <div class="dropdown">
+                        <button class="dropbtn">Equipo
+                          <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="#consejo">Consejo</a>
+                            <a href="#convivencia">Comité Convivencia</a>
+                            <a href="#staff">Staff</a>
+                        </div>
+                    </div>
+                    {% if tipo_usuario == 1 or tipo_usuario == 2 or tipo_usuario == 5 %}
+                    <div class="dropdown">
+                        <button class="dropbtn">Autorizaciones/Accesos
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="{% url 'pagina_autorizaciones' %}">Autorizaciones Accesos</a>
+                            <a href="{% url 'pagina_accesos' %}">Consulta Accesos</a>
+                        </div>
+                    </div>    
+                    <a href="{% url 'lista_correspondencia' %}">Correspondencia</a>
+                    <a href="{% url 'pagina_consejo' %}">Consejo</a>
+                    <a href="#pagos">Pagos En Línea</a>
+                    {% endif %}
+                    {% if tipo_usuario == 0 %}
+                    <a href="{% url 'contactenos' %}">Contactenos</a>
+                    {% endif %}
+                    <a id="opcMenu" href="#loginModal">Login</a>
+                    <a id="opcMenu" href="{% url 'logout' %}">Cerrar Sesión</a>
+                    {% if tipo_usuario == 1 %}
+                    <a id="opcMenu" href="{% url 'pagina_administrador' %}">App</a>
+                    {% endif %}
+                    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                      <i class="fa fa-bars"></i>
+                    </a>
+                </div>
+            
+            </center>
+            <div style="display:flex;flex-direction: column;">
+                <div><h6 style="font-size:15px;color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
+                ">Usuario:{{request.user.username}}</h6>
+                </div>
+                <div style="margin-left: 80px;">Tipo Usuario {{tipo_usuario}}</div>
+            </div>
+        </div>
+      
+    </body>
+
+    
+    <!--
+        End Fixed Navigation
+        ==================================== -->
+
+
+
+    <!--
+        Home Slider
+        ==================================== -->
+
+    <section id="main-sec">
+        <!-- <div id="carousel-example-generic" class="carousel slide" data-ride="carousel"> -->
+
+            <!-- Indicators bullet -->
+            <!-- <ol class="carousel-indicators">
+                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+            </ol> -->
+            <!-- End Indicators bullet -->
+
+            <!-- Wrapper for slides -->
+            <!-- <div class="carousel-inner" role="listbox"> -->
+
+                <!-- single slide -->
+                {% load home_page %}
+                {% get_conjunto_list as conjunto_list %}
+                {% if conjunto_list %}
+                {% for conjunto in conjunto_list %}
+                
+
+                <div class="title" >
+                    <div style="" class="box-title" >
+                        <h1 data-wow-duration="700ms" style="color:white;font-weight: 10vh;font-size: 1.8vw;text-shadow: -1px 0 black, 0 3px black, 3px 0 black, 0 -3px black;" data-wow-delay="500ms" class="wow bounceInDown animated;">
+                            <span>{{ conjunto.nombre }}</span></h1>
+                        </br>
+                        <h3 data-wow-duration="1000ms" class="wow slideInLeft animated" style="font-size: 3vw;color:white;text-shadow: -1px 0 black, 0 3px black, 3px 0 black, 0 -3px black;"><span
+                                class="colo-sub">Unidad residencial</span></h3>
+                        </br>
+                            <p data-wow-duration="1000ms" class="wow slideInRight animated" style="color:white;text-shadow: -1px 0 black, 0 3px black, 3px 0 black, 0 -3px black;">Bogotá Colombia
+                        </p>
+                        
+                    </div>
+                
+                </div>
+                
+                {% endfor %}
+                {% endif %}
+                <!-- end single slide -->
+
+               
+                <!-- end single slide -->
+
+            <!-- </div> -->
+            <!-- End Wrapper for slides -->
+
+        <!-- </div> -->
+    </section>
+    
+    
+        <!--
+        End Home SliderEnd
+        ==================================== -->
+
+    <!--
+        Features
+        ==================================== -->
+    {% load page_extras %}
+    <section id="comunicados" class="features" style="">
+        <div class="sec-title text-center">
+            <h2>Comunicados</h2>
+                        
+            {% get_comunicados_list as comunicados_list %}
+            {% for comunicado in comunicados_list %}
+                {% if comunicado.publicar %}
+                <li>
+                    <div style="color: black;font: small-caps 100%/200% serif; font-size: 2vh">
+                    <h2 style="color:blue">{{comunicado.title}}</h2>
+                    <p>{{comunicado.subtitle}}</p>
+                    <p>{{comunicado.content|striptags|safe|linebreaks}}</p>
+                    {% if comunicado.foto %}
+                        <div><img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="{{comunicado.foto.url}}" alt=""></div>
+                    {% endif %}
+                    {% for anexo in anexos_comunicado_list %}
+                        {% if anexo.comunicado_id == comunicado.id %}
+                            {{anexo.descripcion}}</td>
+                            <h5>
+                            <a href="{{ anexo.archivo.url }}">
+                            <i class="fa fa-folder-open fa-2x"></i>
+                            <span class="nav-text" style="color:black">
+                            <strong>Descargar</strong>
+                            </span>
+                            </a>
+                            </h5>
+                        {% endif %} 
+                    {% endfor %}
+                </li>
+                {% else %}
+                    {% if request.user.is_authenticated %}
+                    <li>
+                        <div style="color: black;font: small-caps 100%/200% serif; font-size: 2vh">
+                        <h2 style="color:blue">{{comunicado.title}}</h2>
+                        <p>{{comunicado.subtitle}}</p>
+                        <p>{{comunicado.content|striptags|safe|linebreaks}}</p>
+                        {% if comunicado.foto %}
+                            <div><img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="{{comunicado.foto.url}}" alt=""></div>
+                        {% endif %}
+                        {% for anexo in anexos_comunicado_list %}
+                            {% if anexo.comunicado_id == comunicado.id %}
+                                {{anexo.descripcion}}</td>
+                                <h5>
+                                <a href="{{ anexo.archivo.url }}">
+                                <i class="fa fa-folder-open fa-2x"></i>
+                                <span class="nav-text" style="color:black">
+                                <strong>Descargar</strong>
+                                </span>
+                                </a>
+                                </h5>
+                            {% endif %} 
+                        {% endfor %}
+                    </li>
+                    {% endif %}
+                {% endif %}    
+            {% endfor %}
+            
+        </div>
+    </section>
+    
+    <div class="sec-title text-center">
+    <a type="button" class="btn btn-primary" href="{% url 'home' %}" class="link">Regresar</a>
+    </div>
+
+    <section style="" id="clasificados" class="features">
+        <div class="sec-title text-center">
+            <h2>clasificados</h2>
+            {% get_clasificados_list as clasificados_list %}
+            {% if clasificados_list %}
+                {% for clasificado in clasificados_list %}
+                Creado el:({{clasificado.created}})
+                <div style="color: black;font: small-caps 100%/200% serif; font-size: 2vh">
+                    <h2 style="color:blue">{{clasificado.title}}</h2>
+                    <p>{{clasificado.content|striptags|safe}}</p>
+                    <p>{{clasificado.informes|striptags|safe}}</p>
+                    <div id="subtitulo" style="font-size: calc(2vh)">
+                        {% if clasificado.foto %}
+                        <div><img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="{{clasificado.foto.url}}" alt=""></div>
+                        {% endif %}
+                        {% if request.user.id == clasificado.user_id %}
+                        | <a href="{% url 'editar_clasificado' clasificado.pk %}">Editar</a>
+                        {% endif %}
+                        {% if request.user.id == clasificado.user_id %}
+                        | <a href="{% url 'borrar_clasificado' clasificado.id %}">Borrar</a>
+                        {% endif %}
+                        {% if request.user.id == clasificado.user_id %}
+                        | <a href="{% url 'poner_vendido_clasificado' clasificado.id %}">Poner Vendido</a>
+                        {% endif %}
+                        {% if request.user.is_authenticated %}
+                        | <a id="btnCrear" href="{% url 'crear_clasificado'  %}">Nuevo Aviso</a>
+                        {% endif %}
+                    </div>
+                </div>    
+                {% endfor %}
+        
+            {% endif %}
+            {% get_conjunto_list as conjunto_list %}
+            {% if conjunto_list %}
+                {% for conjunto in conjunto_list %}
+                <div style="width: 50%;margin-left: auto;margin-right: auto;" >
+                <h3><p style="color:rgb(214, 149, 7)" >Sr. Residente ingrese aquí los bienes y servicios que desea ofrecer a la comunidad de </p><h3 style="color:rgb(214, 149, 7)">{{conjunto.nombre}}</h3></h3>
+                </div>
+                {% endfor %}
+            {% endif %}  
+            
+            {% if user.is_authenticated %}
+            <a href="{% url 'crear_clasificado' %}" class="btn btn-success" role="button" aria-pressed="true">Nuevo Clasificado</a>
+            {% else %}
+            <a href="#loginModal" id= "Btnlogin" class="btn btn-success" role="button" aria-pressed="true">Nuevo Clasificado</a>   
+            {% endif %}
+            
+        </div>
+    </section>
+    <div class="sec-title text-center">
+        <a type="button" class="btn btn-primary" href="#body" class="link">Regresar</a>
+    </div>
+    <section id="pqr" class="feature">
+        <div class="sec-title text-center">
+            <h2>PQR</h2>
+            <div class="main-container">
+                <div style="margin-left: auto;margin-right: auto">
+                <h4><a href="#" style="font-family: 'Times New Roman';color:black;" data-toggle="tooltip" title="Debe loguearse para ver sus PQRs pendientes">PQR Pendientes</a></h4>
+            </div>
+            <div>
+                {% load page_extras %}
+                {% get_pqr_list as pqr_list %}
+                
+                {% if pqr_list %}
+                    {% for pqr in pqr_list %}
+                        {% if pqr.user_id == user.id %}    
+                            {% if pqr.foto %}
+                                <div class="collapsible-body"><img style="margin-top:20px;color:blue;" class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="{{pqr.foto.url}}" alt=""></div>
+                            {% endif %}
+                            Creado el:({{pqr.created}})
+                            <div style="color: black;font: small-caps 100%/200% serif; font-size: 2vh">
+                            <h2><a style="color:blue">{{pqr.title}}</a></h2>
+                            <!--  <p>{{pqr.content|striptags|safe}}</p> -->
+                                <div>
+                                <p>Remitente: {{pqr.remitente}}</p>
+                                <p>Apartamento. {{pqr.apartamento}}</p>
+                                </div>
+                                {% if pqr.fecha_respuesta %}
+                                    {% if tipo_usuario == 2 or tipo_usuario == 5 %}
+                                        <a id="btnVerRespuestaPqr" type="button" style="color:blue;font-weight: 800;" href="{% url 'ver_respuesta_pqr' pqr.id %}" class="link">Ver respuesta</a>
+                                    {% endif %}    
+                                {% endif %}
+                            </div>
+                            {% endif %}    
+                    {% endfor %}
+                {% else %}
+                    <ul class="collapsible">
+                        <li>
+                        <div style="" class="collapsible-header"><i class="material-icons"></i>No Hay PQR pendientes</div>
+                        </li>
+                    </ul>    
+                {% endif %}
+            </div>
+            {% if tipo_usuario == 2 or tipo_usuario == 5 %}
+            <a href="{% url 'crear_pqr' %}" class="btn btn-success" role="button" aria-pressed="true">Nueva PQR</a>
+            {% endif %}
+            
+        </div>
+    </section>
+    <div class="sec-title text-center">
+        <a type="button" class="btn btn-primary" href="#body" class="link">Regresar</a>
+    </div>
+    <section style="background-color:#f3fce8;width:80%;margin-left: auto;margin-right: auto;" id="normatividad" class="features">
+        <div class="sec-title text-center">
+            <h2>normatividad</h2>
+            {% if request.user.is_superuser %}
+            <a type="button" id="btnNormatividad" type="submit" data-toggle="" data-target="#" class="btn btn-success" href="{% url 'crear_normatividad' %}"><span style="color:white" span class="material-icons">Nueva Normatividad</span></a>
+            {% endif %}
+            {% get_anexo_normatividad_list as anexos_normatividad_list %}
+            {% get_normatividad_list as normatividad_list %}
+            {% if normatividad_list %}
+                {% for normatividad in normatividad_list %}
+                <div style="color:#04AA6D"><i></i>Creado el:({{normatividad.created}})</div>
+                <div style="color: black;font: small-caps 100%/200% serif; font-size: 2vh">
+                    <h2 style="color:blue">{{normatividad.title}}</h2>
+                    {% for anexo in anexos_normatividad_list %}
+                        {% if anexo.normatividad_id == normatividad.id %}
+                                {{anexo.descripcion}}
+                                <H5>
+                                <a href="{{ anexo.archivo.url }}">
+                                <i class="fa fa-folder-open fa-2x"></i>
+                                <span class="nav-text" style="color:black">
+                                <strong>Descargar</strong>
+                                </span>
+                                </a>
+                                </H5>
+                        {% endif %} 
+                    {% endfor %}
+                </div>                
+                {% endfor %}
+            {% endif %}
+
+       </div>
+    </section>
+    <div class="sec-title text-center">
+        <a type="button" class="btn btn-primary" href="#body" class="link">Regresar</a>
+        </div>
+    </section>
+    <section style="" id="legislacion" class="features">
+        <div class="sec-title text-center">
+            <h2>legislacion</h2>
+            {% if request.user.is_superuser %}
+            <a type="button" id="btnLegislacion" class="btn btn-success" href="{% url 'crear_legislacion' %}"><span style="color:white" span class="material-icons">Nueva Legislacion</span></a>
+            {% endif %}
+            {% get_anexo_legislacion_list as anexos_legislacion_list %}
+            {% get_legislacion_list as legislacion_list %}
+            {% if legislacion_list %}
+                {% for legislacion in legislacion_list %}
+                    <div style="color:#04AA6D"><i></i>Creado el:({{legislacion.created}})</div>
+                    <li><a style="color: black;font: small-caps 100%/200% serif; font-size: calc(7px + 1vw)" href="{% url 'page_legislacion' legislacion.id legislacion.title|slugify %}" data-toggle="tooltip" data-placement="top" title="Click para desplegar" class="link">{{legislacion.title}}</a></li>
+                    {% for anexo in anexos_legislacion_list %}
+                        {% if anexo.legislacion_id == legislacion.id %}
+                            {{anexo.descripcion}}</td>
+                            <h5>
+                            <a href="{{ anexo.archivo.url }}">
+                            <i class="fa fa-folder-open fa-2x"></i>
+                            <span class="nav-text" style="color:black">
+                            <strong>Descargar</strong>
+                            </span>
+                            </a>
+                            </h5>
+                        {% endif %} 
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+
+        </div>
+    </section>
+    <div class="sec-title text-center">
+        <a type="button" class="btn btn-primary" href="#body" class="link">Regresar</a>
+    </div>
+    </br>
+    </br>    
+    <section id="consejo" class="features">
+        <div class="sec-title text-center">
+            <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
+            <h2>consejo</h2>
+        </div>
+        <div class="sec-title text-center">
+                                         
+        <header class="py-5">
+            <div class="container-titulo px-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-xxl-6">
+                        <div class="text-center my-5">
+                            <h4 class="fw-bolder mb-3">NUESTROS CONSEJEROS</h4>
+                            <hr>
+                            <div>
+                                
+                            <p>El Consejo de Administración cumple una función social y ejerce su cargo ad honórem, ya que realiza su labor gratuita en beneficio de la comunidad.</p>
+                            <p>El Consejo de Administración y sus miembros deben tener como política y filosofía, promover las buenas prácticas administrativas, transmitir transparencia y apertura libre y abierta a toda la información de la copropiedad y velar porque el ejercicio como integrante de este órgano se realize por la totalidad de los propietarios de la comunidad.</p>
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        </br>
+        </br>
+        {% load consejo %}
+        {% get_consejo_list as consejeros  %}
+        {% for p in consejeros %}
+            {% if p.publicar %}
+                {% if forloop.counter|divisibleby:"2"  %}
+                <!-- About section one-->
+                <section style="margin-top:-120px;margin-bottom: -120px;" class="py-5 bg-light" id="scroll-target">
+                    <div class="container px-5 my-5">
+                        <div class="row gx-5 align-items-center">
+                            <div class="col-lg-6" data-type="image" itemprop="image"><img class="img-fluid rounded mb-5 mb-lg-0" src="{{p.foto.url}}" alt="..." width='300' height="300"></div>
+                            <div class="col-lg-6">
+                                <h3 class="fw-bolder">{{ p.nombre }}</h3>
+                                {% if p.cargo == 'P' %}
+                                <h4><b>Presidente</b></h4>
+                                <hr>
+                                <h6><p>p.contenido</p></h6>
+                                {% endif %}
+                                {% if p.cargo == 'V' %}
+                                <h4><b>Vicepresidente</b></h4>
+                                <hr>
+                                <h6><p>p.contenido</p></h6>
+                                {% endif %}
+                                {% if p.cargo == 'S' %}
+                                <h4><b>Secretario</b></h4>
+                                <hr>
+                                {% endif %}
+                                {% if p.cargo == 'T' %}
+                                <h4><b>Tesorero</b></h4>
+                                <hr>
+                                <h6><p>p.contenido</p></h6>
+                                {% endif %}
+                                {% if p.cargo == 'L' %}
+                                <h4><b>Vocal</b></h4>
+                                <hr>
+                                <h6><p>p.contenido</p></h6>
+                                {% endif %}
+                                <p class="lead fw-normal text-muted mb-0"><h5>Apartamento:{{p.apartamento}}</h5></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                {% else %}
+                <!-- About section two-->
+                <section style="margin-top:-120px;margin-bottom: -120px;" class="py-5">
+                    <div class="container px-5 my-5">
+                        <div class="row gx-5 align-items-center">
+                            <div class="col-lg-6 order-first order-lg-last"><img class="img-fluid rounded mb-5 mb-lg-0" src="{{p.foto.url}}" alt="..." width='300' height="300"></div>
+                            <div class="col-lg-6">
+                                <h3 class="fw-bolder">{{ p.nombre }}</h3>
+                                {% if p.cargo == 'P' %}
+                                <h4><b>Presidente</b></h4>
+                                <hr>
+                                <h6><p>p.contenido</p></h6>
+                                {% endif %}
+                                {% if p.cargo == 'V' %}
+                                <h4><b>Vicepresidente</b></h4>
+                                <hr>
+                                <h6><p>p.contenido</p></h6>
+                                {% endif %}
+                                {% if p.cargo == 'S' %}
+                                <h4><b>Secretario</b></h4>
+                                <hr>
+                                <h6><p>p.contenido</p></h6>
+                                {% endif %}
+                                {% if p.cargo == 'T' %}
+                                <h4><b>Tesorero</b></h4>
+                                <hr>
+                                <h6><p>p.contenido</p></h6>
+                                {% endif %}
+                                {% if p.cargo == 'L' %}
+                                <h4><b>Vocal</b></h4>
+                                <hr>
+                                <h6><p>p.contenido</p></h6>
+                                {% endif %}
+                            
+                                <p class="lead fw-normal text-muted mb-0"><h5>Apartamento:{{p.apartamento}}</h5></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+            {% else %}
+                {% if user.is_authenticated %}    
+                    {% if p.orden|divisibleby:"2"  %}
+                    <!-- About section one-->
+                    <section style="margin-top:-120px;margin-bottom: -120px;" class="py-5 bg-light" id="scroll-target">
+                        <div class="container px-5 my-5">
+                            <div class="row gx-5 align-items-center">consejo
+                                <div class="col-lg-6" data-type="image" itemprop="image"><img class="img-fluid rounded mb-5 mb-lg-0" src="{{p.foto.url}}" alt="..." width='300' height="300"></div>
+                                <div class="col-lg-6">
+                                    <h3 class="fw-bolder">{{ p.nombre }}</h3>
+                                    {% if p.cargo == 'P' %}
+                                    <h4><b>Presidente</b></h4>
+                                    <hr>
+                                    <h6><p>p.contenido</p></h6>
+                                    {% endif %}
+                                    {% if p.cargo == 'V' %}
+                                    <h4><b>Vicepresidente</b></h4>
+                                    <hr>
+                                    <h6><p>p.contenido</p></h6>
+                                    {% endif %}
+                                    {% if p.cargo == 'S' %}
+                                    <h4><b>Secretario</b></h4>
+                                    <hr>
+                                    <h6><p>p.contenido</p></h6>
+                                    {% endif %}
+                                    {% if p.cargo == 'T' %}
+                                    <h4><b>Tesorero</b></h4>
+                                    <hr>
+                                    {% endif %}
+                                    {% if p.cargo == 'L' %}
+                                    <h4><b>Vocal</b></h4>
+                                    <hr>
+                                    <h6><p>p.contenido</p></h6>
+                                    {% endif %}
+                                    <p class="lead fw-normal text-muted mb-0"><h5>Apartamento:{{p.apartamento}}</h5></p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    {% else %}
+                    <!-- About section two-->
+                    <section style="margin-top:-120px;margin-bottom: -120px;" class="py-5">
+                        <div class="container px-5 my-5">
+                            <div class="row gx-5 align-items-center">
+                                <div class="col-lg-6 order-first order-lg-last"><img class="img-fluid rounded mb-5 mb-lg-0" src="{{p.foto.url}}" alt="..." width='300' height="300"></div>
+                                <div class="col-lg-6">
+                                    <h3 class="fw-bolder">{{ p.nombre }}</h3>
+                                    {% if p.cargo == 'P' %}
+                                    <h4><b>Presidente</b></h4>
+                                    <hr>
+                                    <h6><p>p.contenido</p></h6>
+                                    {% endif %}
+                                    {% if p.cargo == 'V' %}
+                                    <h4><b>Vicepresidente</b></h4>
+                                    <hr>
+                                    <h6><p>p.contenido</p></h6>
+                                    {% endif %}
+                                    {% if p.cargo == 'S' %}
+                                    <h4><b>Secretario</b></h4>
+                                    <hr>
+                                    <h6><p>p.contenido</p></h6>
+                                    {% endif %}
+                                    {% if p.cargo == 'T' %}
+                                    <h4><b>Tesorero</b></h4>
+                                    <hr>
+                                    <h6><p>p.contenido</p></h6>
+                                    {% endif %}
+                                    {% if p.cargo == 'L' %}
+                                    <h4><b>Vocal</b></h4>
+                                    <hr>
+                                    <h6><p>p.contenido</p></h6>
+                                    {% endif %}
+                                
+                                    <p class="lead fw-normal text-muted mb-0"><h5>Apartamento:{{p.apartamento}}</h5></p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    
+    </section>
+    <section id="convivencia" class="features">
+        <div class="sec-title text-center">
+            <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
+            <h2>comite de convivencia</h2>
+        </div>
+        <div class="sec-title text-center">
+                                         
+        <header class="py-5">
+            <div class="container-titulo px-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 col-xxl-6">
+                        <div class="text-center my-5">
+                            <h4 class="fw-bolder mb-3">COMITE CONVIVENCIA</h4>
+                            <hr>
+                            <p>Los miembros del Comité de Convivencia deben servir como intermediarios para llegar a una conciliación entre las partes involucradas en algún inconveniente o disputa.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        </br>
+        </br>
+        {% load convivencia %}
+        {% get_convivencia_list as convivencia  %}
+        {% for p in convivencia %}
+            {% if forloop.counter|divisibleby:2 %}
+                
+                <!-- About section one-->
+                <section style="margin-top:-120px;margin-bottom: -120px;" class="py-5 bg-light" id="scroll-target">
+                    <div class="container px-5 my-5">
+                        <div class="row gx-5 align-items-center">
+                            <div class="col-lg-6" data-type="image" itemprop="image"><img class="img-fluid rounded mb-5 mb-lg-0" src="{{p.foto.url}}" alt="..." width='300' height="300"></div>
+                            <div class="col-lg-6">
+                                <h3 class="fw-bolder">{{ p.nombre }}</h3>
+                                <p class="lead fw-normal text-muted mb-0"><h5>Apartamento:{{p.apartamento}}</h5></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            {% else %}  
+                <!-- About section two-->
+                <section style="margin-top:-120px;margin-bottom: -120px;" class="py-5">
+                    <div class="container px-5 my-5">
+                        <div class="row gx-5 align-items-center">
+                            <div class="col-lg-6 order-first order-lg-last"><img class="img-fluid rounded mb-5 mb-lg-0" src="{{p.foto.url}}" alt="..." width='300' height="300"></div>
+                            <div class="col-lg-6">
+                                <h3 class="fw-bolder">{{ p.nombre }}</h3>
+                                <p class="lead fw-normal text-muted mb-0"><h5>Apartamento:{{p.apartamento}}</h5></p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+            {% endif %}
+            
+            
+        {% endfor %}
+    
+    </section>
+    
+    <div class="sec-title text-center">
+        <a type="button" class="btn btn-primary" href="#body" class="link">Regresar</a>
+        </div>
+    </br>
+    </br>
+
+    <section style="" id="staff" class="features">
+        <div class="sec-title text-center">
+            <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
+            <h2>Staff</h2>
+        </div>
+        <div class="sec-title text-center">
+                                          
+            <header class="py-5">
+                <div class="container-titulo px-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 col-xxl-6">
+                            <div class="text-center my-5">
+                                <strong>
+                                <h5 class="fw-bolder mb-3">STAFF DEL CONJUNTO</h5>
+                                </strong>
+                                <hr>
+                                <div>
+                                <p>Los edificios o conjuntos de uso residencial podrán contar con Revisor Fiscal, si así lo decide la asamblea general de propietarios.</p>
+                                <p>En este caso, el Revisor Fiscal podrá ser propietario o tenedor de bienes privados en el edificio o conjunto.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+             
+            {% get_staff_list as staff %}
+            {% for p in staff %}
+            {% if p.id|divisibleby:"2"  %}
+            <!-- About section one-->
+            <!-- About section one-->
+            <section style="margin-top:-120px;margin-bottom: -120px;" class="py-5 bg-light" id="scroll-target">
+                <div class="container px-5 my-5">
+                    <div class="row gx-5 align-items-center">
+                        <div class="col-lg-6" data-type="image" itemprop="image"><img class="img-fluid rounded mb-5 mb-lg-0" src="{{p.foto.url}}" alt="..." width='300' height="300"></div>
+                        <div class="col-lg-6">
+                            <h3 class="fw-bolder">{{ p.nombre }}</h3>
+                            {% if p.cargo == 'R' %}
+                            <h4><b>Revisor Fiscal</b></h4>
+                            <hr>
+                            {% endif %}
+                            {% if p.cargo == 'C' %}
+                            <h4><b>Contador</b></h4>
+                            <hr>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {% else %}
+            <!-- About section two-->
+            <section style="margin-top:-120px;margin-bottom: -120px;" class="py-5">
+                <div class="container px-5 my-5">
+                    <div class="row gx-5 align-items-center">
+                        <div class="col-lg-6 order-first order-lg-last"><img class="img-fluid rounded mb-5 mb-lg-0" src="{{p.foto.url}}" alt="..." width='300' height="300"></div>
+                        <div class="col-lg-6">
+                            <h3 class="fw-bolder">{{ p.nombre }}</h3>
+                            {% if p.cargo == 'R' %}
+                            <h4><b>Revisor Fiscal</b></h4>
+                            <hr>
+                            {% endif %}
+                            {% if p.cargo == 'C' %}
+                            <h4><b>Contador</b></h4>
+                            <hr>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+            {% endfor %}
+                                       
+        </div>
+    </section>
+    <div class="sec-title text-center">
+        <a type="button" class="btn btn-primary" href="#body" class="link">Regresar</a>
+    </div>
+    </br>
+    </br>
+    <section style="" id="vigilancia" class="features">
+        <div class="sec-title text-center">
+            <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
+            <h2>Vigilantes</h2>
+        </div>
+        <div class="sec-title text-center">
+                             
+            <header class="py-5">
+                <div class="container-titulo px-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 col-xxl-6">
+                            <div class="text-center my-5">
+                                <strong>
+                                <h5 class="fw-bolder mb-3">EMPRESA DE VIGILANCIA</h5>
+                                </strong>
+                                <hr>
+                                <div>
+                                <img  class="" style="width: 60hv;height: 30hv;" src="{% static 'core/img/superior.png' %}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            {% load vigilantes %}
+            {% get_vigilantes_list as vigilante %}
+            {% for p in vigilante %}             
+            {% if forloop.counter|divisibleby:"2" %}
+            <section style="margin-top:-120px;margin-bottom: -120px;" class="py-5 bg-light" id="scroll-target">
+                <div class="container px-5 my-5">
+                    <div class="row gx-5 align-items-center">
+                        <div class="col-lg-6" data-type="image" itemprop="image"><img class="img-fluid rounded mb-5 mb-lg-0" src="{{p.foto.url}}" alt="..." width='300' height="300"></div>
+                        <div class="col-lg-6">
+                            <h3 class="fw-bolder">{{ p.nombre }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {% else %}
+            <!-- About section two-->
+            <section style="margin-top:-120px;margin-bottom: -120px;" class="py-5">
+                <div class="container px-5 my-5">
+                    <div class="row gx-5 align-items-center">
+                        <div class="col-lg-6 order-first order-lg-last"><img class="img-fluid rounded mb-5 mb-lg-0" src="{{p.foto.url}}" alt="..." width='300' height="300"></div>
+                        <div class="col-lg-6">
+                            <h3 class="fw-bolder">{{ p.nombre }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+            {% endfor %}
+                                       
+        </div>
+    </section>
+    <div class="sec-title text-center">
+        <a type="button" class="btn btn-primary" href="#body" class="link">Regresar</a>
+    </div>
+    </br>
+    </br>
+    <section id="zonas_comunes" style="font-size: 2vh;width:80%;margin-left:auto;margin-right:auto;" class="zonas">
+        <div class="sec-title text-center">
+            <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
+            <h2>ZONAS COMUNES</h2>
+        </div>
+        <div class="sec-title text-center">
+                                           
+            <header class="py-5">
+                <div class="container-titulo px-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 col-xxl-6">
+                            <div class="text-center my-5"><!-- 
+                                <h5 class="fw-bolder mb-3">ZONAS COMUNES</h5> -->
+                                <hr>
+                                <div>
+                                <strong>
+                                <p> Ley 428 de 1998</p>        
+                                </strong>
+                                <p>Artículo 16°.- Áreas de recreación. Todas las Unidades Inmobiliarias Cerradas dispondrán proporcionalmente a su tamaño y al uso predominante de áreas comunes suficientes para actividades recreativas, culturales y deportivas. Tales exigencias podrán disminuirse cuando se garantice de otra manera el derecho a la práctica del deporte y a la recreación.</p>
+                                <p>La utilización de las áreas comunes de recreación se someterá a la reglamentación interna que expida la Asamblea de Copropietarios y la Junta Administradora de la Unidad Inmobiliaria Cerrada.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            </br>
+            </br>
+            </br>
+            </br>
+            {% get_zonas_comunes_list as zonas %}
+            <!-- <section style="margin-top:0px;margin-bottom: 0px;height:40vh" class="py-5 bg-light" id="scroll-target"> -->
+                {% for p in zonas %}
+                    <div class="row gx-5 align-items-center" style="display:flex;flex-direction:column;transform:translate(-4vh,0)">
+                        {% if p.foto %}
+                        <img  class="" style="position: relative;left: 10px;transition: transform .1s;position: relative;top: 0px;width: 400px;height: 300px;display: block;z-index: 999;"src="{{p.foto.url}}" alt="">
+                        {% endif %}
+                        <div class="col-lg-6">
+                            <div style="display:flex;flex-direction:column;justify-content:center;">
+                                <h2 style="color:darkgoldenrod" class="fw-bolder">{{ p.descripcion }}</h2>
+                                {% if p.arrienda == True %}
+                                    <div style="display:flex;flex-direction:row;align-items:center;justify-content:center;">
+                                        <div><h4 class="fw-bolder">Tarifa:</h4></div>
+                                        <div style="transform: translate(10px,0);"><h4>{{p.tarifa|intcomma}}</h4></div>
+                                    </div>
+                                    {% if tipo_usuario == 1 or tipo_usuario == 2 or tipo_usuario == 5 %}
+                                    <a type="submit" data-toggle="" data-target="#Reserva" class="btn btn-success" href= "{% url 'reserva_zonas_comunes' p.id %}"><span style="color:white;padding: 60px 40px;font-size: small;" span class="material-icons">Reservar</span></a>
+                                    {% endif %}
+                                {% endif %}  
+                            </div>
+                        </div>    
+                        <hr>
+                    </div>
+                {% endfor %}
+            <!-- </section> -->
+        </div>
+    </section>
+    <div class="sec-title text-center">
+        <a type="button" class="btn btn-primary" href="#body" class="link">Regresar</a>
+    </div>
+    
+    
+    <section style="font-size: 2vh;width:80%;margin-left: auto;margin-right: auto;" id="pagos" class="features">
+        <div class="sec-title text-center">
+            <h2>Pagos en Línea</h2>
+            <a href="https://www.avalpaycenter.com/wps/portal/portal-de-pagos/web/pagos-aval/resultado-busqueda/realizar-pago?idConv=637&origen=buscar&bancaEmpresarial=false&login=temporal"><img  src="{% static 'core/img/Pse.PNG' %}" width="100" height="100" alt="Pse"></a>
+        </div>        
+    </section> 
+    
+    <div class="sec-title text-center">
+        <a type="button" class="btn btn-primary" href="#body" class="link">Regresar</a>
+    </div>
+
+    <div id="loginModal">
+        <section id="registro" class="features" style="background-color: rgb(250, 248, 235);">
+            <div class="sec-title text-center">
+                <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
+                    <h2>Registro</h2>    
+                    <div id="login" class="modal-body" style="font-size: 1.7vh;margin-left:auto;margin-right:auto;">
+                        <p>Sr. Residente si no está registrado, debe ingresar por la opción Usuario no Registado, el sistema le pedirá el token que se le proporcionó para acceder a la información del conjunto.</p>
+                        <p>Si no tiene token solicitelo con éste botón.
+                        <hr>
+                        <a type="button" style="font-size: 2vh;" class="btn btn-primary btn-sm" type="submit" href="{% url 'solicitud_token' %}" value="editar" ><span class="material-icons">Solicitar Token</span></a>   
+                        <hr> 
+                            
+                        <p>El sistema le va a pedir un mail y el interior y apartamento en que reside, si el mail no está registrado en la información de residentes del conjunto no podrá acceder.</p>
+                        
+                        <p>En éste caso debe enviar la información actualizada con el siguiente botón, que le presentará un fomulario el cual debe llenar con todos los datos. Una vez recibido por la administración
+                            procedera a actualizar sus datos en el sistema y le enviará un token por medio del email consignado en el formulario.
+                        <hr>
+                        <a type="button" style="font-size: 2vh;" class="btn btn-danger" type="submit" href="{% url 'crear_residente_temporal' %}" value="editar" ><span class="material-icons">Actualizar Datos</span></a>   
+                        <hr>    
+                        <p>Una vez recibido el token de acceso ingrese por usuario no registrado y complete el proceso de registro, ingresando un nombre de usuario y una clave, que debe guardar o memorizar pues serán
+                            las que le pide el sistema para poder registrarse cada vez que necesite utilizar las opciones de ingreso de información de ésta página</p>
+                        <hr>
+                        <a type="button" style="font-size: 2vh;" class="btn btn-warning btn-sm" type="submit" href="{% url 'registro_residentes' %}" value="editar" ><span class="material-icons">Usuario No Registrado</span></a>
+                        <hr>
+                        <a type="button" style="font-size: 2vh;" class="btn btn-warning btn-sm" type="submit" href="{% url 'sign_up_vigilante' %}" value="editar" ><span class="material-icons">Vigilante/Staff no Registrado</span></a>
+                        <hr>    
+                        <p>Si ya está registrado, ingrese por la opción Usuario Registrado, con su clave y usuario, esta clave no debe compartirla con nadie,para evitar ingresos indebidos que pueden alterar la información del conjunto </p>
+                        <hr>
+                        <a type="button" style="font-size: 2vh;" class="btn btn-success btn-sm" type="submit" href="{% url 'registro' %}" value="editar" ><span class="material-icons">Usuario Registrado</span></a>
+                        <hr>
+                        <a type="button" style="font-size: 2vh;" class="btn btn-primary" href="#body" class="link">Regresar</a>
+
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+          
+    </div>
+    
+    
+    <div style="display: flex;flex-direction:column;align-content: center;" id="ubicacion">
+
+            <div class="sec-title text-center">
+                <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
+                <h2>Ubicacion</h2>
+            </div>
+
+            <div class="gen-footer" style="padding-top: 10vh;">
+                <div style="transform: translate(0vw,0)" class="mapa">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.204846070885!2d-74.0609792847947!3d4.734445496561433!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f85122506a3b5%3A0x9b28c9f0920708b9!2sCl.%20151%20%2355-68%2C%20Bogot%C3%A1!5e0!3m2!1ses-419!2sco!4v1663864614996!5m2!1ses-419!2sco" width="630" height="283" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+                <!-- <div style="display:flex;flex-direction: column; margin-bottom:0;background-color:rgba(44, 43, 43, 0.9); text-color:white;width: 100%" class="footer" > -->
+                    
+                {% load home_page %}
+                {% get_conjunto_list as conjunto_list %}
+                {% if conjunto_list %}
+                {% for conjunto in conjunto_list %}
+                
+
+                <div style="font-size:small;padding-top: 5vh;" class="data_footer">
+                    </br>
+                    </br>
+                    <div id="" style="">
+                        <div class="box_footer" >
+                            <div style="">
+                                <img  src="{% static 'core/img/logo_footer1.PNG' %}" width="200" height="50" alt="Logo">
+                                </div>
+                                <hr style="width:50%;border-color:white;transform: translate(-10vw,0)">
+                                </br>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <div style="display: flex;flex-direction: row">    
+                                                <div id="ubica">Dirección:</div><div style="margin-left: 10px;">{{conjunto.direccion}}</div> {% if not forloop.last %}.{% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td> 
+                                            <div style="display: flex;flex-direction: row">       
+                                                <div id="ubica">Teléfono:</div><div style="margin-left: 10px;">{{conjunto.telefono}}</div> {% if not forloop.last %}.{% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>    
+                                    <tr>
+                                        <td>
+                                            <div style="display: flex;flex-direction: row">
+                                                <div id="ubica">Email:</div><div style="margin-left: 10px;">{{conjunto.email}}</div> {% if not forloop.last %}.{% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="display: flex;flex-direction: row">     
+                                            <div id="ubica">Unidades:</div><div style="margin-left: 10px;">{{conjunto.numero_unidades}}</div> {% if not forloop.last %}.{% endif %}
+                                            </div>    
+                                        </td> 
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="display: flex;flex-direction: row">    
+                                                <div id="ubica">Estrato:</div><div style="margin-left: 10px;">{{conjunto.estrato}}</div> {% if not forloop.last %}.{% endif %}
+                                            </div>    
+                                        </td>    
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="display: flex;flex-direction: row">    
+                                                <div id="ubica">Administrador:</div><div style="margin-left: 10px;">{{conjunto.nombre_administrador}}</div> {% if not forloop.last %}.{% endif %}
+                                            </div>    
+                                        </td>    
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="display: flex;flex-direction: row">    
+                                                <div id="ubica">Horario:</div><div style="margin-left: 10px;">{{conjunto.horario_administrador}}</div> {% if not forloop.last %}.{% endif %}
+                                            </div>    
+                                        </td>    
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="display: flex;flex-direction: row">                  
+                                                <p class="m-0 mbt1">&copy; Condominium 2020</p>
+                                            </div>
+                                        </td>
+                                    </tr>    
+                                </table>
+                            </div>
+                        </div>    
+                    </div>
+                </div>
+                
+                {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="sec-title text-center">
+                <a type="button" class="btn btn-primary" href="#body" class="link">Regresar</a>
+            </div>
+            
+
+    </div>
+
+    <!-- Modal Structure -->
+  
+      
+    
+    <!-- Essential jQuery Plugins
+		================================================== -->
+    <!-- Main jQuery -->
+    <script src="{% static 'core/js/jquery-1.11.1.min.js' %}"></script>
+    <!-- Single Page Nav -->
+    <script src="{% static 'core/js/jquery.singlePageNav.min.js' %}"></script>
+    <!-- Twitter Bootstrap -->
+    <script src="{% static 'core/js/bootstrap.min.js' %}"></script>
+    <!-- jquery.fancybox.pack -->
+    <script src="{% static 'core/js/jquery.fancybox.pack.js' %}"></script>
+    <!-- jquery.mixitup.min -->
+    <script src="{% static 'core/js/jquery.mixitup.min.js' %}"></script>
+    <!-- jquery.parallax -->
+    <script src="{% static 'core/js/jquery.parallax-1.1.3.js' %}"></script>
+    <!-- jquery.countTo -->
+    <script src="{% static 'core/js/jquery-countTo.js' %}"></script>
+    <!-- jquery.appear -->
+    <script src="{% static 'core/js/jquery.appear.js' %}"></script>
+    <!-- Contact form validation -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.32/jquery.form.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
+    <!-- Google Map -->
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <!-- jquery easing -->
+    <script src="{% static 'core/js/jquery.easing.min.js' %}"></script>
+    <!-- jquery easing -->
+    <script src="{% static 'core/js/wow.min.js' %}"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"> -->
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js">
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+    </script>
+
+    
+</script>  
+    
+    <script>
+        var wow = new WOW({
+            boxClass: 'wow',      // animated element css class (default is wow)
+            animateClass: 'animated', // animation css class (default is animated)
+            offset: 120,          // distance to the element when triggering the animation (default is 0)
+            mobile: false,       // trigger animations on mobile devices (default is true)
+            live: true        // act on asynchronously loaded content (default is true)
+        }
+        );
+        wow.init();
+    </script>
+    <!-- Custom Functions -->
+    <script src="{% static 'core/js/custom.js' %}"></script>
+
+    <script type="text/javascript">
+        
+                
+        $(function () {
+            /* ========================================================================= */
+            /*	Contact Form
+            /* ========================================================================= */
+
+            $('#contact-form').validate({
+                rules: {
+                    name: {
+                        required: true,
+                        minlength: 2
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    message: {
+                        required: true
+                    }
+                },
+                messages: {
+                    name: {
+                        required: "come on, you have a name don't you?",
+                        minlength: "your name must consist of at least 2 characters"
+                    },
+                    email: {
+                        required: "no email, no message"
+                    },
+                    message: {
+                        required: "um...yea, you have to write something to send this form.",
+                        minlength: "thats all? really?"
+                    }
+                },
+
+                submitHandler: function (form) {
+                    $(form).ajaxSubmit({
+                        type: "POST",
+                        data: $(form).serialize(),
+                        url: "process.php",
+                        success: function () {
+                            $('#contact-form :input').attr('disabled', 'disabled');
+                            $('#contact-form').fadeTo("slow", 0.15, function () {
+                                $(this).find(':input').attr('disabled', 'disabled');
+                                $(this).find('label').css('cursor', 'default');
+                                $('#success').fadeIn();
+                            });
+                        },
+                        error: function () {
+                            $('#contact-form').fadeTo("slow", 0.15, function () {
+                                $('#error').fadeIn();
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+            x.className += " responsive";
+        } else {
+        x.className = "topnav";
+        }
+        }
+       
+        
+        /* $(document).ready(function(){
+        $('.sidenav').sidenav();
+        }); */
+
+        function mouseOver() {
+        document.getElementById("barra").click();
+        }
+        
+           
+    
+        function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+            x.className += " responsive";
+        } else {
+        x.className = "topnav";
+        }
+    } 
+    
+    $(document).on("click","#Btnlogin", function(e) {
+        const Modal = document.getElementById('loginModal')
+        Modal.style.display = 'block';
+    })
+
+    $(document).on("click","#opcMenu", function(e) {
+        const Modal = document.getElementById('loginModal')
+        Modal.style.display = 'block';
+    })
+    
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+   
+    </script>
+</body>
+
+</html>

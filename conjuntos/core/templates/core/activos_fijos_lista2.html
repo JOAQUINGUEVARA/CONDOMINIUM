@@ -1,0 +1,99 @@
+{% extends "core/base.html" %}
+{% load render_table from django_tables2 %}
+{% load django_tables2 %}
+{% load static %}
+{% block content %}
+{{ form.media }}
+<!doctype html>
+<style>
+    .container-activos{
+      background-color: #48b97f;
+    }
+    .titulo{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: calc(1em + 1vw)
+    }
+        
+    .table{
+        background-color: rgb(253, 251, 251);
+    }
+
+    nav >ul{ margin: 0 auto; width: 80px; }
+            nav ul li{
+                display: block;
+                float: left;
+                /* margin-left:-40px; */
+                position: relative;
+            }
+    nav ul a{
+                display: block;
+                float: left;
+                width: 180px;
+                padding: 10px 20px;
+            }
+            
+    #dropdown-accesos {
+              top:-60px;
+    }
+    .panel-body .btn:not(.btn-block) { width:120px;margin-bottom:10px; }
+
+    .sidenav li>a {padding:0 32px !important}
+      .collapsible-body>ul>li>a {
+        padding: 0 48px !important;
+        font-weight: 400 !important;
+      }
+</style>
+
+<head> 
+    
+</head>
+
+<!-- <body style="background-image: url({% static '/img/ciudad.jpg' %});"> -->
+         
+    
+    <div class="navbar-fixed">
+        <nav>
+            <div class="nav-wrapper">
+            <a style="font-size: calc(12px + 1vw);transform:translate(3vw,0)" href="#!" class="brand-logo"><i class="material-icons">chair</i>Activos Fijos</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li  class="active"><a href="{% url 'pagina_administrador' %}" >Regresar</a></li>
+            </ul>
+            </div>
+        </nav>
+    </div>
+    
+    <ul class="sidenav" id="mobile-demo">
+    <li  class="active"><a href="{% url 'pagina_administrador' %}" >Regresar</a></li>
+    </ul>
+    
+
+    <div style="padding-top: 10px;margin-left:2vw;margin-right: 2vw ;margin:auto;width:80%;" class="container-activos">
+        <div style="display:flex;align-items:center;justify-content:center;flex-direction:row;justify-content: space-between;background-color:azure;">  
+            <div style="display:flex;align-items:center;justify-content:flex-start;color:darkred;width:180px;margin-top:10px" ><h6>Usuario: {{user}}</h6></div>
+            <a style="display:flex;font-size: calc(7px + 1vw);margin: auto;color:black" type="button" type="submit" href="#" value="autoriza" ><span>ACTIVOS FIJOS</span></a>
+            <div style="transform:translate(-5vh,0)">Nuevo Activo</div><a id ="btnNuevo" style="transform:translate(-20vh,0)" class="btn-floating btn-short waves-effect waves-light blue" href="{% url 'crea_activo_fijo' %}" value="crear" ><i class="material-icons">add</i></a>
+            <div style="transform:translate(3vh,0)">Imprimir Inventario</div><a id="BtnImprimir" style="transform:translate(-15vh,0)" type="button" class="btn-floating btn-short waves-effect waves-light red" href="{% url "imprimir_inventario_activos_fijos" %}" value="imprimir"><i class="material-icons">print</i></a>        
+        </div>
+        <div style="" class="container-activos">
+            <table class="table table-bordered">
+                {% render_table activo1 %}
+            </table>
+        </div>
+    </div>
+    
+</body>
+
+{% block javascript %}
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+{% endblock %}
+{% endblock %}
+
+

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% load static %}
+{% block content %}
+
+<title>{% block tittle %}{% endblock %}Contratos | CONDOMINIUM</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+      Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  }
+  
+  .main-container {
+    padding: 30px;
+  }
+  /* RESPONSIVE */
+  
+  @media (max-width: 1600px) {
+    .cards {
+      justify-content: center;
+    }
+  }
+  h2{
+    font-size: 1rem;
+  }
+  body { padding-top:20px; }
+    .panel-body .btn:not(.btn-block) { width:120px;margin-bottom:10px; }
+
+    .sidenav li>a {padding:0 32px !important}
+      .collapsible-body>ul>li>a {
+        padding: 0 48px !important;
+        font-weight: 400 !important;
+      }
+</style>
+
+<body>
+  <div class="navbar-fixed">
+    <nav>
+      <div class="nav-wrapper">
+        <a style="font-size: calc(12px + 1vw);transform:translate(3vw,0)" href="#!" class="brand-logo"><i class="material-icons">check</i>Autorizaciones</a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'autorizaciones_peatonal_admin' %}">Autorizaciones Ingreso Peatonal</a></li>
+          <li><a href="{% url 'autorizaciones_vehicular_admin' %}">Autorizaciones Ingreso Vehicular</a></li>
+          <li class="active"><a href="{% url 'pagina_administrador' %}">Regresar</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div><h6 style="color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
+      ">Usuario:{{request.user.username}}</h6></div>
+  </div>
+
+  <ul class="sidenav" id="mobile-demo">
+    <li><a href="{% url 'autorizaciones_peatonal_admin' %}">Autorizaciones Ingreso Peatonal</a></li>
+    <li><a href="{% url 'autorizaciones_vehicular_admin' %}">Autorizaciones Ingreso Vehicular</a></li>
+    <li class="active"><a href="{% url 'pagina_administrador' %}">Regresar</a></li>
+  </ul>
+</body>
+
+
+</html>
+{% block javascript %}
+<script>
+  
+  $( document ).ready(function(){
+       $('.sidenav').sidenav();
+       $('[data-toggle="tooltip"]').tooltip();
+      });
+     
+ </script>  
+{% endblock %} 
+{% endblock %}

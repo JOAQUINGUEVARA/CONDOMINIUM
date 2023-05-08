@@ -1,0 +1,64 @@
+{% extends "core/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<style>
+.container-doc{
+    background-color:rgb(236, 247, 237);
+    width:90%;
+    font-size: 20px;
+    margin-top:70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+}
+.mensaje{
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.boton{
+    display: flex;
+    justify-content: center;
+    /* margin-left: auto;
+    margin-right: auto; */
+}
+
+h3{
+    
+    font-weight: bold;
+    
+}
+</style>
+
+    <div class="container-doc">
+        <div class="row mt-3x">
+            <div class="titulo">
+                <h5>ERROR LOGIN</h5>
+            </div>
+            </br>
+            </br>
+            <div class="mensaje">
+            <p>{{ mensaje }}</p>
+            <p>{{ mensaje1 }}</p>
+            <p>{{ mensaje2 }}</p>
+            <p>{{ mensaje3 }}</p>
+            </div>
+            <div class="boton">
+            <a id='btnSalir' class="btn btn-primary btn-xl">Regresar</a>
+            </div>
+        </div>     
+    </div>
+
+{% block javascript %}
+    <script>
+        
+        $(document).on("click","#btnSalir", function(e) {
+              window.location.href = "{% url 'home' %}";
+        })    
+    </script>
+
+{% endblock %}
+{% endblock %}

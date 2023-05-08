@@ -1,0 +1,98 @@
+{% extends "core/base.html" %}
+{% load material_form %}
+{% form form=form %}{% endform %}
+{% load staticfiles %}
+{% block content %}
+{% load materializecss %}
+
+<div class="card orange darken-1" class="card small">
+    <h2 class="center black-text"><i class="material-icons">mail</i>Consulta Correspondencia</h2>
+</div>
+<div class="col s12 m8 l9">    
+    <div class="card indigo lighten-5 center " class="card small">
+        <h2>Ingrese una opcion</h2>
+    </div>
+</div>
+
+<div class="col s12 m5 l9">
+<div class="card indigo lighten-4 center " class="card small">
+<form action="" method="get">
+    <div class="row">
+        <div class="card-panel indigo lighten-5" class="card small">
+        <div class="card-content black-text text-darken-4 " >
+            <label class="black-text">Remitente:</label> {{ filter.form.remitente }}
+        </div>
+        </div>
+
+        <div class="card-panel indigo lighten-5" class="card small">
+        <div class="card-content black-text text-darken-4 " >
+            <label >Clase de correspondencia:</label> {{ filter.form.clase_correspondencia }}
+            <br>
+            <label>Tipo de correspondencia:</label>{{ filter.form.tipo_correspondencia }}
+        </div>
+        </div>    
+    
+        <div class="card-panel indigo lighten-5" class="card small">
+        <div class="card-content black-text text-darken-4" >
+            <label>Fecha de recibo:</label> {{ filter.form.fecha_recibo }}
+            <br>
+            <label>Fecha de notificación:</label>{{ filter.form.fechahora_notifica }}
+        </div>
+        </div>    
+    
+        <div class="card-panel indigo lighten-5" class="card small">
+        <div class="card-content black-text text-darken-4 " >
+            <label>Interior:</label> {{ filter.form.interior }}
+            <br>
+            <label>Apartamento:</label>{{ filter.form.apartamento }}
+        </div>
+        </div>    
+    </div>    
+    <input class="btn btn-primary" value="Filtrar" type="submit">
+</form>
+</div>
+</div>
+         
+<div class="col s12 m8 l9">
+<div class="card indigo lighten-5" class="card small">
+<div class="card-content black-darken-4-text" > 
+    {% for obj in filter.qs %}
+    <div class="container"></div>
+        <table class="table">
+        <thead>
+            <tr>
+                <th>Remitente</th>
+                <th>Destinatario</th>
+                <th>Clase Correspondencia</th>
+                <th>Tipo Corresponcencia</th>
+                <th>Detalle</th>
+                <th>Vigilante</th>
+                <th>Fecha de Recibo</th>
+                <th>Fecha de Notificación</th>
+                <th>Interior</th>
+                <th>Apartamento</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>       
+                <td>{{ obj.remitente }}</td> 
+                <td>{{ obj.destinatario }}</td>
+                <td>{{ obj.clase_corresponcencia  }}</td>
+                <td>{{ obj.tipo_correspondencia }}</td>
+                <td>{{ obj.detalle }}</td>
+                <td>{{ obj.vigilante }}</td>
+                <td>{{ obj.fecha_recibo }}</td>
+                <td>{{ obj.fechahora_notifica }}</td>
+                <td>{{ obj.interior }}</td>
+                <td>{{ obj.apartamento }}</td>
+            </tr>
+        </tbody>
+        </table>
+    </div>    
+    {% endfor %}
+</div>
+</div>
+</div>
+{% endblock %}        
+
+

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang='es'>
+{% extends "core/base_sin_material.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{{ form.media }}            {# Adds date-picker required JS and CSS #}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+
+{% load static %}
+
+<form method="post">{% csrf_token %}
+     
+ 
+ 
+ 
+<p>Está seguro de borrar "{{ object }}"?</p>
+ 
+ 
+ 
+ 
+    <input type="submit" value="Confirm">
+</form>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% load static %}
+{% block content %}
+
+<title>{% block tittle %}{% endblock %}Inicio | CONDOMINIUM</title>
+
+<style>
+ @media only screen and (min-width: 993px){
+nav a.button-collapse {
+    display: block;
+}
+}
+</style>
+
+<div class="navbar-fixed">  
+    <nav>
+      <div class="nav-wrapper">
+        <a style="font-size: calc(12px + 1vw);transform:translate(1vw,0)" href="#!" class="brand-logo"><i class="material-icons">people</i> PAGO RESERVA</a>       
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="{% url 'direcciona_pagina_zonas_conunes' %}">Regresar</a></li>
+            <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+        </ul>
+      </div>
+    </nav>  
+</div>    
+    <ul class="sidenav" id="mobile-demo">
+        <li><a href="{% url 'direcciona_pagina_zonas_conunes' %}">Regresar</a></li>
+        <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+    </ul>
+
+<head>
+</head>
+<body>
+
+    <section style="font-size: 2vh;width:80%;margin-left: auto;margin-right: auto;" id="pagos" class="features">
+        <div class="sec-title text-center">
+            <div style="width:40%;margin-left: auto;margin-right: auto;">
+                <h4>Pagos en Línea</h4>
+                <a href="https://www.avalpaycenter.com/wps/portal/portal-de-pagos/web/pagos-aval/resultado-busqueda/realizar-pago?idConv=637&origen=buscar&bancaEmpresarial=false&login=temporal"><img  src="{% static 'core/img/Pse.PNG' %}" width="100" height="100" alt="Pse"></a>
+            </div>
+        </div>        
+    </section>
+    
+    
+</body>
+{% block javascript %}
+<script>
+  $(document).ready(function(){
+  $('.sidenav').sidenav();
+  });
+
+</script>  
+{% endblock %}
+{% endblock %}

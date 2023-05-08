@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% comment %} {% load material_form %}
+{% form form=form %}{% endform %} {% endcomment %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<title>{% block tittle %}Administrador | CONDOMINIUM{% endblock %}</title>
+
+<style>
+   .container-activos{
+      background-color: #48b97f;
+    }
+    .titulo{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-left: 20vw;
+        font-size: calc(1em + 1vw)
+    }
+        
+    .table{
+        background-color: rgb(253, 253, 253);
+    }
+    table, th, td {
+        border: 1px solid black;
+    }
+
+  .main-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }  
+ 
+  .collapsible {
+   margin:auto;
+   width: 50em;
+   background:mintcream;
+   box-shadow:1px 1px 2px #333;
+   font-family:Georgia, "Times New Roman", Times, serif;
+   font-size:16px;
+   text-align:justify;
+   flex-direction: column;
+   white-space: normal;
+   
+  }
+  
+  /* .collapsible-body{
+   padding: 5px 5px 5px 5px;
+  } */
+  .user-box{
+    transform:translate(0vw,-.6vw)
+  }
+  body{
+       height: 3000px;
+  }
+  body { padding-top:20px; }
+  nav >ul{ margin: 0 auto; width: 80px; }
+            nav ul li{
+                display: block;
+                float: left;
+                /* margin-left:-40px; */
+                position: relative;
+            }
+    nav ul a{
+                display: block;
+                float: left;
+                width: 180px;
+                padding: 10px 20px;
+            }
+            
+    #dropdown-accesos {
+              top:-60px;
+    }
+    .panel-body .btn:not(.btn-block) { width:120px;margin-bottom:10px; }
+
+    .sidenav li>a {padding:0 32px !important}
+      .collapsible-body>ul>li>a {
+        padding: 0 48px !important;
+        font-weight: 400 !important;
+      }
+</style>
+
+<head>
+    
+      <ul id="dropdown1" class="dropdown-content">
+        <li><a href="{% url 'lista_legislacion' %}">Legislación</a></li>
+        <li><a href="{% url 'lista_normatividad' %}">Normatividad</a></li>
+        <li><a href="{% url 'lista_comunicados' %}">Comunicados</a></li>
+        <li><a href="{% url 'lista_clasificados' %}">Clasificados</a></li>
+        <li><a href="{% url 'lista_pqr' %}">PQR</a></li>
+        <li class="divider"></li>
+        <li><a href="{% url 'pagina_accesos' %}">Accesos</a></li>
+        <li class="divider"></li>
+        <li><a href="{% url 'lista_correspondencia' %}">Correspondencia</a></li>
+        <li class="divider"></li>
+        <li><a href="{% url 'pagina_autorizaciones' %}">Autorizaciones</a></li>
+        <li class="divider"></li>
+        <li><a href="{% url 'lista_zonas_comunes' %}">Zonas Comunes</a></li>
+        <li class="divider"></li>
+        <li><a href="{% url 'lista_miembros_consejo' %}">Consejo</a></li>
+        <li><a href="{% url 'lista_comite_convivencia' %}">Comite de Convivencia</a></li>
+        <li><a href="{% url 'lista_miembros_staff' %}">Staff</a></li>
+        <li><a href="{% url 'lista_vigilantes' %}">Vigilantes</a></li>
+        <li class="divider"></li>
+        <li><a href="{% url 'lista_reuniones_consejo' %}">Reuniones Consejo</a></li>
+        <li><a href="{% url 'lista_informes_revisor' %}">Informes Auditor</a></li>
+        <li><a href="{% url 'lista_procesos_juridicos' %}">Procesos Jurídicos</a></li>
+      </ul>
+      
+      <ul id="dropdown2" class="dropdown-content">
+        <li><a href="{% url 'lista_proponentes' %}">Proponentes</a></li>
+        <li><a href="{% url 'lista_proyectos' %}">Proyectos</a></li>
+        <li class="divider"></li>
+        <li><a href="{% url 'lista_proveedores' %}">Proveedores</a></li>
+        <li><a href="{% url 'lista_contratos' %}">Contratos</a></li>
+        <li class="divider"></li>
+        <li><a href="{% url 'lista_mantenimientos' %}">Mantenimientos</a></li>
+        <li><a href="{% url 'lista_obras' %}">Obras</a></li>
+        <li><a href="{% url 'lista_reparaciones' %}">Reparaciones</a></li>
+        
+      </ul>
+      
+      <div class="navbar-fixed">  
+        <nav>
+          <div class="nav-wrapper">
+            <a style="font-size: calc(12px + 1vw);transform:translate(1vw,0)" href="#!" class="brand-logo"><i class="material-icons">face</i>Administrador</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down" style="transform:translate(12vw,0)">
+              <li style="transform: translate(60px)"><a class="dropdown-trigger" href="#!" data-target="dropdown1">Comunidad<i class="material-icons right">arrow_drop_down</i></a></li>
+              <li style="transform: translate(60px)"><a class="dropdown-trigger" href="#!" data-target="dropdown2">Proyectos<i class="material-icons right">arrow_drop_down</i></a></li>
+              <li style="transform: translate(60px);"><a href="{% url 'activos_fijos_lista' %}">Activos Fijos</a></li>
+              <li style="transform: translate(0px);"><a href="{% url 'lista_informes_revisor' %}">Informes Revisor</a></li>
+              <li style="transform: translate(-30px);"><a href="{% url 'lista_procesos_juridicos' %}">Procesos Jurídicos</a></li>
+              <li style="transform: translate(-40px);"><a href="{% url 'pagina_informacion_residentes' %}">Residentes</a></li>
+              <li style="transform: translate(-90px);"><a href="{% url 'lista_asambleas' %}">Asambleas</a></li>              
+              <li style="transform: translate(-180px);"><a href="{% url 'user_home' 1 %}">Regresar</a></li>
+              <li style="transform: translate(-270px);"><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <ul class="sidenav" id="mobile-demo">
+
+        <li class="active"><a href="{% url 'lista_legislacion' %}"></i>Legislación</a></li>
+        <li class="active"><a href="{% url 'lista_normatividad' %}">Normatividad</a></li>
+        <li class="active"><a href="{% url 'lista_comunicados' %}">Comunicados</a></li>
+        <li class="active"><a href="{% url 'lista_clasificados' %}">Clasificados</a></li>
+        <li class="active"><a href="{% url 'lista_pqr' %}">PQR</a></li>
+        <li class="divider"></li>
+        <li class="active"><a href="{% url 'lista_zonas_comunes' %}">Zonas Comunes</a></li>
+        <li class="divider"></li>
+        <li class="active"><a href="{% url 'lista_miembros_consejo' %}">Consejo</a></li>
+        <li class="active"><a href="{% url 'lista_comite_convivencia' %}">Comite de Convivencia</a></li>
+        <li class="active"><a href="{% url 'lista_miembros_staff' %}">Staff</a></li>
+        <li class="active"><a href="{% url 'lista_vigilantes' %}">Vigilantes</a></li>
+        <li class="divider"></li>
+        <li class="active"><a href="{% url 'lista_proponentes' %}">Proponentes</a></li>
+        <li class="active"><a href="{% url 'lista_proyectos' %}">Proyectos</a></li>
+        <li class="divider"></li>
+        <li class="active"><a href="{% url 'lista_proveedores' %}">Proveedores</a></li>
+        <li class="active"><a href="{% url 'lista_contratos' %}">Contratos</a></li>
+        <li class="divider"></li>
+        <li class="active"><a href="{% url 'lista_mantenimientos' %}">Mantenimientos</a></li>
+        <li class="active"><a href="{% url 'lista_obras' %}">Obras</a></li>
+        <li class="active"><a href="{% url 'lista_reparaciones' %}">Reparaciones</a></li>
+        <li class="divider"></li>
+        <li class="active"><a href="{% url 'activos_fijos_lista' %}">Activos Fijos</a></li>
+        <li class="divider"></li>
+        <li class="divider"><a href="{% url 'acceso_peatonal_lista' %}">Acceso Peatonal</a></li>
+        <li class="divider"><a href="{% url 'acceso_vehicular_lista' %}">Acceso Vehicular</a></li>
+        <li class="active"><a href="{% url 'pagina_autorizaciones' %}">Autorizaciones</a></li>
+        <li class="divider"></li>
+        <li class="active"><a href="{% url 'lista_informes_revisor' %}">Informes Revisor</a></li>
+        <li class="active"><a href="{% url 'lista_procesos_juridicos' %}">Procesos Jurídicos</a></li>
+        <li class="active"><a href="{% url 'pagina_informacion_residentes' %}">Residentes</a></li>
+        <li class="active"><a href="{% url 'lista_asambleas' %}">Asambleas</a></li>
+        <li class="divider"></li>
+        <li><a href="{% url 'lista_reuniones_consejo' %}">Reuniones Consejo</a></li>
+        
+        <li class="divider"></li>
+        <li class="active" ><a  href="{% url 'user_home' 1 %}">Regresar</a></li>
+        <li class="active"><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+      </ul>
+    
+      
+    
+</head>
+<div class="user-box"><h6 style="color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
+  ">Usuario:{{request.user.username}}</h6></div>
+<div class="main-container">
+  <div style="margin-left: auto;margin-right: auto">
+  <h4 style="font-family: 'Times New Roman';color:black;" class="heading__title">Pendientes</h4>
+  </div>
+  <div>
+    {% load pqr %}
+    {% get_pqr_list as pqr_list %}
+    {% if pqr_list %}
+    <ul class="collapsible">
+      <th><i class="material-icons">mood_bad</i></th>
+      <th>PQR</th>
+      <li>
+        <table style="background-color:rgb(169, 248, 173)" class="table table-bordered">
+        <!-- <tr>
+          <th><i class="material-icons">mood_bad</i></th>
+          <th>PQR</th>
+        </tr> -->
+        <tr style="background-color:rgb(169, 216, 248)">
+          <th>No.</th>
+          <th>Descripción</th>
+          <th>Enviada Hace</th>
+        </tr>
+        {% for pqr in pqr_list %}  
+        <tr>
+            <td>{{ forloop.counter }}-</td>
+            <td ><li><a style="color:blue;font-weight: 800;" href="{% url 'pqr_detalle' pqr.id %}" class="link">{{pqr.title}}</a></li></td>
+            <td ><li><a style="color:blue;font-weight: 800;" href="{% url 'pqr_detalle' pqr.id %}" class="link">{{pqr.created|timesince}}</a></li></td>
+        </tr>
+        {% endfor %}
+        </table>  
+      </li>
+    </ul>
+    {% else %}
+    <ul class="collapsible">
+      <li>
+        <div style="background: radial-gradient(#cbf1e4, #58d5c9);" class="collapsible-header"><i class="material-icons">second</i>No Hay PQR pendientes</div>
+      </li>
+    </ul>    
+    {% endif %}
+  <div>
+</div>
+
+<div class="main-container">
+  <div>
+    {% load mantenimientos %}
+    {% get_mantenimientos_list as mantenimientos_list %}
+    {% if mantenimientos_list %}
+    <ul class="collapsible">
+        <th><i class="material-icons">construction</i></th>
+          <th>MANTENIMIENTOS</th>
+        <li>
+        <table style="background-color:rgb(224, 248, 169)" class="table table-bordered">
+        <tr style="background-color:rgb(169, 216, 248)">
+          <th>No.</th>
+          <th>Descripción</th>
+          <th>Vencido Desde</th>
+          <th>Días sin mantenimiento</th>
+        </tr>
+        {% for mantenimiento in mantenimientos_list %}  
+        <tr>
+            <td>{{ forloop.counter }}-</td>
+            <td ><li><a style="color:blue;font-weight: 800;" href="{% url 'activos_fijos_detalle' mantenimiento.id %}" class="link">{{mantenimiento.nombre}}</a></li></td>
+            <td ><li><a style="color:blue;font-weight: 800;" href="{% url 'activos_fijos_detalle' mantenimiento.id %}" class="link">{{mantenimiento.fecha_vence_mantenimiento|timesince}}</a></li></td>
+            <td ><li><a style="color:blue;font-weight: 800;" href="{% url 'activos_fijos_detalle' mantenimiento.id %}" class="link">{{mantenimiento.dias_sin_mantenimiento}}</a></li></td>
+        </tr>
+        {% endfor %}
+        </table>  
+      </li>
+    </ul>
+    {% else %}
+    <ul class="collapsible">
+      <li>
+        <div style="background: radial-gradient(#cbf1e4, #58d5c9);" class="collapsible-header"><i class="material-icons">second</i>No Hay Mantenimientos Pendientes</div>
+      </li>
+    </ul>    
+    {% endif %}
+  <div>
+</div>
+
+<div class="main-container">
+  <div>
+    {% load obras %}
+    {% get_obras_list as obras_list %}
+    {% if obras_list %}
+    <ul class="collapsible">
+        <th><i class="material-icons">engineering</i></th>
+          <th>OBRAS</th>
+        <li>
+        <table style="background-color:rgb(169, 248, 205)" class="table table-bordered">
+        <tr style="background-color:rgb(169, 216, 248)">
+          <th>No.</th>
+          <th>Descripción</th>
+          <th>Fecha</th>
+          <th>Saldo</th>
+        </tr>
+        {% for obra in obras_list %}  
+        <tr>
+            <td>{{ forloop.counter }}-</td>
+            <td ><li><a style="color:blue;font-weight: 800;" href="{% url 'obra_detalle' obra.id %}" class="link">{{obra.descripcion}}</a></li></td>
+            <td ><li><a style="color:blue;font-weight: 800;" href="{% url 'obra_detalle' obra.id %}" class="link">{{obra.fecha|timesince}}</a></li></td>
+            <td ><li><a style="color:blue;font-weight: 800;" href="{% url 'obra_detalle' obra.id %}" class="link">{{obra.saldo_pagar|intcomma}}</a></li></td>
+        </tr>
+        {% endfor %}
+        </table>  
+      </li>
+    </ul>
+    {% else %}
+    <ul class="collapsible">
+      <li>
+        <div style="background: radial-gradient(#cbf1e4, #58d5c9);" class="collapsible-header"><i class="material-icons">second</i>No Hay Mantenimientos Pendientes</div>
+      </li>
+    </ul>    
+    {% endif %}
+  <div>
+</div>
+<div>
+  {% load reparaciones %}
+  {% get_reparaciones_list as reparaciones_list %}
+  {% if reparaciones_list %}
+  <ul class="collapsible">
+      <th><i class="material-icons">handyman</i></th>
+        <th>REPARACIONES</th>
+      <li>
+      <table style="background-color:rgb(248, 198, 169)" class="table table-bordered">
+      <tr style="background-color:rgb(169, 216, 248)">
+        <th>No.</th>
+        <th>Descripción</th>
+        <th>Fecha</th>
+      </tr>
+      {% for reparacion in reparaciones_list %}  
+      <tr>
+          <td>{{ forloop.counter }}-</td>
+          <td ><li><a style="color:blue;font-weight: 800;" href="{% url 'reparaciones_detalle' reparacion.id %}" class="link">{{reparacion.descripcion}}</a></li></td>
+          <td ><li><a style="color:blue;font-weight: 800;" href="{% url 'reparaciones_detalle' reparacion.id %}" class="link">{{reparacion.fecha|timesince}}</a></li></td>
+      </tr>
+      {% endfor %}
+      </table>  
+    </li>
+  </ul>
+  {% else %}
+  <ul class="collapsible">
+    <li>
+      <div style="background: radial-gradient(#cbf1e4, #58d5c9);" class="collapsible-header"><i class="material-icons">second</i>No Hay Mantenimientos Pendientes</div>
+    </li>
+  </ul>    
+  {% endif %}
+<div>
+</div>
+<div class="main-container">
+  <div>
+    {% load contratos %}
+    {% get_contratos_list as contratos_list %}
+    {% if contratos_list %}
+    <ul class="collapsible">
+        <th><i class="material-icons">contacts</i></th>
+          <th>CONTRATOS</th>
+        <li>
+        <table style="background-color:rgb(169, 243, 248)" class="table table-bordered">
+        <!-- <tr style="background-color:rgb(169, 206, 248)">
+          <th><i class="material-icons">contacts</i></th>
+          <th>CONTRATOS</th>
+          <th></th>
+          <th></th>
+        </tr> -->
+        <tr style="background-color:rgb(169, 216, 248)">
+          <th>No.</th>
+          <th>Descripción</th>
+          <th>Vence Desde</th>
+          <th>(+)Vencido/(-) Por vencer</th>
+        </tr>
+        {% for contrato in contratos_list %}  
+        <tr>
+            <td>{{ forloop.counter }}-</td>
+            <td ><li><a style="color:blue;font-weight: 800;" href="{% url 'contratos_detalle' contrato.id %}" class="link">{{contrato.proveedor}}</a></li></td>
+            <td ><li><a style="color:blue;font-weight: 800;" href="{% url 'contratos_detalle' contrato.id %}" class="link">{{contrato.fecha_vence|timesince}}</a></li></td>
+            <td ><li><a style="color:blue;font-weight: 800;" href="{% url 'contratos_detalle' contrato.id %}" class="link">{{contrato.dias_vence}}</a></li></td>
+        </tr>
+        {% endfor %}
+        </table>  
+      </li>
+    </ul>
+    {% else %}
+    <ul class="collapsible">
+      <li>
+        <div style="background: radial-gradient(#cbf1e4, #58d5c9);" class="collapsible-header"><i class="material-icons">second</i>No Hay Contratos Pendientes</div>
+      </li>
+    </ul>    
+    {% endif %}
+  <div>
+</div>
+
+<div class="main-container">
+  <div>
+    {% load compromisos %}
+    {% get_compromisos_list as compromisos_list %}
+    {% if compromisos_list %}
+    <ul class="collapsible">
+        <th><i class="material-icons">compare_arrows</i></th>
+          <th>COMPROMISOS REUNIONES CONSEJO</th>
+        <li>
+        <table style="background-color:rgb(243, 226, 188)" class="table table-bordered">
+        <!-- <tr style="background-color:rgb(243, 226, 188)">
+          <th><i class="material-icons">compare_arrows</i></th>
+          <th>COMPROMISOS REUNIONES CONSEJO</th>
+          <th></th>
+          <th></th>
+        </tr> -->
+        <tr style="background-color:rgb(169, 216, 248)">
+          <th>No.</th>
+          <th>Descripción</th>
+          <th>Desde</th>
+        </tr>
+        {% for compromiso in compromisos_list %}  
+        <tr>
+            <td>{{ forloop.counter }}-</td>
+            <td ><li><a style="color:blue;font-weight: 800;" href="{% url 'compromiso_detalle' compromiso.id %}" class="link">{{compromiso.compromiso}}</a></li></td>
+            <td ><li><a style="color:blue;font-weight: 800;" href="{% url 'compromiso_detalle' compromiso.id %}" class="link">{{compromiso.reunion_consejo.fecha|timesince}}</a></li></td>
+        </tr>
+        {% endfor %}
+        </table>  
+      </li>
+    </ul>
+    {% else %}
+    <ul class="collapsible">
+      <li>
+        <div style="background: radial-gradient(#cbf1e4, #58d5c9);" class="collapsible-header"><i class="material-icons">second</i>No Hay Compromisos Pendientes</div>
+      </li>
+    </ul>    
+    {% endif %}
+  <div>
+</div>
+
+<div class="main-container">
+  <div>
+    {% load solicitudes %}
+    {% get_solicitudes_list as solicitudes_list %}
+    {% if solicitudes_list %}
+    <ul class="collapsible">
+        <th><i class="material-icons"> record_voice_over</i></th>
+          <th>SOLICITUDES PENDIENTES</th>
+          <th></th>
+        <li>
+        <table style="background-color:rgb(250, 191, 223)" class="table table-bordered">
+        <!-- <tr style="background-color:rgb(250, 191, 223)">
+          <th><i class="material-icons">email</i></th>
+          <th>SOLICITUDES PENDIENTES</th>
+          <th></th>
+          <th></th>
+        </tr> -->
+        <tr style="background-color:rgb(169, 216, 248)">
+          <th>No.</th>
+          <th>Descripción</th>
+          <th>Desde</th>
+        </tr>
+        {% for solicitud in solicitudes_list %}  
+        <tr>
+            <td>{{ forloop.counter }}-</td>
+            <td ><li><a style="color:blue;font-weight: 800" href="{% url 'solicitudes_residentes_uno' solicitud.id %}" class="link">Residente:{{solicitud.nombre}}--->Apartamento.{{solicitud.apartamento.numero}}</a></li>
+            <td ><li><a style="color:blue;font-weight: 800" href="{% url 'solicitudes_residentes_uno' solicitud.id %}" class="link">{{solicitud.created|timesince}}</a></li></td>
+        </tr>
+        {% endfor %}
+        </table>  
+      </li>
+    </ul>
+    {% else %}
+    <ul class="collapsible">
+      <li>
+        <div style="background: radial-gradient(#cbf1e4, #58d5c9);" class="collapsible-header"><i class="material-icons">second</i>No Hay Recomendaciones Pendientes</div>
+      </li>
+    </ul>    
+    {% endif %}
+  <div>
+</div>
+<div class="main-container">
+  <div>
+    {% load recomendaciones %}
+    {% get_recomendaciones_list as recomendaciones_list %}
+    {% if recomendaciones_list %}
+    <ul class="collapsible">
+        <th><i class="material-icons">record_voice_over</i></th>
+          <th>RECOMENDACIONES REVISOR FISCAL</th>
+          <th></th>
+        <li>
+        <table style="background-color:rgb(250, 191, 223)" class="table table-bordered">
+        <!-- <tr style="background-color:rgb(250, 191, 223)">
+          <th><i class="material-icons">record_voice_over</i></th>
+          <th>RECOMENDACIONES AUDITORIA</th>
+          <th></th>
+          <th></th>
+        </tr> -->
+        <tr style="background-color:rgb(169, 216, 248)">
+          <th>No.</th>
+          <th>Descripción</th>
+          <th>Desde</th>
+        </tr>
+        {% for recomendacion in recomendaciones_list %}  
+        <tr>
+            <td>{{ forloop.counter }}-</td>
+            <td ><li><a style="color:blue;font-weight: 800" href="{% url 'recomendacion_detalle' recomendacion.id %}" class="link">{{recomendacion.recomendacion}}</a></li></td>
+            <td ><li><a style="color:blue;font-weight: 800" href="{% url 'recomendacion_detalle' recomendacion.id %}" class="link">{{recomendacion.informe_revisor.fecha|timesince}}</a></li></td>
+        </tr>
+        {% endfor %}
+        </table>  
+      </li>
+    </ul>
+    {% else %}
+    <ul class="collapsible">
+      <li>
+        <div style="background: radial-gradient(#cbf1e4, #58d5c9);" class="collapsible-header"><i class="material-icons">second</i>No Hay Recomendaciones Pendientes</div>
+      </li>
+    </ul>    
+    {% endif %}
+  <div>
+</div>
+<div class="main-container">
+  <div>
+    {% load prestamos %}
+    {% get_prestamos_list as prestamos_list %}
+    {% if prestamos_list %}
+    <ul class="collapsible">
+        <th><i class="material-icons">record_voice_over</i></th>
+          <th>PRESTAMOS ACTIVOS FIJOS</th>
+          <th></th>
+        <li>
+        <table style="background-color:rgb(250, 191, 223)" class="table table-bordered">
+        <tr style="background-color:rgb(169, 216, 248)">
+          <th>No.</th>
+          <th>Descripción</th>
+          <th>Fecha</th>
+          <th>Responsable</th>
+          <th>Días</th>
+        </tr>
+        {% for prestamo in prestamos_list %}  
+        <tr>
+            <td>{{ forloop.counter }}-</td>
+            <td ><li><a style="color:blue;font-weight: 800" href="{% url 'activos_fijos_detalle' prestamo.activo_fijo_id %}" class="link">{{prestamo.activo_fijo.nombre}}</a></li></td>
+            <td ><li><a style="color:blue;font-weight: 800" href="{% url 'activos_fijos_detalle' prestamo.activo_fijo_id %}" class="link">{{prestamo.fecha}}</a></li></td>
+            <td ><li><a style="color:blue;font-weight: 800" href="{% url 'activos_fijos_detalle' prestamo.activo_fijo_id %}" class="link">{{prestamo.responsable}}</a></li></td>
+            <td ><li><a style="color:blue;font-weight: 800" href="{% url 'activos_fijos_detalle' prestamo.activo_fijo_id %}" class="link">{{prestamo.dias}}</a></li></td>
+        </tr>
+        {% endfor %}
+        </table>  
+      </li>
+    </ul>
+    {% else %}
+    <ul class="collapsible">
+      <li>
+        <div style="background: radial-gradient(#cbf1e4, #58d5c9);" class="collapsible-header"><i class="material-icons">second</i>No Hay Recomendaciones Pendientes</div>
+      </li>
+    </ul>    
+    {% endif %}
+  <div>
+</div>
+
+<div class="main-container">
+  <div>
+    {% load reservas %}
+    {% get_reservas_list as reservas_list %}
+    {% if reservas_list %}
+    <ul class="collapsible">
+        <th><i class="material-icons">pending_actions</i></th>
+          <th>RESERVAS</th>
+          <th></th>
+        <li>
+        <table style="background-color:rgb(250, 191, 223)" class="table table-bordered">
+        <!-- <tr style="background-color:rgb(250, 191, 223)">
+          <th><i class="material-icons">record_voice_over</i></th>
+          <th>RECOMENDACIONES AUDITORIA</th>
+          <th></th>
+          <th></th>
+        </tr> -->
+        <tr style="background-color:rgb(169, 216, 248)">
+          <th>No.</th>
+          <th>Descripción</th>
+          <th>Reserva</th>
+          <th>Pago Anexo</th>
+        </tr>
+        {% for reserva in reservas_list %}  
+        <tr>
+            <td>{{ forloop.counter }}-</td>
+            <td ><li><a style="color:blue;font-weight: 800" href="{% url 'consulta_reserva_zonas_comunes_administrador' id=reserva.id %}" class="link">{{reserva.zona_comun.descripcion}}</a></li></td>
+            <td ><li><a style="color:blue;font-weight: 800" href="{% url 'consulta_reserva_zonas_comunes_administrador' id=reserva.id %}" class="link">{{reserva.fecha}}-{{reserva.hora_inicio}}</a></li></td>
+            {% load anexo_pago_reservas %}
+            {% get_anexo_pago_reservas_list as anexo_pago_reservas %}
+            {% for anexo in anexo_pago_reservas %}
+            {% if anexo.reserva_id == reserva.id %}
+            <td><a href="{{ anexo.archivo.url }}">
+              <i class="fa fa-folder-open fa-2x"></i>
+              <span class="nav-text" style="color:black">
+              <strong>Descargar</strong>
+              </span>
+              </a>
+            </td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </table>  
+      </li>
+    </ul>
+    {% else %}
+    <ul class="collapsible">
+      <li>
+        <div style="background: radial-gradient(#cbf1e4, #58d5c9);" class="collapsible-header"><i class="material-icons">second</i>No Hay Reservas Pendientes</div>
+      </li>
+    </ul>    
+    {% endif %}
+  <div>
+</div>
+
+{% block javascript %}
+<script>
+  
+  $(".dropdown-trigger").dropdown()
+  $(document).ready(function(){
+        $('.sidenav').sidenav();
+  });
+  
+</script>  
+
+{% endblock javascript%} 
+{% endblock %}
+

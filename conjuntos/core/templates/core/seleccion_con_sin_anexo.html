@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang='es'>
+{% extends "core/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{{ form.media }}            {# Adds date-picker required JS and CSS #}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+
+{% load static %}
+<script>
+  
+</script>
+
+<style>
+body{
+    
+    background-color: rgb(190, 226, 214);
+    
+        
+}
+form{
+    padding-top: 10px;
+}
+#lista3 {
+    counter-reset: li; 
+    list-style: none; 
+    *list-style: decimal; 
+    font: 15px 'trebuchet MS', 'lucida sans';
+    padding: 0;
+    margin-bottom: 4em;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+#lista3 li{
+    position: relative;
+    display: block;
+    padding: .4em .4em .4em .8em;
+    *padding: .4em;
+    margin: .5em 0 .5em 2.5em;
+    background: #ddd;
+    color: #444;
+    text-decoration: none;
+    transition: all .3s ease-out;   
+}
+
+#lista3 li:hover{
+    background: #eee;
+}   
+
+#lista3 li:before{
+    content: counter(li);
+    counter-increment: li;
+    position: absolute; 
+    left: -2.5em;
+    top: 50%;
+    margin-top: -1em;
+    background: #fa8072;
+    height: 2em;
+    width: 2em;
+    line-height: 2em;
+    text-align: center;
+    font-weight: bold;
+}
+
+#lista3 li:after{
+    position: absolute; 
+    content: '';
+    border: .5em solid transparent;
+    left: -1em;
+    top: 50%;
+    margin-top: -.5em;
+    transition: all .3s ease-out;               
+}
+
+#lista3 li:hover:after{
+    left: -.5em;
+    border-left-color: #fa8072;             
+}
+.container-email{
+    margin-top: 30vh;
+    width: 50vh;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: azure;
+}
+.container-menu{
+    margin-top: 20px;
+    width: 35vh;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: -50px;
+}
+.titulo{background-color: darkcyan;color: #ddd;}
+</style>
+<body></body>
+<div class="container-email">
+    <div class="titulo">SELECCIONE TIPO DE CORREO</div>
+    <form method="post" >
+        {% csrf_token %}
+        <!-- <h5>Observación</h5> -->
+        <div class="container-menu">
+            {% if tipomail == 1 %}
+                <ol id="lista3">
+                    <li><a class="nav-link" href="{% url 'envio_email_un_residente' %}">Sin Anexo</li>
+                    <li><a class="nav-link" href="{% url 'envio_email_anexo_un_residente' %}">Con Anexo</li>
+                </ol>   
+            {% endif %}
+            {% if tipomail == 2 %}
+                <ol id="lista3">
+                    <li><a class="nav-link" href="{% url 'envio_email_residentes_filtro' %}">Sin Anexo</li>
+                    <li><a class="nav-link" href="{% url 'envio_email_anexo_residentes_filtro' %}">Con Anexo</li>
+                </ol>   
+            {% endif %}
+        </div>    
+        <div class="modal-footer">
+            <button id="btnSalir" class="btn btn-warning" data-dismiss="modal">Salir</button>
+        </div>  
+    </form>
+</div>
+
+{% block javascript %}
+<script>
+  $(document).on("click","#btnSalir", function(e) {
+        window.location.href = "{% url 'envio_correos_masivos_residentes' %}";
+  })
+</script>
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "core/base_sin_material.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{{ form.media }}            {# Adds date-picker required JS and CSS #}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+
+<style>
+    .titulo{
+        margin-bottom: -20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #056636;
+        color: white;
+    }
+    label{color: black;
+        font-size: medium;
+        font-weight: 500;}
+</style>
+
+<main role="main">
+  <div class="container-doc">
+      <div class="col-md-6 mx-auto mb-6">
+          <div class="titulo">
+              <h2>LOGIN</h2>
+          </div>
+          </br>
+          <div class="container">
+            <form method="post">
+              {% csrf_token %}
+                {% for field in form %}
+                <p>
+                  {{ field.label_tag }}<br>
+                  {{ field }}
+                  {% if field.help_text %}
+                    <small style="display: none">{{ field.help_text }}</small>
+                  {% endif %}
+                  {% for error in field.errors %}
+                    <p style="color: red">{{ error }}</p>
+                  {% endfor %}
+                </p>
+                {% endfor %}
+              <button type="submit">Aceptar</button>
+            </form>
+          </div>
+      </div>
+  </div>
+</main>        
+{% endblock %}

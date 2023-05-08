@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+    nav >ul{ margin: 0 auto; width: 80px; }
+    nav ul li{
+        display: block;
+        float: left;
+        /* margin-left:-40px; */
+        position: relative;
+    }
+    nav ul a{
+        display: block;
+        float: left;
+        width: 180px;
+        padding: 10px 20px;
+    }
+    
+    #dropdown-accesos {
+      top:-60px;
+    }
+
+    body { padding-top:20px; }
+    .panel-body .btn:not(.btn-block) { width:120px;margin-bottom:10px; }
+
+    .sidenav li>a {padding:0 32px !important}
+      .collapsible-body>ul>li>a {
+        padding: 0 48px !important;
+        font-weight: 400 !important;
+      }
+
+</style>
+<title>{% block tittle %}Sistema | CONDOMINIUM{% endblock %}</title>
+
+<body>
+  <div class="navbar-fixed">
+    <nav>
+      <div class="nav-wrapper">
+        <a style="font-size: calc(12px + 1vw)" href="#!" class="brand-logo"><i class="material-icons">security</i>Sistema</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'crear_usuarios' %}">Crear Usuarios</a></li>
+          <li class="active" ><a  href="{% url 'main' %}">Regresar</a></li>
+          <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div><h6 style="color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
+    ">Usuario:{{request.user.username}}</h6>
+  </div>
+  <ul class="sidenav" id="mobile-demo">
+    <ul class="collapsible collapsible-accordion">
+        <li>
+          <li><a href="{% url 'crear_usuarios' %}">Crear Usuarios</a></li>
+          <li class="active" ><a  href="{% url 'main' %}">Regresar</a></li>
+          <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+        </li>
+    </ul>
+  </ul>
+
+
+</body>
+{% block javascript %}
+<script>
+  $(".dropdown-trigger").dropdown();
+  $('.dropdown-button').dropdown({
+        inDuration: 300,
+        outDuration: 225,
+        constrainWidth: false,
+        gutter: 0, // Spacing from edge
+        belowOrigin: true, // Displays dropdown below the button
+        alignment: 'right', // Displays dropdown with edge aligned to the left 
+        stopPropagation: false // Stops event propagation
+       
+  });
+  $( document ).ready(function(){
+        $('.sidenav').sidenav();
+        $('.collapsible').collapsible();
+        $(".dropdown-trigger").dropdown({ hover: true });
+  });
+  $(document).ready(function() {$('.button-collapse').sidenav('show'); });    
+</script>
+{% endblock %}
+
+{% endblock %}

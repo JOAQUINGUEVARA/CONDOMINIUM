@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% comment %} {% load material_form %}
+{% form form=form %}{% endform %} {% endcomment %}
+{% load static %}
+{% block content %}
+<style>
+  .collapsible {
+   margin:auto;
+   width: 50em;
+   background:mintcream;
+   box-shadow:1px 1px 2px #333;
+   font-family:Georgia, "Times New Roman", Times, serif;
+   font-size:16px;
+   text-align:justify;
+   flex-direction: column;
+   white-space: normal;
+   
+  }
+  .collapsible-body{
+   padding: 5px 5px 5px 5px;
+  } 
+  
+  body{
+       height: 3000px;
+     }
+     body { padding-top:20px; }
+    .panel-body .btn:not(.btn-block) { width:120px;margin-bottom:10px; }
+
+    .sidenav li>a {padding:0 32px !important}
+      .collapsible-body>ul>li>a {
+        padding: 0 48px !important;
+        font-weight: 400 !important;
+      }
+</style>
+
+<title>{% block tittle %}Principal | CONDOMINIUM{% endblock %}</title>
+
+<body>
+  <div class="navbar-fixed">
+    <nav>
+        <div class="nav-wrapper">
+          <a href="#!" class="brand-logo center"><i class="material-icons">home</i>Principal</a>
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+          <ul class="right hide-on-med-and-down">
+            <li><a href="{% url 'legislacion' %}">Legislación</a></li>
+            <li><a href="{% url 'pagina_administrador' %}">Administrador</a></li>
+            <li><a href="{% url 'vigilancia' %}">Vigilancia</a></li>
+            <li><a href="{% url 'pagina_consejo' %}">Consejo</a></li>
+            <li><a href="{% url 'residente' %}">Residentes</a></li>
+            {% if request.user.is_superuser %}
+            <li><a href="{% url 'sistema' %}">Sistema</a></li>
+            {% endif %}
+            <li><a class="active" href="{% url 'logout' %}">Cerrar Sesión</a></li>
+          </ul>
+        </div>
+        <img style="transform: translate(0,-65px);" src="{% static '/img/logo_conjunto.png' %}" class="avatar" width="300" height="70">
+    </nav>
+    <div><h6 style="color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
+        ">Usuario:{{request.user.username}}</h6>
+    </div>
+    
+  </div>  
+  <ul class="sidenav" id="mobile-demo">
+        <li><a href="{% url 'legislacion' %}">Legislación</a></li>
+        <li><a href="{% url 'pagina_administrador' %}">Administrador</a></li>
+        <li><a href="{% url 'vigilancia' %}">Vigilancia</a></li>
+        <li><a href="{% url 'consejero' %}">Consejeros</a></li>
+        <li><a href="{% url 'residente' %}">Residentes</a></li>
+        {% if request.user.is_superuser %}
+        <li><a href="{% url 'sistema' %}">Sistema</a></li>
+        {% endif %}
+        <li><a class="active" href="{% url 'logout' %}">Cerrar Sesión</a></li>
+  </ul>
+</body>
+
+<div><h6 style="color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
+  ">Usuario:{{request.user.username}}</h6>
+</div>
+<div style="text-align: center;padding-top:10px;font-size: calc(12px + 1vw)"><h4>COMUNICADOS</h4></div>
+
+{% load noticias_extras %}
+{% get_noticias_list as noticias_list %}
+{% if noticias_list %}
+  {% for noticia in noticias_list %}
+  <ul class="collapsible">
+    <li>
+      <div style="background: radial-gradient(#cbf1e4, #58d5c9);" class="collapsible-header"><i class="material-icons">second</i>{{noticia.title}} ({{noticia.created}})</div>
+      <div class="collapsible-body"><span>{{noticia.subtitle}}</span></div>
+      <div class="collapsible-body"><span>{{noticia.content|striptags|safe|linebreaks}}</span></div>
+      {% if noticia.foto %}
+      <div class="collapsible-body"><img style="margin-top:20px" class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="{{noticia.foto.url}}" alt=""></div>
+      {% endif %}
+    </li>
+  </ul>
+  
+  {% endfor %}
+{% else %}
+  <ul class="collapsible">
+  <li>
+    <div style="background: radial-gradient(#cbf1e4, #58d5c9);" class="collapsible-header"><i class="material-icons">second</i>No Hay Comunicados Recientes</div>
+    <div class="collapsible-body"><span>No Hay Comunicados Recientes</span></div>
+  </li>  
+{% endif %}
+
+{% block javascript %}
+<script>
+  $( document ).ready(function(){
+       $('.sidenav').sidenav();
+       $('.collapsible').collapsible();
+       $(".dropdown-trigger").dropdown({ hover: true });
+     });
+
+ </script>  
+
+{% endblock javascript%} 
+{% endblock %}
+
+
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang='es'>
+{% extends "core/base_sin_material.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{{ form.media }}            {# Adds date-picker required JS and CSS #}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+
+{% load static %}
+
+
+<style>
+    
+    label{
+    color:black;
+    }
+    .titulo{
+        margin-bottom: -20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #056636;
+        color: white;
+    }
+    label{color: black;
+        font-size: medium;
+        font-weight: 500;}
+</style>
+<!DOCTYPE html>
+<html lang='es'>
+
+<head>
+    <link href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet"/>
+    <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet"/>
+    
+       
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    
+</head>
+<main role="main">
+    <div class="container-doc">
+        <div class="col-md-6 mx-auto mb-6">
+            <div class="titulo">
+                <h2>INFORMACION AUTORIZADO PLATAFORMA WEB</h2>
+            </div>
+            </br>
+            <div class="container">
+            <form role="form" method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <!-- <button id="btnAutorizado" type="submit" class="btn btn-primary" value="Submit">Guardar</button> -->
+                <button id="btnAutorizado" class="btn btn-primary">Guardar</button>
+                <button id = "btnSalir" class="btn btn-default" data-dismiss="modal">Salir</button>
+            </form>
+            </div>
+        </div>    
+    </div>
+</main>        
+{% block javascript %}
+<script>
+    $(document).ready(function(){
+    $('#id_fecha_inicial').datepicker();
+    $('#id_fecha_final').datepicker();
+    });
+    
+    jQuery(function ($) {
+    $.datepicker.regional['es'] = {
+    closeText: 'Cerrar',
+    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+    'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+    dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+    dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié;', 'Juv', 'Vie', 'Sáb'],
+    dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+    weekHeader: 'Sm',
+    dateFormat: 'dd/mm/yy',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix: ''
+    };
+    $.datepicker.setDefaults($.datepicker.regional['es']);
+    });
+
+    /* document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.datepicker');
+        var instances = M.Datepicker.init(elems, options);
+    }); */
+
+    $("#id_identificacion").change(function () {
+    const identificacion = $(this).val();
+    let posicion = identificacion.indexOf('.');
+    if (posicion !== -1){
+       Swal.fire('No se pueden ingresar puntos en la identificación')
+    }
+    $.ajax({
+      url: "{% url 'validar_autorizado_plataforma_web_peatonal' %}",
+      data: {
+          'identificacion': identificacion
+      },
+          type: 'GET',
+          dataType: 'json',
+          success: function (data) {
+          console.log(data)
+          if(data.is_taken == true)
+          {
+            Swal.fire('Autorizado ya ingresado, modifiquelo')
+            window.location.href = "{% url 'autorizacion_plataforma_web_peatonal' %}"
+          };
+      }
+    });
+  });
+</script>
+
+{% endblock %}
+{% endblock %}

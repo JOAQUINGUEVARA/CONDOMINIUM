@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang='es'>
+{% extends "core/base_sin_material.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{{ form.media }}            {# Adds date-picker required JS and CSS #}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+
+{% load static %}
+
+
+<style>
+    
+    label{
+    color:black;
+    }
+    .titulo{
+      margin-bottom: -20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #056636;
+      color: white;
+    }
+    label{color: black;
+        font-size: medium;
+        font-weight: 500;}
+</style>
+<!DOCTYPE html>
+<html lang='es'>
+
+<head>
+    
+</head>
+<main role="main">
+    <div class="container-doc">
+        <div class="col-md-6 mx-auto mb-6">
+            <div class="titulo">
+                <h2>INFORMACION CORRESPONDENCIA</h2>
+            </div>
+            </br>
+            <div class="container">
+            <form role="form" method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button id="btnCorrespondencia" type="submit" class="btn btn-primary" value="Submit">Guardar</button>
+                <button id="btnSalir" class="btn btn-warning" data-dismiss="modal">Salir</button>
+            </form>
+            </div>
+        </div>    
+    </div>
+</main>        
+{% block javascript %}
+<script>
+    $(document).on("click","#btnSalir", function(e) {
+          window.location.href = "{% url 'lista_correspondencia' %}";
+    })
+
+    $(document).on("click","#id_interior", function(e) {
+    const IdInterior = document.getElementById('id_interior')
+    $.ajax({
+    url: "{% url 'ajax_filtrar_apartamento' %}",
+    data: {'idinterior':IdInterior.value },
+    method: "GET",
+    Type: 'json',
+    success:function(data) {
+    var trHTML = '';
+    document.getElementById("id_apartamento").innerHTML='';
+    for (var i = 0; i < data.length; i++) {
+    const id =  {id: data[i].id};
+    const numero =  data[i].numero;
+    console.log(numero)  
+    trHTML = `<option value=${data[i].id} >${numero}</option>`;
+    $("#id_apartamento").append(trHTML);
+    }
+    }
+    });
+    });
+</script>
+</script>
+
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% comment %} {% load material_form %}
+{% form form=form %}{% endform %} {% endcomment %}
+{% load static %}
+{% block content %}
+
+<title>{% block tittle %}{% endblock %}Contratos | CONDOMINIUM</title>
+
+
+<body>
+  <nav>
+      <div class="nav-wrapper">
+        <a href="#!" class="brand-logo"><i class="material-icons">cloud</i>Logo</a>
+        <ul class="right hide-on-med-and-down">
+          <li class="active"><a href="{% url 'pagina_administrador' %}">Regresar</a></li>
+          <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+        </ul>
+      </div>
+  </nav>
+</body>
+</html>
+{% endblock %}

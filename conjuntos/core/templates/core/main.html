@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% comment %} {% load material_form %}
+{% form form=form %}{% endform %} {% endcomment %}
+{% load static %}
+{% block content %}
+<style>
+  .collapsible {
+   margin:auto;
+   width: 50em;
+   background:mintcream;
+   box-shadow:1px 1px 2px #333;
+   font-family:Georgia, "Times New Roman", Times, serif;
+   font-size:16px;
+   text-align:justify;
+   flex-direction: column;
+   white-space: normal;
+   
+    }
+    .collapsible-body{
+    padding: 5px 5px 5px 5px;
+    } 
+      
+    .panel-body .btn:not(.btn-block) { width:120px;margin-bottom:10px; }
+
+    .sidenav li>a {padding:0 32px !important}
+      .collapsible-body>ul>li>a {
+        padding: 0 48px !important;
+        font-weight: 400 !important;
+    }
+</style>
+
+<title>{% block tittle %}Principal | CONDOMINIUM{% endblock %}</title>
+
+<body>
+  <div class="navbar-fixed">
+    <nav>
+        <div class="nav-wrapper">
+          <a href="#!" class="brand-logo left"><i class="material-icons">home</i>Principal</a>
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+          <ul class="right hide-on-med-and-down">
+            {% if request.user.is_superuser %}
+            <li><a href="{% url 'lista_legislacion' %}">Legislación</a></li>
+            {% endif %}
+            {% if request.user.is_superuser %}
+            <li><a href="{% url 'lista_normatividad' %}">Normatividad</a></li>
+            {% endif %}
+            <li><a href="{% url 'lista_comunicados' %}">Comunicados</a></li>
+            {% if request.user.is_superuser %}
+            <li><a href="{% url 'pagina_administrador' %}">Administrador</a></li>
+            {% endif %}
+            {% if request.user.is_superuser %}
+            <li><a href="{% url 'vigilancia' %}">Vigilancia</a></li>
+            {% endif %}
+            {% if request.user.is_superuser %}
+            <li><a href="{% url 'consejero' %}">Consejeros</a></li>
+            {% endif %}
+            {% if request.user.is_superuser %}
+            <li><a href="{% url 'pagina_informacion_residentes' %}">Residentes</a></li>
+            {% endif %}
+            <li><a href="{% url 'pagina_zonas_comunes' %}">Zonas Comunes</a></li>
+            {% if request.user.is_superuser %}
+            <li><a href="{% url 'lista_miembros_staff' %}">Staff</a></li>
+            {% endif %}
+            <li><a class="active" href="{% url 'logout' %}">Cerrar Sesión</a></li>
+          </ul>
+        </div>
+        <!-- <img style="transform: translate(0,-65px);" src="{% static '/img/logo_conjunto.png' %}" class="avatar" width="350" height="70"> -->
+    </nav>
+    <div><h6 style="color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
+        ">Usuario:{{request.user.username}}</h6>
+    </div>
+    
+  </div>  
+  <ul class="sidenav" id="mobile-demo">
+        {% if request.user.is_superuser %}
+        <li><a href="{% url 'lista_legislacion' %}">Legislación</a></li>
+        {% endif %}
+        {% if request.user.is_superuser %}
+        <li><a href="{% url 'lista_normatividad' %}">Normatividad</a></li>
+        {% endif %}
+        <li><a href="{% url 'lista_comunicados' %}">Comunicados</a></li>
+        {% if request.user.is_superuser %}
+        <li><a href="{% url 'pagina_administrador' %}">Administrador</a></li>
+        {% endif %}
+        {% if request.user.is_superuser %}
+        <li><a href="{% url 'vigilancia' %}">Vigilancia</a></li>
+        {% endif %}
+        {% if request.user.is_superuser %}
+        <li><a href="{% url 'consejero' %}">Consejeros</a></li>
+        {% endif %}
+        {% if request.user.is_superuser %}
+        <li><a href="{% url 'pagina_informacion_residentes' %}">Residentes</a></li>
+        {% endif %}
+        <li><a href="{% url 'pagina_zonas_comunes' %}">Zonas Comunes</a></li>
+        {% if request.user.is_superuser %}
+        <li><a href="{% url 'lista_miembros_staff' %}">Staff</a></li>
+        {% endif %}
+        <li><a class="active" href="{% url 'logout' %}">Cerrar Sesión</a></li>
+  </ul>
+</body>
+
+<div><h6 style="color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
+  ">Usuario:{{request.user.username}}</h6>
+</div>
+
+{% block javascript %}
+<script>
+  $( document ).ready(function(){
+       $('.sidenav').sidenav();
+       $('.collapsible').collapsible();
+       $(".dropdown-trigger").dropdown({ hover: true });
+     });
+
+ </script>  
+
+{% endblock javascript%} 
+{% endblock %}
+
+
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% comment %} {% load material_form %}
+{% form form=form %}{% endform %} {% endcomment %}
+{% load static %}
+{% block content %}
+
+<title>{% block tittle %}{% endblock %}Mantenimiento | CONDOMINIUM</title>
+
+
+<body>
+  <nav>
+      <div class="nav-wrapper">
+        <a style="font-size: calc(12px + 1vw);transform:translate(3vw,0)" href="#!" class="brand-logo"><i class="material-icons">cloud</i>Logo</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'activos_fijos' %}">Activos Fijos</a></li>
+          <li><a href="{% url 'asignacion_activos' %}">Asignación de Activos</a></li>
+          <li class="active" ><a href="{% url 'pagina_administrador' %}"></a>Regresar</a></li>
+          <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+        </ul>
+      </div>
+  </nav>
+</body>
+</html>
+{% endblock %}

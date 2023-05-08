@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang='es'>
+{% extends "core/base_sin_material.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{{ form.media }}            {# Adds date-picker required JS and CSS #}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+
+<style>
+    #id_numero{
+      width: 300px;
+    }
+    #id_tipo_proceso{
+      width: 150px;
+    }
+    #id_cc_nit{
+      width: 300px;
+    }
+    #id_fecha_inicial{
+      width: 150px;
+    }
+    #id_abogado{
+      width: 300px;
+    }
+    #id_demandante{
+      width: 300px;
+    }
+    #id_demandado{
+      width: 300px;
+    }
+    #id_juzgado{
+      width: 500px;
+    }
+    #id_interior{
+      width: 300px;
+    }
+    #id_apartamento{
+      width: 300px;
+    }
+    #id_fecha_final{
+      width: 150px;
+    }
+    #id_cc_nit{
+      width: 300px;
+    }
+    #id_valor_demanda{
+      width: 100px;
+    }
+    #id_activo{
+      width: 100px;
+    }
+    label{
+    color:black;
+    }
+    .titulo{
+        margin-bottom: -20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #056636;
+        color: white;
+    }
+    label{color: black;
+        font-size: medium;
+        font-weight: 500;}
+</style>
+<!DOCTYPE html>
+<html lang='es'>
+
+<head>
+    
+
+<!-- Updated JavaScript url -->
+<script src="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>
+
+    <link href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet"/>
+    <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet"/>
+    
+       
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+ 
+</head>
+<main role="main">
+    <div class="container-doc">
+        <div class="col-md-6 mx-auto mb-6">
+            <div class="titulo">
+                <h2>INFORMACION PROCESO JURIDICO</h2>
+            </div>
+            </br>
+            <div class="container">
+            <form role="form" method="post">
+                {% csrf_token %}
+                    <div style="display:flex;flex-direction:column;">
+                    <div style="display:flex;margin-left:20px">{{ form.proceso_numero|as_crispy_field }}</div>
+                                       
+                    <div style="display:flex;flex-direction:row;align-items: center;">
+                        <div style="display:flex;margin-left:20px;">{{ form.tipo_proceso|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;transform:translate(0,5px)"><a id="btnGuardaServicio" type="button" href="{% url 'crea_tipo_proceso' %}" class="btn btn-primary" value="nuevo" >Crear Tipo Proceso</a></div>
+                    </div>
+                    <div style="display:flex;margin-left:20px;">{{ form.fecha_inicial|as_crispy_field }}</div>
+                    
+                    <div style="display:flex;margin-left:20px;">{{ form.abogado|as_crispy_field }}</div>
+                    <div style="display:flex;margin-left:20px;">{{ form.demandante|as_crispy_field }}</div>
+                    
+                    
+                    <div style="display:flex;margin-left:20px;">{{ form.demandado|as_crispy_field }}</div>
+                    <div style="display:flex;margin-left:20px;">{{ form.juzgado|as_crispy_field }}</div>
+                    <div style="display:flex;margin-left:20px;">{{ form.contenido|as_crispy_field }}</div>
+                    
+                    
+                    <div style="display:flex;margin-left:20px;">{{ form.interior|as_crispy_field }}</div>
+                    <div style="display:flex;margin-left:20px;">{{ form.apartamento|as_crispy_field }}</div>
+                   
+                    <div style="display:flex;margin-left:20px;">{{ form.fecha_final|as_crispy_field }}</div>
+                    <div style="display:flex;margin-left:20px;">{{ form.valor_demanda|as_crispy_field }}</div>
+                    <div style="display:flex;margin-left:20px;color: black;font-size: medium;font-weight: 500;">Activo:{{ form.activo }}</div>
+                    </br>
+                    </div>
+                <button id="btnReunionConsejo" type="submit" class="btn btn-primary" value="Submit">Guardar</button>
+                <button id="btnSalir" class="btn btn-warning" data-dismiss="modal">Salir</button>
+            </form>
+            </div>
+        </div>    
+    </div>
+</main>        
+{% block javascript %}
+
+<script>
+    
+    $( document ).ready(function() {
+      $.ajax({
+        url: "{% url 'cargar_numero_proceso' %}",
+          type: 'GET',
+          dataType: 'json',
+          success: function (data) {
+          numero = document.getElementById('id_proceso_numero');
+          numero.value = data.numero;
+      }
+    });
+    });
+
+    $(document).on("click","#btnSalir", function(e) {
+          window.location.href = "{% url 'lista_procesos_juridicos' %}";
+    })
+    $(document).ready(function(){
+    $('#id_fecha_inicial').datepicker();
+    $('#id_fecha_final').datepicker();
+    });
+    
+    jQuery(function ($) {
+    $.datepicker.regional['es'] = {
+    closeText: 'Cerrar',
+    monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+    'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+    dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+    dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié;', 'Juv', 'Vie', 'Sáb'],
+    dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+    weekHeader: 'Sm',
+    dateFormat: 'dd/mm/yy',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix: ''
+    };
+    $.datepicker.setDefaults($.datepicker.regional['es']);
+    });
+
+        
+    $("#id_proceso_numero").change(function () {
+        const numeroProceso = $(this).val();
+        $.ajax({
+          url: "{% url 'guarda_numero_proceso' %}",
+          data: {'numero_proceso': numeroProceso},
+          type: 'GET',
+          dataType: 'json',
+              
+        });
+        });
+</script>
+
+{% endblock %}
+{% endblock %}

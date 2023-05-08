@@ -1,0 +1,268 @@
+{% extends "core/base.html" %}
+{% load render_table from django_tables2 %}
+
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+{% load django_tables2 %}
+{% load humanize %}
+{% load static %}
+{% block content %}
+{{ form.media }}
+
+<style>
+ 
+@media (max-width: 1600px) {
+  .container-autoriza{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:row;
+  justify-content: space-between;
+  background-color:azure;
+  width: 100%;
+  }
+  .autoriza-buttons{
+    display:flex;
+    justify-content:center;
+    flex-direction:row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .filter-button{
+    display:flex;
+    justify-content:center;
+    flex-direction:row;
+    align-items: center;
+  }
+  .container-filter{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    background-color:rgb(44, 158, 211);
+    height: 85px;
+    width: 100%;
+}
+}
+@media screen and (max-width: 600px) {
+  .container-autoriza{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    justify-content: space-between;
+    background-color:azure;
+  
+  }
+  .autoriza-buttons{
+    display:flex;
+    justify-content:center;
+    flex-direction:row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  table, thead, tbody, th, td, tr { 
+		display: block; 
+	}
+	
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	tr { border: 1px solid #ccc; }
+	
+	td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+	}
+	
+	td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+  td:nth-of-type(1):before { content: "Identificación"; }
+	td:nth-of-type(2):before { content: "Nombre"; }
+	td:nth-of-type(3):before { content: "Permanente"; }
+	td:nth-of-type(4):before { content: "Fecha Inic."; }
+	td:nth-of-type(5):before { content: "Fecha Fin."; }
+	td:nth-of-type(6):before { content: "Apto."; }
+	td:nth-of-type(7):before { content: "Tipo Autoriza"; }
+  td:nth-of-type(8):before { content: "Activo"; }
+  td:nth-of-type(9):before { content: "Id"; }
+  td:nth-of-type(10):before { content: "Editar"; }
+  td:nth-of-type(11):before { content: "Borrar"; }
+}
+
+
+</style>
+
+<head>
+      
+</head>
+       
+    <body>
+        <div class="navbar-fixed">
+            <nav>
+              <div class="nav-wrapper">
+                <a style="font-size: calc(12px + 1vw)" href="#!" class="brand-logo"><i class="material-icons">assignment_turned_in</i>Autorizaciones</a>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li  class="active"><a href="{% url 'direcciona_salida_autorizaciones_peatonal' %}" >Regresar</a></li>
+                </ul>
+              </div>
+            </nav>
+          </div>
+      
+          <ul class="sidenav" id="mobile-demo">
+            <li  class="active"><a href="{% url 'direcciona_salida_autorizaciones_peatonal' %}" >Regresar</a></li>
+          </ul>
+    </body>
+    <div id="filtro">
+      <form method="get">
+          <div class="container-filter">
+              <div class="fecha-inicial" style="border-style:none; border-width:1; background-color:rgb(109, 203, 247);width: 170px;border-radius: 5px;transform:translate(1vh,0)">
+                <div style="display:flex;">Fecha Inicial:</div><div style="background-color: white;display:flex;border-radius: 5px;">{{ filter.form.fecha_inicial}}</div>
+              </div>
+              <div class="fecha-final" style="border-style:none; border-width:1; background-color:rgb(109, 203, 247);width: 170px;border-radius: 5px;transform:translate(4vh,0)">
+                <div style="display:flex;">Fecha Final:</div><div style="background-color: white;display:flex;border-radius: 5px;">{{ filter.form.fecha_final}}</div>
+              </div>  
+              <div class="identificacion" style="border-style:none; border-width:1; background-color:rgb(109, 203, 247);width: 170px;border-radius: 5px;transform:translate(7vh,0)">
+                <div style="display:flex;">Identificación:</div><div style="background-color: white;display:flex;border-radius: 5px;">{{ filter.form.identificacion}}</div>
+              </div>
+              <div class="apartamento" style="border-style:none; border-width:1; background-color:rgb(109, 203, 247);width: 120px;border-radius: 5px;transform:translate(12vh,0)">
+                  <div>Apartamento:</div><div style="background-color: white;border-radius: 5px;">{{ filter.form.apartamento }}</div>
+              </div>    
+              <div class="tipo_autoriza" style="border-style:none; border-width:1; background-color:rgb(109, 203, 247);width: 170px;border-radius: 5px;transform:translate(15vh,0)">   
+                  <div style="display:flex;">Tipo Autoriza:</div><div style="display:flex;background-color: white;border-radius: 5px;">{{ filter.form.tipo_autoriza }}</div>
+              </div>
+              
+          </div>
+          <div style="color:#212529;" class="btnFiltro">
+              {% bootstrap_button 'Filtrar' %}
+          </div>
+      </form>
+    </div>
+    
+    <div class="container-autoriza">  
+        <div style="display:flex;align-items:center;justify-content:flex-start;color:darkred;width:180px;margin-top:10px" ><h6>Usuario: {{user}}</h6></div>
+        <a style="display:flex;font-size: calc(7px + 1vw);margin: auto;color:black" type="button" type="submit" href="#" value="autoriza" ><span>AUTORIZACIONES INGRESO PEATONAL</span></a>
+        <div class="filter-button">
+        <div  style="transform:translate(-7vh,0)">Filtro</div>
+        <div><a type="submit" id="btnFiltros" onClick="muestra_oculta('filtro')" style="transform:translate(-16vh,0)" class="btn-floating btn-short waves-effect waves-light cyan" value="crear" ><i class="material-icons">filter_list</i></a></div>
+        </div>
+        {% if tipo_usuario == 1 or tipo_usuario == 2 or tipo_usuario == 5 %}
+        <div class="autoriza-buttons">
+        <div><a id ="btnNuevo" style="transform:translate(-7vh,0)" class="btn-floating btn-short waves-effect waves-light blue" href="{% url 'crear_autorizado_peatonal' %}" value="crear" ><i class="material-icons">add</i></a></div>
+        <div style="transform:translate(-6vh,0)">Nueva Autorización</div>        
+        </div>
+        {% endif %}
+    </div>
+    <div class="autoriza-table">
+      <table class="table table-bordered">
+        {% render_table autorizaciones %}
+      </table>
+    </div>
+    
+    
+
+
+{% block javascript %}
+  <script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    $(document).ready(function(){
+    $('select').formSelect();
+    });
+
+    $(document).ready(function(){
+    $('.sidenav').sidenav();
+    });
+    
+    var sw=0;
+    if (sw ==0 ){
+        pone_simbolos();
+        sw=1
+    }
+
+    function muestra_oculta(id){
+    if (document.getElementById){ //se obtiene el id
+    var el = document.getElementById(id); //se define la variable "el" igual a nuestro div
+    el.style.display = (el.style.display == 'none') ? 'block' : 'none'; //damos un atributo display:none que oculta el div
+    }
+    }
+    window.onload = function(){/*hace que se cargue la función lo que predetermina que div estará oculto hasta llamar a la función nuevamente*/
+    muestra_oculta('filtro');/* "contenido_a_mostrar" es el nombre que le dimos al DIV */
+    }
+
+    function pone_simbolos(){
+    $('table tr ').each(function() {
+    var s = $(this).find("#activo").html();
+    var t = $(this).find("#permanente").html();
+    var thtml = ''
+    if (s == 'True') {
+        thtml = '<td><label><input type="checkbox" checked="checked" id="activo"><span></span></label></td>'
+        $(this).find("#activo").replaceWith(thtml);
+    }
+    if (s == 'False') {
+        thtml = '<td><label><input type="checkbox" id="activo" ><span></span></label></td>'
+        $(this).find("#activo").replaceWith(thtml);
+    }
+    if (t == 'True') {
+        thtml = '<td><label><input type="checkbox" checked="checked" id="permanente"><span></span></label></td>'
+        $(this).find("#permanente").replaceWith(thtml);
+    }
+    if (t == 'False') {
+        thtml = '<td><label><input type="checkbox" id="permanente" ><span></span></label></td>'
+        $(this).find("#permanente").replaceWith(thtml);
+    }
+
+    });
+    }
+
+    $(document).on("click","#activo", function(e) {
+        e.stopImmediatePropagation();
+        var currentRow=$(this).closest("tr");
+        var id = currentRow.find("#id").text();
+        var id_old = id
+        var thtml = '';
+        $.ajax({
+        url: "{% url 'ajax_switch_activo_autorizado_peatonal' %}",
+        data: {'id':id},
+        method: "GET",
+        dataType: 'json',
+        
+        });
+    });
+
+    $(document).on("click","#permanente", function(e) {
+        e.stopImmediatePropagation();
+        var currentRow=$(this).closest("tr");
+        var id = currentRow.find("#id").text();
+        var id_old = id
+        var thtml = '';
+        $.ajax({
+        url: "{% url 'ajax_switch_permanente_autorizado_peatonal' %}",
+        data: {'id':id},
+        method: "GET",
+        dataType: 'json',
+        
+        });
+    });
+  </script>
+{% endblock %}
+{% endblock %}

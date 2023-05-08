@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang='es'>
+{% extends "core/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{{ form.media }}            {# Adds date-picker required JS and CSS #}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+
+{% load static %}
+
+
+<style>
+     .container-doc{
+    margin-top: 10vh;
+    }
+    
+    form{
+        padding-top: 40px;
+    }
+    
+    label{color: black;
+        font-size: medium;
+        font-weight: 500;}
+    .titulo{
+        margin-bottom: 0px;
+    }    
+</style>
+<!DOCTYPE html>
+<html lang='es'>
+
+<head>
+    
+</head>
+<main role="main">
+    <div class="container-doc">
+        <div class="col-md-6 mx-auto mb-6">
+            <div class="titulo">
+                <h2>ANEXO PROYECTO</h2>
+            </div>
+            <div class="container">
+                <form method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  {{ form|crispy }}
+                  <button type="submit" class="btn btn-primary">Cargar</button>
+                </form>
+            </div>
+        </div>
+    </div>        
+</main>        
+{% block javascript %}
+<script>
+        
+</script>
+
+{% endblock %}
+{% endblock %}

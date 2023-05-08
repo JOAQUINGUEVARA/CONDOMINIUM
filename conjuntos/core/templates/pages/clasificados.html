@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% comment %} {% load material_form %}
+{% form form=form %}{% endform %} {% endcomment %}
+{% load static %}
+{% block content %}
+<style>
+  .sidenav li>a {padding:0 32px !important}
+      .collapsible-body>ul>li>a {
+        padding: 0 48px !important;
+        font-weight: 400 !important;
+      }
+
+  .collapsible {
+  margin:auto;
+  width: 50em;
+  background:mintcream;
+  box-shadow:1px 1px 2px #333;
+  font-family:Georgia, "Times New Roman", Times, serif;
+  font-size:16px;
+  text-align:justify;
+  flex-direction: column;
+  white-space: normal;
+  
+  }
+  .collapsible-body{
+  padding: 5px 5px 5px 5px;
+  }
+  
+</style>
+
+<title>{% block tittle %}{% endblock %}Inicio | CONDOMINIUM</title>
+
+<body>
+  <div class="navbar-fixed">
+      <nav>
+        <div class="nav-wrapper">
+          <a href="#!" class="brand-logo"><i class="material-icons">campaign</i>Clasificados</a>
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+          <ul class="right hide-on-med-and-down">
+            <li a class="active"><a href="{% url 'main' %}">Regresar</a></li>
+            <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+          </ul>
+        </div>
+        <div><h6 style="color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
+          ">Usuario:{{request.user.username}}</h6></div>
+      </nav>
+    </div>
+
+    <ul class="sidenav" id="mobile-demo">
+      <li a class="active"><a href="{% url 'main' %}">Regresar</a></li>
+      <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+    </ul>
+    <div><h6 style="color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
+      ">Usuario:{{request.user.username}}</h6></div>
+</body>
+ 
+<section style="text-align: center" class="info">
+    <strong><h4><p>Avisos Clasificados</p></h4></strong>
+</section>  
+
+{% load clasificados %}
+{% get_clasificados_list as clasificados_list %}
+{% if clasificados_list %}
+    {% for clasificado in clasificados_list %}
+    <ul class="collapsible">
+      <li>
+        <div style="background: radial-gradient(#fad0d8, #fa99b2);" id="barra" class="collapsible-header" data-toggle="tooltip" data-placement="top" title="Click para desplegar"><i class="material-icons">second</i>{{clasificado.title}} Creado el:({{clasificado.created}})</div>
+        <div class="collapsible-body"><span>Informes:{{clasificado.informes}}</span></div>
+        <div class="collapsible-body"><span>{{clasificado.content|striptags|safe}}</span></div>
+        {% if clasificado.foto %}
+        <div class="collapsible-body"><img style="margin-top:20px" class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="{{clasificado.foto.url}}" alt=""></div>
+        {% endif %}
+        {% if request.user.id == clasificado.residente_id %}
+        | <a href="{% url 'editar_clasificado' clasificado.pk %}">Editar</a>
+        {% endif %}
+        {% if request.user.id == clasificado.residente_id %}
+        | <a href="{% url 'borrar_clasificado' clasificado.id %}">Borrar</a>
+        {% endif %}
+        {% if request.user.id == clasificado.residente_id %}
+        | <a href="{% url 'poner_vendido_clasificado' clasificado.id %}">Poner Vendido</a>
+        {% endif %}
+        | <a id="btnCrear" href="{% url 'crear_clasificado'  %}">Nuevo Aviso</a>
+      </li>
+    </ul>   
+    {% endfor %}
+{% else %}
+  <div style="display:flex;justify-content: center">
+    <a id="clasificado" type="button" class="btn default" type="submit"  href="{% url 'crear_clasificado'  %}" value="editar">Nuevo aviso</a>
+  </div>
+{% endif %}  
+
+{% block javascript %}
+<script>
+  $(document).ready(function(){
+  $('.collapsible').collapsible();
+});
+$(document).ready(function(){
+   $('.sidenav').sidenav();
+ });
+
+function mouseOver() {
+  document.getElementById("barra").click();
+}
+</script>  
+
+{% endblock javascript%} 
+
+{% endblock %}
+
+
+</html>

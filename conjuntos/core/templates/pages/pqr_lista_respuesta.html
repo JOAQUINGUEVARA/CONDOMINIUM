@@ -1,0 +1,104 @@
+{% extends "core/base.html" %}
+{% load render_table from django_tables2 %}
+{% load django_tables2 %}
+{% load static %}
+{% block content %}
+{% load humanize %}
+{{ form.media }}
+<!doctype html>
+<style>
+    .contenido{
+    border-left: 2px solid #000;
+    border-left-color: #7e0505;
+    width: 80%;
+    }
+    .container-contenido{
+      font-size: calc(2 + .5vw);
+    }
+    .container-respuesta{
+      font-size: calc(2 + .5vw)
+    }
+</style>
+
+<head> 
+   
+</head>
+
+<!-- <body style="background-image: url({% static '/img/ciudad.jpg' %});"> -->
+         
+    
+    <div class="navbar-fixed">
+        <nav>
+          <div class="nav-wrapper">
+            <a style="font-size: calc(7px + 1vw);transform:translate(3vw,0)" href="#!" class="brand-logo"><i class="material-icons">home</i>RESPUESTA PQR</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+              <li class="active"><a href="{% url 'lista_pqr' %}"></i>Regresar</a></li>
+            </ul>
+          </div>
+        </nav>
+    </div>
+      
+    <ul class="sidenav" id="mobile-demo">
+        <li class="active" ><a href="{% url 'lista_pqr' %}"></i>Regresar</a></li>
+    </ul>
+
+    <div class="container-pqr" tyle="padding-top: 20px;margin-left:auto;margin-right:auto;width:80%;" >
+        <div style="display:flex;align-items:center;justify-content:center;flex-direction:row;justify-content: space-between;background-color:azure;">  
+          <div style="display:flex;align-items:center;justify-content:flex-start;color:darkred;width:180px;margin-top:10px" ><h6>Usuario: {{user}}</h6></div>
+          <a style="display:flex;font-size: calc(5px + 1vw);margin: auto;color:black;transform:translate(-7vh,0)" type="button" type="submit" href="#" value="autoriza" ><span>RESPUESTA PQR</span></a>
+        </div>
+        <hr width=50% style="color:black;size:20">
+    </div>
+
+    <div class="container-contenido" style ="background-color: aliceblue;width: 80%;margin-left: auto;margin-right: auto;">
+   
+      <h5>PQR</h5>
+      <hr>
+      
+      <h5 class="mb-4">{{pqr.titulo}}</h5>
+      <div class="contenido">
+        <p>Contenido:{{pqr.content|striptags|safe|linebreaks}}</p>
+      </div>
+      <div class="text-publicado" >Creado:{{ pqr.created }}</div>
+      
+      
+    </div>
+    <div class="respuesta-pqr" style ="background-color:white;width: 80%;;margin-left: auto;margin-right: auto;">
+      <h5>RESPUESTAS</h5>  
+      <div class="container-respuesta" style ="background-color:rgb(248, 246, 244);width: 90%">
+        {% for l in  respuesta_pqr %}
+          {% if l.foto %}
+            <div><img  style="float: left;width:100px;height:100px;margin-right:2vw;" src="{% if l.foto %}{{l.foto.url}}{% endif  %}" alt=""></div>
+          {% endif %}
+          </br>
+          <div class="contenido">
+            <p>{{l.content|striptags|safe|linebreaks}}</p>
+          </div>
+          <div class="text-publicado" >Rspuesta de :{{ l.created }} |&nbsp;</div>
+          </br></br>
+          <div class="noticia">
+            <a href="{% url 'edita_respuesta_pqr' l.id %}">Editar</a>|
+            <a href="{% url 'borra_respuesta_pqr' l.id %}">Borrar</a>|
+          </div>
+        {% endfor %}    
+      </div>
+    </div>
+</body>
+
+
+
+
+{% block javascript %}
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+</script>
+{% endblock %}
+{% endblock %}
+
+

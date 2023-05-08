@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang='es'>
+{% extends "core/base.html" %}
+{% load material_form %}
+{% form form=form %}{% endform %}
+{% block content %}
+<form role="form" action="{% url 'correspondencia' %}" method="post">
+<div class="container" class="text-primary" >
+    <div class="jumbotron">
+        <div class="panel-heading">
+            <h3 class="text-center">INGRESAR CORRESPONDENCIA</h3>
+        </div>    
+            {% csrf_token %}
+            {{form.remitente}}
+            {{form.destinatario}}
+            <label>
+            <input type="checkbox" />
+            {{form.clase_correspondencia}}
+            </label>
+            {{form.tipo_correspondencia}}
+         <button type="submit" class="btn btn-primary" value="Submit">Guardar</button>            
+    </div>
+</div>
+</form> 
+{% endblock  %}        

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% comment %} {% load material_form %}
+{% form form=form %}{% endform %} {% endcomment %}
+{% load static %}
+
+<title>{% block tittle %}{% endblock %}Inicio | CONDOMINIUM</title>
+
+{% block head %}
+<body>
+  <nav>
+      <div class="nav-wrapper">
+        <a href="#!" class="brand-logo"><i class="material-icons">cloud</i>CONDOMINIUM</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'legislacion' %}">Legislación</a></li>
+          <li><a href="{% url 'pagina_administrador' %}">Administrador</a></li>
+          <li><a href="{% url 'consejero' %}">Consejero</a></li>
+          <li><a href="{% url 'residente' %}">Residente</a></li>
+          <li><a href="{% url 'blog' %}">Blog</a></li>
+        </ul>
+      </div>
+  </nav>
+</body>
+{% endblock %} 
+
+{% block content %}
+
+{% block panel %}
+  {% for panel in panel %}
+    <section class="page-section">
+      <div class="container">
+        <div class="product-item">
+          <div class="product-item-title d-flex">
+            <div class="bg-faded p-5 d-flex mr-auto rounded">
+              <h2 class="section-heading mb-0">
+                <span class="section-heading-upper">{{comunicado.subtitle}}</span>
+                <span class="section-heading-lower">{{comunicado.title}}</span>
+              </h2>
+            </div>
+          </div>
+          <img class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="{{service.image.url}}" alt="">
+          <div class="product-item-description d-flex ml-auto">
+            <div class="bg-faded p-5 rounded">
+              <p class="mb-0">{{panel.content|striptags|safe|linebreaks}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  {% endfor %}
+{% endblock %}
+
+{% endblock %}
+
+</html>

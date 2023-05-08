@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang='es'>
+{% extends "core/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{{ form.media }}            {# Adds date-picker required JS and CSS #}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+
+{% load static %}
+
+
+<style>
+    .container{
+    background-color:aquamarine;
+    }
+    label{
+    color:black;
+    }
+    .titulo{
+        margin-bottom: -20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: #056636;
+        color: white;
+    }
+    label{color: black;
+        font-size: medium;
+        font-weight: 500;}
+</style>
+<!DOCTYPE html>
+<html lang='es'>
+
+<head>
+    
+    
+</head>
+<main role="main">
+    <div class="container-doc">
+        <div class="col-md-6 mx-auto mb-6">
+            <div class="titulo">
+                <h2>FOTO MIEMBRO STAFF</h2>
+            </div>
+            </br>
+            <div class="container">
+            <form role="form" method="post"  enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button id="btnObra" type="submit" class="btn btn-primary" value="Submit">Guardar</button>
+            </form>
+            </div>
+        </div>    
+    </div>
+</main>        
+{% block javascript %}
+<script>
+   
+</script>
+
+{% endblock %}
+{% endblock %}

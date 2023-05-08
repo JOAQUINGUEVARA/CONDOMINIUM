@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang='es'>
+{% extends "core/base_sin_material.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block content %}
+{{ form.media }}            {# Adds date-picker required JS and CSS #}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+
+{% load static %}
+
+    <head>
+        
+    </head>
+    <div class="container-doc">
+        <div class="col-md-6 mx-auto mb-6">
+            <div class="titulo">
+                <h2>IMPORTACION INFORMACION PARQUEADEROS</h2>
+            </div>    
+        </div>
+        </br>
+    </div>        
+    <body style="margin-top: 30px;margin-left: 30px;">
+        <form action="{% url "importar_xls_parqueaderos" %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file"
+                   title="Upload excel file"
+                   name="excel_file"
+                   style="border: 1px solid black; padding: 5px;"
+                   required="required">
+            <p>
+            <input type="submit"
+                   value="Upload"
+                   style="border: 1px solid green; padding:5px; border-radius: 2px; cursor: pointer;">
+            <button id="btnSalir" class="btn btn-warning" data-dismiss="modal">Salir</button>       
+        </form>
+
+        <p></p>
+        <hr>
+
+        {% for row in excel_data %}
+            {% for cell in row %}
+                {{ cell }}&nbsp;&nbsp;
+            {% endfor %}
+            <br>
+        {% endfor %}
+
+    </body>
+    </html>
+    {% block javascript %}
+    <script>
+        
+        $(document).on("click","#btnSalir", function(e) {
+              window.location.href = "{% url 'pagina_informacion_residentes' %}";
+        })
+    </script>
+
+{% endblock %}
+{% endblock %}    

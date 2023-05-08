@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Django Send Email to Multiple Users - Tuts-Station.com</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5 pt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-9 p-0">
+                        <h5><b>Django Send Email to Multiple Users - <span class="text-danger">Tuts-Station.com</span></b></h5>
+                    </div>
+                    <div class="col-md-3 text-right mb-2 p-0">
+                        <button type="button" class="btn btn-primary send-mail btn-sm" disabled="disabled"> <i class="fa fa-share"></i> Send Mail</button>
+                    </div>
+                    <div class="col-md-12 success-mail p-0" style="display: none;">
+                        <div class="alert alert-success">
+                          Sent Mail Successfully.
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" value="1" name="user-all" class="user-all"></th>
+                                <th>Name</th>
+                                <th>UserEmail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% csrf_token %}
+                            {% for user in users %}
+                            <tr>
+                                <td><input type="checkbox" name="ckeck_user[]" class="ckeck_user" value="{{ user.id }}"></td>
+                                <td>{{ user.username}}</td>
+                                <td>{{ user.email }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    $('.user-all').change(function (e) {
+        var value = $('.user-all:checked').val();
+        if (value == 1) {
+            $('.ckeck_user').prop('checked',true);
+            $('.send-mail').removeAttr('disabled');
+        }else{
+            $('.ckeck_user').prop('checked',false);
+            $('.send-mail').attr('disabled','disabled');
+        }
+    });  
+
+    $(".ckeck_user").change(function () {
+        if ($(".ckeck_user:checked").length > 0) {
+          $('.send-mail').removeAttr('disabled');
+        }else{
+         $('.send-mail').attr('disabled','disabled');
+       }
+     });
+
+    $('.send-mail').click(function (e) {
+        e.preventDefault();
+        var ids = [];
+        var token = $('input[name="csrfmiddlewaretoken"]').val();
+
+        $('.ckeck_user:checked').each(function(i){
+            ids[i] = $(this).val();
+        })
+
+        if (ids != '') {
+            $(this).attr("disabled", true);
+            $(this).html('<i class="fa fa-spinner fa-spin"></i> Send Mail');
+            $.ajax({
+                url: '{% url "users" %}',
+                type: 'POST',
+                data: {
+                    ids:ids,
+                    csrfmiddlewaretoken: token,
+                },
+                success: function (data) {
+                    $('.success-mail').css('display','block');
+                    $('.ckeck_user, .user-all').prop('checked',false);
+                    $('.send-mail').attr("disabled", false);
+                    $('.send-mail').html('<i class="fa fa-share"></i> Send Mail');
+                }
+            });
+        }
+    });
+</script>
+</html>

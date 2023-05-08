@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends 'core/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+<title>{% block tittle %}Ingreso Peatonal | CONDOMINIUM{% endblock %}</title>
+{% block content %}
+{% csrf_token %}
+<head>
+    <meta charset="utf-8">
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- <script type="text/javascript" src="/static/media/webcam.js"></script> -->
+    <!-- <script type="text/javascript" src="/static/media/jspdf.js"></script> -->
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+</head>
+<body>
+    
+</body>
+<style>
+    label{
+        font-size: 2vh;
+        color: black;
+    }
+    #datosVisitanteModal{
+        height: 40vh;
+        width: 40vh;
+    }
+    #datosIngresoModal{
+        margin-top: -35vh;
+        height: 30vh;
+        width: 40vh;
+    }
+    .card-content{
+        width: 60%;
+    }
+    .modal{
+        width: 30%;
+        height: 60%;
+    }
+    #tipo_autorizacion{
+        visibility: hidden ;
+    }
+    .container-datos-ingreso{
+        visibility: hidden ;
+    }    
+    .blink-mensaje {
+    animation: blinker 1s linear infinite;
+    /* color: #050505;
+    background-color: #dfefb5;
+    letter-spacing: .05em;
+    text-shadow: 
+      4px 4px 0px #d5d5d5, 
+      7px 7px 0px rgba(0, 0, 0, 0.2);
+    width: 100%;  */ 
+    }
+    .card-content{
+        background-color: rgb(252, 253, 253);
+    }
+    @keyframes blinker {
+        0%{     color: #fa6f6f;    }
+        49%{    color: #be0a0a; }
+    60%{    color: transparent; }
+    99%{    color:transparent;  }
+    100%{   color: #7a0606;    }
+    
+    }
+    
+    /* Flipping the video as it was not mirror view */  
+    video {  
+        -webkit-transform: scaleX(-1);  
+        transform: scaleX(-1);  
+        margin-top: 5px;  
+    }  
+  
+    /* Flipping the canvas image as it was not mirror view */  
+    #canvas {  
+        -moz-transform: scaleX(-1);  
+        -o-transform: scaleX(-1);  
+        -webkit-transform: scaleX(-1);  
+        transform: scaleX(-1);  
+        filter: FlipH;  
+        -ms-filter: "FlipH";  
+    }
+    #identificacion{
+        display:none;
+    }
+    
+</style>
+
+<div class="navbar-fixed">
+    <nav>
+      <div id="identificacion">{{identificacion}}</div>  
+      <div class="nav-wrapper">
+        <a style="font-size: calc(12px + 1vw)" href="#!" class="brand-logo"><i class="material-icons">directions_walk</i>ACCESO VEHICULAR</a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+          <li class="active" ><a  href="{% url 'direcciona_pagina_vigilancia_vehicular' %}">Regresar</a></li>
+          <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div><h6 style="color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
+      ">Usuario:{{request.user.username}}</h6></div>
+    </div>
+
+  <ul class="sidenav" id="mobile-demo">
+    <li class="active" ><a  href="{% url 'direcciona_pagina_vigilancia_vehicular' %}">Regresar</a></li>
+    <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+  </ul>
+</body>
+
+<form action="{% url 'ingreso_vehicular_busqueda' %}" method="GET" value="{{request.GET.q}}">
+    <div class="container">
+        
+            <div class="card blue-grey-1" style="display:flex;flex-direction: row;">
+                <div class="card-content white-text">
+                    <label style="font-size: calc(12px + 1vw)">Ingrese Número de placa:</label>
+                    <input style="color:black" id='placa' type="text" name="q" value="{{request.GET.q}}" placeholder="Número de Placa"/>
+                    <input  id="btnBuscar" class="btn btn-primary" type="submit" name="submit" value="Buscar"/>
+                    <a type="button" style="transform: translate(1px);" class="btn btn-warning" href="{% url 'direcciona_salida_acceso_vehicular' %}">salir</a>
+                    <!-- <a type="button" style="transform: translate(1px);" class="btn btn-warning" href="{% url 'filtro_ingresos_peatonal' %}">Pendientes Salida</a> -->
+                </div>
+                {% for result in results %}
+                <div class="card-content" style="display:flex;flex-direction: column;">
+                    <div style="padding-left: 10px;font-size:0vh;"><h5>Placa Vehículo: {{ result.placa }}</h5></div>
+                    <div style="padding-left: 10px;font-size:0vh;"><h5>Identificación: {{ result.identificacion }}</h5></div>
+                    <div style="padding-left: 10px;font-size:0vh;"><h5>Nombre:{{result.nombre}}</h5></div>
+                    <div style="padding-left: 10px;font-size:0vh;" id="tipo_autorizacion"><h5>Tipo Autorización:{{tipo_autorizacion}}</h5></div>
+                </div>
+                {% endfor %}
+            </div>        
+           
+    </div>
+</form>
+{% if results %}
+    <div class="container">
+        <div class="card-content" style="width:100vh;margin-top: -30px;">
+            <table class="table">
+                </div>
+                <thead>
+                    <tr>
+                    <th><div class="col s7">Id</div></th>    
+                    <th>Tipo de Ingreso</th>
+                    <th>Hora de Ingreso</th>
+                    <th>Hora de salida</th>
+                    <th>Interior</th>
+                    <th>Apartamento</th>
+                    <th>Vigilante</th>
+                    <th>Dar Salida</th>                            
+                    </tr>
+                </thead>
+                <tbody>
+                {% for ingreso in ingresos %}
+                    <tr>
+                        <td id="id">{{ingreso.id}}</td>
+                        <td>{{ingreso.tipoingreso}}</td>
+                        <td>{{ingreso.hora_ingreso}}-{{ingreso.hora_ingreso|time:"H\h:i\m:"}}</td>
+                        <td id="hora_salida">{{ingreso.hora_salida}}-{{ingreso.hora_salida|time:"H\h:i\m:"}}</td>
+                        <td>{{ingreso.interior}}</td>
+                        <td>{{ingreso.apartamento}}</td>
+                        <td>{{ingreso.vigilante}}</td>
+                        <td><a id = "btnSalida" class="btn-floating btn-short waves-effect waves-light red" value="salida" ><i class="material-icons">add</i></a></td>
+                    </tr>
+                {% endfor %}
+                <div class="col s15 m15">
+                    <div class="card blue-grey darken-1">
+                        <!-- <div class="card-content white-text"> -->
+                            
+                            <strong><div style="font-size: 2.0vh;color:yellow;display:flex;flex-direction: row;margin-left: 2vw;"><div>Tipo Autorización :</div><div style="margin-left: 2vw"></div><div>{{ desc_autoriza }}</div></div></strong>
+                            
+                            <div style="display: flex;flex-direction: row;">
+                                {% if fecha_inicial != None %}
+                                <strong><div style="font-size: 2.0vh;color:yellow;display:flex;flex-direction: row;margin-left: 2vw;"><div>Désde :</div><div style="margin-left: 2vw;"></div><div>{{fecha_inicial}}</div></div></strong>
+                                {% endif %}
+                                {% if fecha_final != None %}
+                                <strong><div style="font-size: 2.0vh;color:yellow;display:flex;flex-direction: row;margin-left: 2vw;"><div>Hasta :</div><div style="margin-left: 2vw;"></div><div>{{fecha_final}}</div></div></strong>
+                                {% endif %}
+                            </div>
+
+                            <div style="display: flex;flex-direction: row;">
+                                {% if nom_interior != '' %}
+                                <strong><div style="font-size: 2.0vh;color:yellow;display:flex;flex-direction: row;margin-left: 2vw;"><div>Interior :</div><div style="margin-left: 3.2vw;"></div><div>{{nom_interior}}</div></div></strong>
+                                {% endif %}
+                                {% if nom_apartamento != '' %}
+                                <strong><div style="font-size: 2.0vh;color:yellow;display:flex;flex-direction: row;margin-left: 2vw;"><div>Apartamento :</div><div style="margin-left: 1vw;"></div><div>{{nom_apartamento}}</div></div></strong>
+                                {% endif %}    
+                            </div>
+
+                            {% if mensaje != '' %}
+                            <strong><div class="blink-mensaje" style="font-size: 3.0vh;background-color: rgb(163, 203, 239);"><div style="align-content: center">{{ mensaje }}</div></div></strong>
+                            {% endif %}
+                        <!-- </div> -->
+                    </div>
+                </div>       
+                </tbody> 
+            </table>
+            <div class="col-xs-8 col-sm-1">
+                <div style="display: flex;flex-direction: row;transform: translate(20vw,0px);">
+                    {% if tipo_autorizacion == 0 %}
+                    <a id = "btnCrear" type="submit" class="btn btn-primary" href="{% url 'crear_ingreso_vehicular' %}" value="crear" >Crear Ingreso</i></a>
+                    <!-- <button id="btnDatosIngreso" type="button" class="btn btn-primary" href="{% url 'crear_ingreso_peatonal' %}">Crear Ingreso</button> -->
+                    {% endif %}
+                    {% if tipo_autorizacion != 0 %}
+                    <a id = "btnCrear" type="submit" class="btn btn-primary" href="{% url 'crear_ingreso_vehicular' %}" value="crear" >Crear Ingreso</i></a>
+                    <!-- <button id="btnDatosIngresoAutorizado" type="button" class="btn btn-primary"  href="{% url 'crear_ingreso_peatonal' %}">Crear Ingreso</button> -->
+                    {% endif %}
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <form role="form" method="POST">
+        <div class="card-content black-text" style="margin-left: auto;margin-right: auto;">
+            {% if visitante == '' %}
+            <h3 style="font-size: calc(12px + 1vw)" class="text-center">VISITANTE NO ENCONTRADO, DEBE INGRESAR LOS DATOS</h3>
+            <button id="btnDatosVisitante" type="button" class="btn btn-primary" data-toggle="modal" data-target="#datosVisitanteModal">Ingresar datos</button>
+            {% endif %}
+            {% csrf_token %}
+        </div>
+    </form>
+{% endif %}
+
+<div class="modal fade" id="datosVisitanteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="">Datos Visitante</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+        
+            </div>
+        </div>
+    </div>
+</div>    
+    
+{% block javascript %}
+
+<script>
+      
+      $( document ).ready(function(){
+       $('.sidenav').sidenav();
+       $('.collapsible').collapsible();
+       $(".dropdown-trigger").dropdown({ hover: true });
+    });
+    
+    $("#placa" ).change(function() {
+        placa = document.getElementById("placa").value;
+        placa = placa.toUpperCase();
+        document.getElementById("placa").value = placa;
+    });    
+
+    $(document).on("click","#btnDatosVisitante", function(e) {
+    e.stopImmediatePropagation();
+    var id = document.getElementById("placa");
+    $.ajax({
+    url: "{% url 'datos_visitante_vehicular' %}",
+    data:{'id':id.value},
+    method: "GET",
+    dataType: 'json',
+    success: function (data) {
+    $("#datosVisitanteModal .modal-body").html(data.html_form);
+    },
+    });
+    });
+
+    $(document).on("click","#btnGuardarVisitante", function(e) {
+        e.stopImmediatePropagation();
+        var nombre = document.getElementById('id_nombre');
+        nombre = nombre.toUpperCase();
+        var identificacion = document.getElementById('id_identificacion');
+        var placa = document.getElementById("placa");
+        $.ajax({
+        url: "{% url 'guarda_datos_visitante_vehicular' %}",
+        data:{'identificacion':identificacion.value,'placa':placa.value,'nombre':nombre.value},
+        method: "GET",
+        dataType: 'json',
+        success: function (data) {
+        document.getElementById('btnBuscar').dispatchEvent(new MouseEvent("click"));
+        },
+      });
+    });
+    
+    $(document).on("click","#btnGuardaIngreso", function(e) {
+        e.stopImmediatePropagation();
+        var interior = document.getElementById('id_interior');
+        var apartamento = document.getElementById('id_apartamento');
+        var placa = document.getElementById('placa');
+        var idplaca = document.getElementById('id_placa');
+        $.ajax({
+        url: "{% url 'guarda_datos_ingreso_vehicular' %}",
+        data:{'placa':placa.value,'interior':interior.value,'apartamento':apartamento.value},
+        method: "GET",
+        dataType: 'json',
+        success: function (data) {
+        nplaca =  document.getElementById('id_placa')
+        alert(nplaca)
+        alert(idplaca)    
+        nplaca.value = idplaca    
+        document.getElementById('btnBuscar').dispatchEvent(new MouseEvent("click"));
+        },
+      });
+    });
+    
+    $(document).on("click","#btnDatosIngresoAutorizado", function(e) {
+        e.stopImmediatePropagation();
+        var id = document.getElementById("identifica");
+        var placa = document.getElementById("placa");
+        var tipoAutorizacion = document.getElementById('tipo_autorizacion').innerHTML;
+        $.ajax({
+        url: "{% url 'guarda_datos_ingreso_vehicular_autorizado' %}",
+        data:{'placa':placa,'id':id.value,'tipo_autorizacion':tipoAutorizacion},
+        method: "GET",
+        dataType: 'json',
+        success: function (data) {
+        document.getElementById('btnBuscar').dispatchEvent(new MouseEvent("click"));
+        Swal.fire(
+        'Visitante Ingresado!'
+        )
+        },
+      });
+    });
+
+    $(document).on("click","#btnSalida", function(e) {
+    e.stopImmediatePropagation();
+    var currentRow=$(this).closest("tr");
+    var id = currentRow.find("#id").text();
+    var identifica = document.getElementById('identifica');
+    var thtml = '';
+        $.ajax({
+        url: "{% url 'salida_vehicular' %}",
+        data: {'id':id},
+        method: "GET",
+        dataType: 'json',
+        success: function (data) {
+        $('table tr ').each(function() {
+        var id = $(this).find("#id").html();
+        var thtml = ''
+        idingreso = data.id
+        if (id == idingreso){
+        thtml ='<td id="hora_salida">'+data.fecha+'</td>';
+        $(this).find("#hora_salida").replaceWith(thtml);
+        };
+        });
+        Swal.fire(
+        'Salida Visitante!'
+        )
+        }
+      });
+    });
+    
+</script>
+
+<script>
+
+</script>
+
+{% endblock %}
+{% endblock %}

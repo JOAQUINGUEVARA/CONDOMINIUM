@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang='es'>
+    {% extends "core/base_sin_material.html" %}
+    {% load crispy_forms_tags %}
+    {% load static %}
+    {% block content %}
+    
+    {% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+    {% bootstrap_css %}         {# Embed Bootstrap CSS #}
+    {% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+    {{ form.media }}            {# Adds date-picker required JS and CSS #}
+    {% load humanize %}
+    
+    <style>
+    #id_contenido{
+      width: 600px;
+      height: 150px;
+    }
+    </style>
+    <head>
+        <script src="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>
+
+        <link href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"/>
+        <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet"/>
+        <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet"/>
+        
+        
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    </head>
+           
+    <style>
+   
+           
+    
+    </style>
+    <main role="main">
+      <div class="container-doc">
+          <div class="col-md-6 mx-auto mb-6">
+                <div class="titulo">
+                    <h2>INFORMACION ASAMBLEA</h2>
+                </div>
+                </br>
+                <div class="container">
+                  <form role="form" method="post">
+                    </br>
+                    {% csrf_token %}
+                  
+
+                    <div style="display:flex;flex-direction:column;">
+                        <div style="display:flex;margin-left:20px">{{ form.fecha|as_crispy_field }}</div>
+                        <div style="display:flex;flex-direction:row;align-items: center;">
+                            <div style="display:flex;margin-left:20px;">{{ form.tipo_asamblea|as_crispy_field }}</div>
+                            <div style="display:flex;margin-left:20px;transform:translate(0,5px)"><a id="btnGuardaTipoAsamblea" type="button" href="{% url 'crear_tipo_asamblea' %}" class="btn btn-primary" value="nuevo" >Crear Tipo Asamblea</a></div>
+                        </div>
+                        <div style="display:flex;margin-left:20px;">{{ form.contenido|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.numero_acta|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.hora_inicio|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.hora_final|as_crispy_field }}</div>
+                    </div> 
+                    <button id="btnGuardar" type="submit" class="btn btn-primary">Guardar</button>
+                    <button id="btnSalir" class="btn btn-warning" data-dismiss="modal">Salir</button>
+                  </form>
+                </div>
+                
+          </div> 
+      </div>
+    </main>
+    <div style="width:30%;height: 50%;" class="modal fade" id="datosServicioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <!-- <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5> -->
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              
+            </div>
+            <div class="modal-footer">
+              
+            </div>
+          </div>
+        </div>
+    </div>
+    
+    {% block javascript %}
+    <script>
+         $(document).on("click","#btnSalir", function(e) {
+         window.location.href = "{% url 'lista_asambleas' %}";
+        })
+
+        $("#id_fecha").change(function () {
+        var fecha = document.getElementById('id_fecha')
+        var hora_inicio = document.getElementById('id_hora_inicio')
+        var hora_final = document.getElementById('id_hora_final')
+        hora_inicio.value = "00:00"
+        hora_final.value = "00:00"
+        
+        })
+
+        $("#id_fecha").change(function () {
+        const fecha = $(this).val();
+        $.ajax({
+          url: "{% url 'guarda_fecha_asamblea' %}",
+          data: {'fecha': json.dumps(fecha)},
+          type: 'GET',
+          dataType: 'json',
+              
+        });
+        });
+
+        $(document).ready(function(){
+        $('#id_fecha').datepicker();
+        });
+        
+        jQuery(function ($) {
+        $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+        'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié;', 'Juv', 'Vie', 'Sáb'],
+        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+        });
+
+        
+    </script> 
+    {% endblock %}             
+    {% endblock %}

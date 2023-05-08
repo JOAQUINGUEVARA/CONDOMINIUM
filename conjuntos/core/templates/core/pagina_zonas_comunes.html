@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% comment %} {% load material_form %}
+{% form form=form %}{% endform %} {% endcomment %}
+{% load static %}
+{% block content %}
+
+<title>{% block tittle %}{% endblock %}Zonas Comunes | CONDOMINIUM</title>
+
+
+<body>
+  <nav>
+      <div class="nav-wrapper">
+        <a href="#!" class="brand-logo"><i class="material-icons">cloud</i>Logo</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'lista_zonas_comunes' %}">Lista de Zonas Comunes</a></li>
+          <!-- <li><a href="{% url 'reserva_zonas_comunes' %}">Reserva Zonas Comunes</a></li> -->
+          <li><a href="{% url 'main' %}">Regresar</a></li>
+          <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+        </ul>
+      </div>
+  </nav>
+</body>
+</html>
+{% endblock %}

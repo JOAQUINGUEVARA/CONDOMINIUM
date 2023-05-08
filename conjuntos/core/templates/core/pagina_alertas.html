@@ -1,0 +1,137 @@
+{% extends "core/base.html" %}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% load static %}
+{% block content %}
+{% load humanize %}
+{{ form.media }}
+
+<style>
+ul li:before {
+  background: linear-gradient(45deg, #f69ec4, #f9dd94);
+}
+ul {
+  display: block;
+  margin-left: -5px;
+}
+
+ul li {
+  display: block;
+  position: relative;
+}
+
+ul li:not(:last-child) {
+  margin-bottom: 16px;
+}
+
+ul li:before {
+  content: "";
+  position: absolute;
+  top: 1.2em;
+  left: -30px;
+  margin-top: -.9em;
+  background: #f69ec4;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+}
+.container-links{
+  padding-top: 20px;
+  margin-left:2vw;
+  margin-right: 2vw ;
+  margin:auto;
+  width:80%;
+}
+.container1{
+  width: 20%;
+  font-size:larger;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media screen and (max-width: 600px) {
+  .container-links{
+  padding-top: 20px;
+  margin:auto;
+  width:100%;
+  }
+  .container1{
+  width: 50%;
+  font-size:larger;
+  margin-left: auto;
+  margin-right: auto;
+}
+}
+</style>
+
+<div class="navbar-fixed">
+    <nav>
+        <div class="nav-wrapper">
+        <a style="font-size: calc(12px + 1vw)" href="#!" class="brand-logo"><i class="material-icons">warning</i>ALERTA RECIBO SERVICIOS PUBLICOS</a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+            <li  class="active"><a href="{% url 'pagina_vigilancia' %}" >Regresar</a></li>
+        </ul>
+        </div>
+    </nav>
+</div>
+
+<ul class="sidenav" id="mobile-demo">
+  <ul class="collapsible collapsible-accordion">
+    <li  class="active"><a href="{% url 'pagina_vigilancia' %}" >Regresar</a></li>
+  </ul>
+</ul>
+
+
+<div class="container-links">
+    <div style="display:flex;align-items:center;justify-content:center;flex-direction:row;justify-content: space-between;background-color:azure;">  
+        <div style="display:flex;align-items:center;justify-content:flex-start;color:darkred;width:180px;margin-top:10px" ><h6>Usuario: {{user}}</h6></div>
+    </div>
+    <div class="container1" >
+    <ul>
+        <li><a id="alerta-energia" href="{% url 'alerta_recibo_energia' %}"  style="color:black;">Alerta Recibo Energía</a></li>
+        <li><a id="alerta-agua" href="{% url 'alerta_recibo_agua' %}"  style="color:black;">Alerta Recibo Agua</a></li>
+        <li><a id="alerta-gas" href="{% url 'alerta_recibo_gas' %}"  style="color:black;">Alerta Recibo Gas</a></li>
+    </ul>
+    </div>
+</div>
+
+{% block javascript %}
+<script>
+  $(".dropdown-trigger").dropdown();
+  $('.dropdown-button').dropdown({
+        inDuration: 300,
+        outDuration: 225,
+        constrainWidth: false,
+        gutter: 0, // Spacing from edge
+        belowOrigin: true, // Displays dropdown below the button
+        alignment: 'right', // Displays dropdown with edge aligned to the left 
+        stopPropagation: false // Stops event propagation
+       
+  });
+  $( document ).ready(function(){
+        $('.sidenav').sidenav();
+        $('.collapsible').collapsible();
+        $(".dropdown-trigger").dropdown({ hover: true });
+  });
+  $(document).ready(function() {$('.button-collapse').sidenav('show'); });    
+
+  $(document).on("click","#alerta-energia", function(e) {
+        e.stopImmediatePropagation();
+        Swal.fire(
+        'Correos de Alerta en envio!, favor esperar'
+        )
+        });
+  $(document).on("click","#alerta-agua", function(e) {
+      e.stopImmediatePropagation();
+      Swal.fire(
+      'Correos de Alerta en envio!, favor esperar'
+      )
+      });
+  $(document).on("click","#alerta-gas", function(e) {
+      e.stopImmediatePropagation();
+      Swal.fire(
+      'Correos de Alerta en envio!, favor esperar'
+      )
+      });          
+</script>
+{% endblock %}
+{% endblock %}

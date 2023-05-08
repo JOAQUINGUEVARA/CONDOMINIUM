@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% load static %}
+{% block content %}
+
+
+<title>{% block tittle %}{% endblock %}Inicio | CONDOMINIUM</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.main-container {
+  padding: 30px;
+}
+
+/* HEADING */
+
+.heading {
+  text-align: center;
+}
+
+.heading__title {
+  font-weight: 300;
+}
+
+.heading__credits {
+  margin: 10px 0px;
+  color: #888888;
+  font-size: 15px;
+  transition: all 0.5s;
+}
+
+.heading__link {
+  text-decoration: none;
+}
+
+.heading__credits .heading__link {
+  color: inherit;
+}
+
+/* CARDS */
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.card {
+  margin: 20px;
+  padding: 20px;
+  width: 300px;
+  /* height: 300px; */
+  min-height: 100px;
+  display: grid;
+  grid-template-rows: 20px 50px 1fr 50px;
+  border-radius: 10px;
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.4);
+  transform: scale(1.01);
+}
+
+.card__link,
+.card__exit,
+.card__icon {
+  position: relative;
+  text-decoration: none;
+ /*  color: rgba(255, 255, 255, 0.9); */
+}
+
+.card__link::after {
+  position: absolute;
+  top: 25px;
+  left: 0;
+  content: "";
+  width: 0%;
+  height: 3px;
+  background-color: rgba(255, 255, 255, 0.6);
+  transition: all 0.5s;
+}
+
+.card__link:hover::after {
+  width: 100%;
+}
+
+.card__exit {
+  grid-row: 1/2;
+  justify-self: end;
+}
+
+.card__icon {
+  grid-row: 2/3;
+  font-size: 8px;
+}
+
+.card__title {
+  grid-row: 3/4;
+  font-weight: 50;
+  color: #ffffff;
+}
+
+.card__apply {
+  grid-row: 4/5;
+  align-self: center;
+}
+
+/* CARD BACKGROUNDS */
+
+.card-1 {
+  background: radial-gradient(#1fe4f5, #3fbafe);
+}
+
+.card-4 {
+  background: radial-gradient(#fbc1cc, #fa99b2);
+}
+
+.card-3 {
+  background: radial-gradient(#76b2fe, #b69efe);
+}
+
+.card-2 {
+  background: radial-gradient(#60efbc, #58d5c9);
+}
+
+.card-5 {
+  background: radial-gradient(#f588d8, #c0a3e5);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1600px) {
+  .cards {
+    justify-content: center;
+  }
+}
+h2{
+  font-size: 1rem;
+}
+
+</style>
+
+<body>
+  <nav>
+      <div class="nav-wrapper">
+        <a href="#!" class="brand-logo"><i class="material-icons">location_city</i>Residente</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'legislacion' %}">Legislación</a></li>
+          <li><a href="{% url 'reserva_zonas_comunes' %}">Reserva Zonas Comunes</a></li>
+          <li><a href="{% url 'pqr' id=request.user.id %}">PQR</a></li>
+          <li><a href="{% url 'clasificados_list' %}">Clasificados</a></li>
+          <li a class="active"><a href="{% url 'main' %}">Regresar</a></li>
+          <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+        </ul>
+      </div>
+  </nav>
+</body>
+
+<div class="main-container">
+  <div class="heading">
+    <h1 class="heading__title">Publicaciones Recientes</h1>
+    <!-- <p class="heading__credits"><a class="heading__link" target="_blank" href="https://dribbble.com/sl">Design by Simon Lurwer on Dribbble</a></p> -->
+  </div>
+  <div class="cards">
+    <div class="card card-1">
+      <div class="card__icon"><i class="material-icons">flash_on</i></div>
+      <p class="card__exit"><i>Clasificados</i></p>
+      <table>
+        {% load clasificados %}
+        {% get_clasificados_list as clasificados_list %}
+        {% if clasificados_list %}
+        {% for clasificado in clasificados_list %}
+          <tr style="height:auto ;">
+            <td ><li><a style="color:blue;" href="{% url 'clasificados_list' %}" class="link">{{clasificado.title}}</a></li></td>
+          </tr>  
+        {% endfor %}
+        {% endif %}
+      </table>
+    </div>
+    <div class="card card-2">
+      <div class="card__icon"><i class="material-icons">gavel</i></div>
+      <p class="card__exit"><i>Legislación</i></p>
+      <table>
+        {% load page_extras %}
+        {% get_legislacion_list as legislacion_list %}
+        {% if legislacion_list %}
+        {% for legislacion in legislacion_list %}
+          <tr style="height:auto ;">
+            <td ><li ><a style="color:green;" href="{% url 'legislacion' %}" class="link">{{legislacion.title}}</a></li></td>
+          </tr>  
+        {% endfor %}
+        {% endif %}
+      </table>
+    </div>
+    <div class="card card-3">
+      <div class="card__icon"><i class="material-icons">podcasts</i></div>
+      <p class="card__exit"><i>Comunicados</i></p>
+      <table>
+        {% load noticias_extras %}
+        {% get_noticias_list as noticias_list %}
+        {% if noticias_list %}
+        {% for noticia in noticias_list %}
+          <tr style="height:auto;">
+            <td ><li ><a style="color:blue;" href="{% url 'main' %}" class="link">{{noticia.title}}</a></li></td>
+          </tr>  
+        {% endfor %}
+        {% endif %}
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

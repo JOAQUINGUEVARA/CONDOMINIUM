@@ -1,0 +1,128 @@
+{% extends "core/base.html" %}
+{% load render_table from django_tables2 %}
+{% load django_tables2 %}
+{% load static %}
+
+{% block content %}
+<!doctype html>
+<style>
+    .container-autoriza{
+      background-color: #48b97f;
+    }
+    .container-table{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 10vh;
+        margin-left: 20vw;
+        margin-right: 20vw;
+    }
+    .table{
+      background-color: rgb(253, 251, 251);
+    }
+    
+    label{
+        font-weight: bold;
+        color:black;
+
+    }
+    .body{
+       height: 3000px;
+     }
+
+    nav >ul{ margin: 0 auto; width: 80px; }
+            nav ul li{
+                display: block;
+                float: left;
+                /* margin-left:-40px; */
+                position: relative;
+            }
+    nav ul a{
+                display: block;
+                float: left;
+                width: 180px;
+                padding: 10px 20px;
+            }
+            
+    #dropdown-accesos {
+              top:-60px;
+    }
+    body{
+       height: 3000px;
+     }
+
+    body { padding-top:20px; }
+    .modal {height: 130vh;width: 40vw;}
+     .panel-body .btn:not(.btn-block) { width:120px;margin-bottom:10px; }
+
+    .sidenav li>a {padding:0 32px !important}
+      .collapsible-body>ul>li>a {
+        padding: 0 48px !important;
+        font-weight: 400 !important;
+      }
+      /* RESPONSIVE */
+  
+    @media (max-width: 1600px) {
+    .cards {
+      justify-content: center;
+    }
+    }
+    h2{
+    font-size: 1rem;
+    }
+    body { padding-top:20px; }
+    .panel-body .btn:not(.btn-block) { width:120px;margin-bottom:10px; }
+
+    .sidenav li>a {padding:0 32px !important}
+      .collapsible-body>ul>li>a {
+        padding: 0 48px !important;
+        font-weight: 400 !important;
+      }
+</style>
+
+<head>
+  
+</head>
+
+<body style="background-image: url({% static '/img/ciudad.jpg' %});">
+         
+    <body>
+        <div class="navbar-fixed">
+            <nav>
+              <div class="nav-wrapper">
+                <a style="font-size: calc(12px + 1vw)" href="#!" class="brand-logo"><i class="material-icons">assignment_turned_in</i>AUTORIZACIONES PLATAFORMA WEB PEATONAL</a>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li  class="active"><a href="{% url 'autorizaciones' id=1 %}" >Regresar</a></li>
+                </ul>
+              </div>
+            </nav>
+          </div>
+          <ul class="sidenav" id="mobile-demo">
+            <li  class="active"><a href="{% url 'autorizaciones' id=1 %}" >Regresar</a></li>
+          </ul>
+    </body>
+
+    <div style="padding-top: 10px;margin-left:2vw;margin-right: 2vw ;margin:auto;width:80%;" class="container-autoriza">
+      <div style="display:flex;align-items:center;justify-content:center;flex-direction:row;justify-content: space-between;background-color:azure;">  
+          <div style="display:flex;align-items:center;justify-content:flex-start;color:darkred;width:180px;margin-top:10px" ><h6>Usuario: {{user}}</h6></div>
+          <a style="display:flex;font-size: calc(7px + 1vw);margin: auto;color:black" type="button" type="submit" href="#" value="autoriza" ><span>AUTORIZACIONES PLATAFORMA WEB PEATONAL</span></a>
+          <a id ="btnNuevo" style="transform:translate(-20vh,0)" class="btn-floating btn-short waves-effect waves-light blue" href="{% url 'crear_autorizado_plataforma_web_peatonal' %}" value="crear" ><i class="material-icons">add</i></a>        
+      </div>
+      <div style="" class="container-autoriza">
+        <table class="table table-bordered">
+            {% render_table autorizaciones %}
+        </table>
+      </div>
+    </div>
+</body>
+
+{% block javascript %}
+  <script>
+      $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+  </script>
+{% endblock %}
+{% endblock %}

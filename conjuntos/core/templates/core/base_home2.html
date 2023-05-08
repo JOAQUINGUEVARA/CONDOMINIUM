@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" class="no-js">
+<!--<![endif]-->
+{% load static %}
+<style>
+    
+    #main-sec{
+        background-image: url({% static "core/img/Conjunto.png" %}) ;
+        background-repeat: no-repeat;
+        height: 800px;
+        width: 1900px;
+        background-size: cover;
+         /* margin-left: 50px; */
+        
+    }
+    .vertical-line{
+        width: 1px; /* Line width */
+        background-color: white; /* Line color */
+        height: 100%; /* Override in-line if you want specific height. */
+        /* float: right; */ /* Causes the line to float to left of content. 
+        You can instead use position:absolute or display:inline-block
+        if this fits better with your design */
+        transform:traslate(-50vw,0);
+        border: 1px inset;
+    }
+
+.data_footer{
+    display:flex;
+    flex-direction:column;
+    align-content:flex-start;
+    padding-left: 3%;width:100%;
+    color:white;
+    background-color: #0eb493;
+}
+.subbox_footer{
+    display: flex;
+    flex-direction: row;
+}
+.box-title{
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    background-color: rgb(59, 58, 58);
+    opacity:.5;
+    width:60vw;
+    height:20vh;
+    margin: 0 auto;
+    }
+
+
+.data_footer{
+    display:flex;
+    flex-direction:column;
+    align-content:flex-start;
+    padding-left: 3%;
+    width:30%;
+  }
+.subbox_footer{
+    display: flex;flex-direction: column;
+
+  }
+  
+
+/* When the screen is less than 600 pixels wide, hide all links, except for the first one ("Home"). Show the link that contains should open and close the topnav (.icon) */
+@media screen and (max-width: 600px) {
+  
+  #main-sec{
+        background-image: url({% static "core/img/Conjunto.png" %}) ;
+        background-repeat: no-repeat;
+        height: 400px;
+        width: 480px;
+        background-size: cover;
+         /* margin-left: 50px; */
+        
+    }
+  .box-title{
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    background-color: rgb(59, 58, 58);
+    opacity:.5;
+    width:38vw;
+    height:15vh;
+    margin: 0 auto;
+
+  }  
+  .data_footer{
+    display:flex;
+    flex-direction:column;
+    align-content:flex-start;
+    padding-left: 3%;
+    width:30%;
+  }
+  .subbox_footer{
+    display: flex;flex-direction: column;
+
+  }
+}
+
+/**********************/
+
+body {margin:0;font-family:Arial}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+}
+
+.dropdown .dropbtn {
+  font-size: 17px;    
+  border: none;
+  outline: none;
+  color: white;
+  padding: 14px 16px;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.topnav a:hover, .dropdown:hover .dropbtn {
+  background-color: #555;
+  color: white;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child), .dropdown .dropbtn {
+    display: none;
+  }
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+  .topnav.responsive .dropdown {float: none;}
+  .topnav.responsive .dropdown-content {position: relative;}
+  .topnav.responsive .dropdown .dropbtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+
+/* The "responsive" class is added to the topnav with JavaScript when the user clicks on the icon. This class makes the topnav look good on small screens (display the links vertically instead of horizontally) */
+
+
+
+</style>
+<head>
+    <!-- meta charec set -->
+    <meta charset="utf-8">
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- Page Title -->
+    <title>i Administrado|Solución para Conjuntos Residenciales</title>
+    <!-- Meta Description -->
+    <meta name="description" content="Blue One Page Creative HTML5 Template">
+    <meta name="keywords"
+        content="one page, single page, onepage, responsive, parallax, creative, business, html5, css3, css3 animation">
+    <meta name="author" content="Muhammad Morshed">
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Google Font -->
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+    <!-- CSS
+		================================================== -->
+    <!-- Fontawesome Icon font -->
+    <link href="{% static 'core/css/font-awesome.min.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="css/font-awesome.min.css"> -->
+    <!-- Twitter Bootstrap css -->
+    <link href="{% static 'core/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+    <!-- jquery.fancybox  -->
+    <link href="{% static 'core/css/jquery.fancybox.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="css/jquery.fancybox.css"> -->
+    <!-- animate -->
+    <link href="{% static 'core/css/animate.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="css/animate.css"> -->
+    <!-- Main Stylesheet -->
+    <link href="{% static 'core/css/main.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="css/main.css"> -->
+    <!-- media-queries -->
+    <link href="{% static 'core/css/media-queries.css' %}" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="css/media-queries.css"> -->
+
+    <!-- Modernizer Script for old Browsers -->
+    <script src="{% static 'core/js/modernizr-2.6.2.min.js' %}"></script>
+    <!-- <script src="js/modernizr-2.6.2.min.js"></script> -->
+
+    <script defer src='https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js'></script>
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css'>
+
+    
+    
+</head>
+
+<body id="body">
+
+    <!-- preloader -->
+    <div id="preloader">
+      <img src="{% static 'core/img/preloader.gif' %}" alt="Preloader">
+      <!-- <img src="img/preloader.gif" alt="Preloader"> -->
+    </div>
+    <!-- end preloader -->
+
+    <!-- 
+        Fixed Navigation
+        ==================================== -->
+    <header id="navigation" class="navbar-fixed-top navbar" >
+        <div style="width:100%" class="container">
+            <!-- <div class="navbar-header"> -->
+                <!-- responsive nav button -->
+                <!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> -->
+                    <!-- span class="sr-only">Toggle navigation</span> -->
+                    <!-- <i class="fa fa-bars fa-2x"></i> -->
+              <!--   </button> -->
+                <!-- /responsive nav button -->
+
+                <!-- logo -->
+              <!--   <a class="navbar-brand" style="transform: translate(1vw,.5vw)" href="#home"> -->
+                    
+                      <!-- <img class="logo" src="{% static 'core/img/logo2.PNG' %}" alt="Logo"> -->
+                      <!-- <img src="img/logo.png" alt="Brandi"> -->
+                    
+                <!-- </a> -->
+                <!-- /logo -->
+            <!-- </div> -->
+
+            <!-- main nav -->
+            <!-- <nav class="collapse navbar-collapse navbar-right" style="background-color: black;" role="navigation">
+                <ul id="nav" class="nav navbar-nav">
+                    <li class="current"><a href="#body">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#works">Work</a></li>
+                    <li><a href="#team">Team</a></li>
+                    <li><a href="http://google.com">Contact</a></li>
+                </ul>
+            </nav> -->
+            <!-- /main nav -->
+            
+            <div class="topnav" id="myTopnav">
+                <a href="#home" class="active">Home</a>
+                <a href="{% url 'zonas_comunes' %}">Zonas Comunes</a>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#">Page 1
+                    <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">Page 1-1</a></li>
+                      <li><a href="#">Page 1-2</a></li>
+                      <li><a href="#">Page 1-3</a></li>
+                    </ul>
+                </li>
+                <a href="#comunicados">Comunicados</a>
+                <a href="#clasificados">Clasificados</a>
+                <a href="#legislacion">Legislación</a>
+                <a href="#pqr">PQR</a>
+                <a href="{% url 'registro' %}">Login</a>
+                <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                  <i class="fa fa-bars"></i>
+                </a>
+            </div>
+            
+              
+              
+            <div class="topnav" id="myTopnav">
+                <a href="#home" class="active">Home</a>
+                <a href="#legislacion">Legislación</a>
+                <a href="#normatividad">Normatividad Interna</a>
+                <div class="dropdown">
+                    <button class="dropbtn">Comunidad
+                      <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                
+                      <a href="#comunicados">Comunicados</a>
+                      <a href="#clasificados">Clasificados</a>
+                      <a href="#pqr">PQR</a>
+                    </div>
+                </div>
+                <a href="{% url 'zonas_comunes' %}">Zonas Comunes</a>
+                <a href="#clasificados">Clasificados</a>
+                <a href="#legislacion">Legislación</a>
+                <a href="{% url 'registro' %}">Login</a>
+                <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                  <i class="fa fa-bars"></i>
+                </a>
+            </div>
+
+            
+        </div>
+        <nav class="navbar navbar-expand-lg bg-light">
+            <div class="container-fluid">
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                <ul class='navbar-nav mr-auto'>
+                  <li class='nav-item dropdown'>
+                    <a class='nav-link dropdown-toggle' href='#' id='navbarDropdownAbout' role='button' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>About</a>
+                    <div class='dropdown-menu' aria-labelledby='navbarDropdownAbout'>
+                      <span class='nav-link' data-toggle='modal' data-target='#CUserAbout'>This Site</span>
+                      <span class='nav-link' data-toggle='modal' data-target='#CUabout'>Utils</span>
+                      <span class='nav-link' data-toggle='modal' data-target='#CUlicense'>License</span>
+                      <a class='nav-link' href="https://wikipedia.org/" target="_blank">Wiki</a>
+                    </div>
+                  </li>
+                  <li class='nav-item'> <span class='nav-link' onclick="function('charts.txt', true);">Home</span> </li>
+                </ul>
+              </div>
+            </div>
+        </nav>    
+    </header>
+    
+    <!--
+        End Fixed Navigation
+        ==================================== -->
+
+
+
+    <!--
+        Home Slider
+        ==================================== -->
+
+    <section id="main-sec">
+        <!-- <div id="carousel-example-generic" class="carousel slide" data-ride="carousel"> -->
+
+            <!-- Indicators bullet -->
+            <!-- <ol class="carousel-indicators">
+                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+            </ol> -->
+            <!-- End Indicators bullet -->
+
+            <!-- Wrapper for slides -->
+            <!-- <div class="carousel-inner" role="listbox"> -->
+
+                <!-- single slide -->
+                {% load home_page %}
+                {% get_conjunto_list as conjunto_list %}
+                {% if conjunto_list %}
+                {% for conjunto in conjunto_list %}
+                
+
+                <div class="tittle" >
+                    <div style="width: 70vh;height:30vh;margin-top: 15%;" class="box-title" >
+                        <h1 data-wow-duration="700ms" style="color:white;font-weight: 10vh;font-size: 6.5vw;text-shadow: -1px 0 black, 0 3px black, 3px 0 black, 0 -3px black;" data-wow-delay="500ms" class="wow bounceInDown animated;">
+                            <span>{{ conjunto.nombre }}</span></h1>
+                        </br>
+                        <h3 data-wow-duration="1000ms" class="wow slideInLeft animated" style="font-size: 3vw;color:white;text-shadow: -1px 0 black, 0 3px black, 3px 0 black, 0 -3px black;"><span
+                                class="colo-sub">Unidad residencial</span></h3>
+                        </br>
+                            <p data-wow-duration="1000ms" class="wow slideInRight animated" style="color:white;text-shadow: -1px 0 black, 0 3px black, 3px 0 black, 0 -3px black;">Bogotá Colombia
+                        </p>
+                        
+                    </div>
+                
+                </div>
+                
+                {% endfor %}
+                {% endif %}
+                <!-- end single slide -->
+
+               
+                <!-- end single slide -->
+
+            <!-- </div> -->
+            <!-- End Wrapper for slides -->
+
+        <!-- </div> -->
+    </section>
+    
+    <div style="display: flex;flex-direction:row;width: 100%;height: 30%;">
+        <div id="mapa">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.204846070885!2d-74.0609792847947!3d4.734445496561433!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f85122506a3b5%3A0x9b28c9f0920708b9!2sCl.%20151%20%2355-68%2C%20Bogot%C3%A1!5e0!3m2!1ses-419!2sco!4v1663864614996!5m2!1ses-419!2sco" width="1200" height="340" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <!-- <div style="display:flex;flex-direction: column; margin-bottom:0;background-color:rgba(44, 43, 43, 0.9); text-color:white;width: 100%" class="footer" > -->
+            
+        {% load home_page %}
+        {% get_conjunto_list as conjunto_list %}
+        {% if conjunto_list %}
+        {% for conjunto in conjunto_list %}
+        
+
+        <div class="data_footer">
+            </br>
+            </br>
+            <div class="subbox_footer" >
+            <img  src="{% static 'core/img/logo_footer1.PNG' %}" 50% alt="Logo">
+            </div>
+            <hr style="width:80%;border-color:white;transform: translate(-3vw,0)">
+            </br>
+            <div style="display: flex;flex-direction: row;">
+            <div id="ubica">Dirección:</div><div style="margin-left: 10px;">{{conjunto.direccion}}</div> {% if not forloop.last %}.{% endif %}
+            </div>
+            </br>
+            <div style="display: flex;flex-direction: row;">
+            <div id="ubica">Teléfono:</div><div style="margin-left: 10px;">{{conjunto.telefono}}</div> {% if not forloop.last %}.{% endif %}
+            </div>
+            </br>
+            <div style="display: flex;flex-direction: row;">
+            <div id="ubica">Email:</div><div style="margin-left: 10px;">{{conjunto.email}}</div> {% if not forloop.last %}.{% endif %}
+            </div>
+            </br>
+            <div style="display: flex;flex-direction: row;"></div>
+            <p class="m-0 mbt1">&copy; Mazurén 13 2020</p>
+            </div>
+            <div class="vertical-line"></div>
+        </div>
+        
+        {% endfor %}
+        {% endif %}
+        
+        <!-- </div> -->
+    </div>
+        <!--
+        End Home SliderEnd
+        ==================================== -->
+
+    <!--
+        Features
+        ==================================== -->
+    
+    <section id="comunicados" class="features">
+        <div class="sec-title text-center">
+            <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
+            <h2>Comunicados</h2>
+           
+            {% if request.user.is_authenticated %}
+            <button id="btnLogin" type="submit" data-toggle="modal" data-target="#loginModal" class="btn btn-light" href="#"><span style="color:green" span class="material-icons">Nuevo Comunicado</span></button>
+            {% endif %}
+        </div>
+        <div class="sec-title text-center">
+            {% load page_extras %}
+                      
+            {% get_comunicados_list as comunicados_list %}
+            {% if comunicados_list %}
+            {% for comunicado in comunicados_list %}
+            
+                <li>
+                  <div><h4>{{comunicado.title}} ({{comunicado.created}})</div></h4>
+                  <div class="collapsible-body"><span>{{comunicado.subtitle}}</span></div>
+                  <div class="collapsible-body"><span>{{comunicado.content|striptags|safe|linebreaks}}</span></div>
+                  {% if comunicado.foto %}
+                  <div class="collapsible-body"><img style="margin-top:20px" class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="{{comunicado.foto.url}}" alt=""></div>
+                  {% endif %}
+                </li>
+              </ul>
+              
+            {% endfor %}
+            {% endif %}
+
+        </div>
+    </section>
+
+    <section style="background-color:#e8f5fc" id="clasificados" class="features">
+        <div class="sec-title text-center">
+            <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
+            <h2>clasificados</h2>
+            <div class="sec-sub-title text-center">
+                {% get_conjunto_list as conjunto_list %}
+                {% if conjunto_list %}
+                {% for conjunto in conjunto_list %}
+                <div style="background-color:#04AA6D;width: 50%;margin-left: auto;margin-right: auto;" >
+                <p style="color:white" >Sr. Residente ingrese aquí los bienes y servicios que desea ofrecer a la comunidad de </p><h3 style="color:white">{{conjunto.nombre}}</h3>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            
+            <button id="btnLogin" type="submit" data-toggle="modal" data-target="#loginModal" class="btn btn-light" href="#"><span style="color:green" span class="material-icons">Nuevo clasificado</span></button>
+            
+        </div>
+       
+        {% get_clasificados_list as clasificados_list %}
+        {% if clasificados_list %}
+            {% for clasificado in clasificados_list %}
+           
+            
+                <div style="background: radial-gradient(#fad0d8, #fa99b2);" id="barra" class="collapsible-header" data-toggle="tooltip" data-placement="top" title="Click para desplegar"><i class="material-icons">second</i>{{clasificado.title}} Creado el:({{clasificado.created}})</div>
+                <div class="collapsible-body"><span>Informes:{{clasificado.informes}}</span></div>
+                <div class="collapsible-body"><span>{{clasificado.content|striptags|safe}}</span></div>
+                {% if clasificado.foto %}
+                <div class="collapsible-body"><img style="margin-top:20px" class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="{{clasificado.foto.url}}" alt=""></div>
+                {% endif %}
+                {% if request.user.id == clasificado.residente_id %}
+                | <a href="{% url 'editar_clasificado' clasificado.pk %}">Editar</a>
+                {% endif %}
+                {% if request.user.id == clasificado.residente_id %}
+                | <a href="{% url 'borrar_clasificado' clasificado.id %}">Borrar</a>
+                {% endif %}
+                {% if request.user.id == clasificado.residente_id %}
+                | <a href="{% url 'poner_vendido_clasificado' clasificado.id %}">Poner Vendido</a>
+                {% endif %}
+                | <a id="btnCrear" href="{% url 'crear_clasificado'  %}">Nuevo Aviso</a>
+            
+            {% endfor %}
+        {% else %}
+        <div style="display:flex;justify-content: center">
+            <a id="clasificado" type="button" class="btn default" type="submit"  href="{% url 'crear_clasificado'  %}" value="editar">Nuevo aviso</a>
+        </div>
+        {% endif %}  
+        
+    </section>
+    <section style="background-color:#f3fce8" id="normatividad" class="features">
+        <div class="sec-title text-center">
+            <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
+            <h2>normatividad</h2>
+            
+            {% if request.user.is_superuser %}
+            <button id="btnLogin" type="submit" data-toggle="modal" data-target="#loginModal" class="btn btn-light" href="#"><span style="color:green" span class="material-icons">Nueva Normatividad</span></button>
+            {% endif %}
+        </div>
+        <div class="sec-title text-center">
+            
+            {% get_anexo_normatividad_list as anexos_normatividad_list %}
+
+            
+            {% get_normatividad_list as normatividad_list %}
+            {% if normatividad_list %}
+            {% for normatividad in normatividad_list %}
+                    
+                <div style="color:#04AA6D"><i></i>Creado el:({{normatividad.created}})</div>
+             
+                <li><a style="color: black;font: small-caps 100%/200% serif; font-size: calc(7px + 1vw)" href="#" data-toggle="tooltip" data-placement="top" title="Click para desplegar" class="link">{{normatividad.title}}</a></li>
+                {% for anexo in anexos_normatividad_list %}
+                    {% if anexo.normatividad_id == normatividad.id %}
+                            {{anexo.descripcion}}
+                            <a href="{{ anexo.archivo.url }}">
+                            <i class="fa fa-folder-open fa-2x"></i>
+                            <span class="nav-text" style="color:black">
+                            <strong>Descargar</strong>
+                            </span>
+                            </a>
+                        
+                    {% endif %} 
+                {% endfor %}
+                              
+            {% endfor %}
+            {% endif %}
+
+       </div>
+    </section>
+
+    </section>
+    <section style="background-color:#fce8ec" id="legislacion" class="features">
+        <div class="sec-title text-center">
+            <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
+            <h2>legislacion</h2>
+            
+            {% if request.user.is_superuser %}
+            <button id="btnLogin" type="submit" data-toggle="modal" data-target="#loginModal" class="btn btn-light" href="#"><span style="color:green" span class="material-icons">Nueva Legislacion</span></button>
+            {% endif %}
+        </div>
+        <div class="sec-title text-center">
+            
+            {% get_anexo_legislacion_list as anexos_legislacion_list %}
+
+            
+            {% get_legislacion_list as legislacion_list %}
+            {% if legislacion_list %}
+            {% for legislacion in legislacion_list %}
+                       
+                <div style="color:#04AA6D"><i></i>Creado el:({{legislacion.created}})</div>
+                <li><a style="color: black;font: small-caps 100%/200% serif; font-size: calc(7px + 1vw)" href="{% url 'page_legislacion' legislacion.id legislacion.title|slugify %}" data-toggle="tooltip" data-placement="top" title="Click para desplegar" class="link">{{legislacion.title}}</a></li>
+                {% for anexo in anexos_legislacion_list %}
+                    {% if anexo.legislacion_id == legislacion.id %}
+                            {{anexo.descripcion}}</td>
+                            <a href="{{ anexo.archivo.url }}">
+                            <i class="fa fa-folder-open fa-2x"></i>
+                            <span class="nav-text" style="color:black">
+                            <strong>Descargar</strong>
+                            </span>
+                            </a>
+                            
+                    {% endif %} 
+                {% endfor %}
+                                       
+            {% endfor %}
+            {% endif %}
+
+       </div>
+    </section>
+    <!--
+        End Features
+        ==================================== -->
+
+
+    <!--
+        Our Works
+        ==================================== -->
+
+    <section id="works" class="works clearfix">
+        <div class="container">
+            <div class="row">
+
+                <div class="sec-title text-center">
+                    <h2>Works</h2>
+                    <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
+                </div>
+
+                <div class="sec-sub-title text-center">
+                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                        totam rem aperiam, eaque ipsa quae ab illo inventore</p>
+                </div>
+
+                <div class="work-filter wow fadeInRight animated" data-wow-duration="500ms">
+                    <ul class="text-center">
+                        <li><a href="javascript:;" data-filter="all" class="active filter">All</a></li>
+                        <li><a href="javascript:;" data-filter=".branding" class="filter">Branding</a></li>
+                        <li><a href="javascript:;" data-filter=".web" class="filter">web</a></li>
+                        <li><a href="javascript:;" data-filter=".logo-design" class="filter">logo design</a></li>
+                        <li><a href="javascript:;" data-filter=".photography" class="filter">photography</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="project-wrapper">
+
+            <figure class="mix work-item branding">
+                <img src="{% static 'core/img/works/item-1.jpg' %}" alt="">
+                <!-- <img src="img/works/item-1.jpg" alt=""> -->
+                <figcaption class="overlay">
+                    <a class="fancybox" rel="works" title="Write Your Image Caption Here" href="img/works/item-1.jpg"><i
+                            class="fa fa-eye fa-lg"></i></a>
+                    <h4>Labore et dolore magnam</h4>
+                    <p>Photography</p>
+                </figcaption>
+            </figure>
+
+            <figure class="mix work-item web">
+                <img src="{% static 'core/img/works/item-2.jpg' %}" alt="">
+                <!-- <img src="img/works/item-2.jpg" alt=""> -->
+                <figcaption class="overlay">
+                    <a class="fancybox" rel="works" title="Write Your Image Caption Here" href="img/works/item-2.jpg"><i
+                            class="fa fa-eye fa-lg"></i></a>
+                    <h4>Labore et dolore magnam</h4>
+                    <p>Photography</p>
+                </figcaption>
+            </figure>
+
+            <figure class="mix work-item logo-design">
+                <img src="{% static 'core/img/works/item-3.jpg' %}" alt="">
+                <!-- <img src="img/works/item-3.jpg" alt=""> -->
+                <figcaption class="overlay">
+                    <a class="fancybox" rel="works" title="Write Your Image Caption Here" href="img/works/item-3.jpg"><i
+                            class="fa fa-eye fa-lg"></i></a>
+                    <h4>Labore et dolore magnam</h4>
+                    <p>Photography</p>
+                </figcaption>
+            </figure>
+
+            <figure class="mix work-item photography">
+                <img src="{% static 'core/img/works/item-4.jpg' %}" alt="">
+                <!-- <img src="img/works/item-4.jpg" alt=""> -->
+                <figcaption class="overlay">
+                    <a class="fancybox" rel="works" title="Write Your Image Caption Here" href="img/works/item-4.jpg"><i
+                            class="fa fa-eye fa-lg"></i></a>
+                    <h4>Labore et dolore magnam</h4>
+                    <p>Photography</p>
+                </figcaption>
+            </figure>
+
+            <figure class="mix work-item branding">
+                <img src="{% static 'core/img/works/item-5.jpg' %}" alt="">
+                <!-- <img src="img/works/item-5.jpg" alt=""> -->
+                <figcaption class="overlay">
+                    <a class="fancybox" rel="works" title="Write Your Image Caption Here" href="img/works/item-5.jpg"><i
+                            class="fa fa-eye fa-lg"></i></a>
+                    <h4>Labore et dolore magnam</h4>
+                    <p>Photography</p>
+                </figcaption>
+            </figure>
+
+            <figure class="mix work-item web">
+                <img src="{% static 'core/img/works/item-6.jpg' %}" alt="">
+                <!-- <img src="img/works/item-6.jpg" alt=""> -->
+                <figcaption class="overlay">
+                    <a class="fancybox" rel="works" title="Write Your Image Caption Here" href="img/works/item-6.jpg"><i
+                            class="fa fa-eye fa-lg"></i></a>
+                    <h4>Labore et dolore magnam</h4>
+                    <p>Photography</p>
+                </figcaption>
+            </figure>
+
+            <figure class="mix work-item logo-design">
+                <img src="{% static 'core/img/works/item-7.jpg' %}" alt="">
+                <!-- <img src="img/works/item-7.jpg" alt=""> -->
+                <figcaption class="overlay">
+                    <a class="fancybox" rel="works" title="Write Your Image Caption Here" href="img/works/item-7.jpg"><i
+                            class="fa fa-eye fa-lg"></i></a>
+                    <h4>Labore et dolore magnam</h4>
+                    <p>Photography</p>
+                </figcaption>
+            </figure>
+
+            <figure class="mix work-item photography">
+                <img src="{% static 'core/img/works/item-8.jpg' %}" alt="">
+                <!-- <img src="img/works/item-8.jpg" alt=""> -->
+                <figcaption class="overlay">
+                    <a class="fancybox" rel="works" title="Write Your Image Caption Here" href="img/works/item-8.jpg"><i
+                            class="fa fa-eye fa-lg"></i></a>
+                    <h4>Labore et dolore magnam</h4>
+                    <p>Photography</p>
+                </figcaption>
+            </figure>
+
+        </div>
+
+
+    </section>
+
+    <!--
+        End Our Works
+        ==================================== -->
+
+    <!--
+        Meet Our Team
+        ==================================== -->
+
+    <section id="team" class="team">
+        <div class="container">
+            <div class="row">
+
+                <div class="sec-title text-center wow fadeInUp animated" data-wow-duration="700ms">
+                    <h2>Meet Our Team</h2>
+                    <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
+                </div>
+
+                <div class="sec-sub-title text-center wow fadeInRight animated" data-wow-duration="500ms">
+                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                        totam rem aperiam, eaque ipsa quae ab illo inventore</p>
+                </div>
+
+                <!-- single member -->
+                <figure class="team-member col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp animated"
+                    data-wow-duration="500ms">
+                    <div class="member-thumb">
+                        <img src="{% static 'core/img/team/member-1.png' %}" alt="Team Member" class="img-responsive">
+                        <!-- <img src="img/team/member-1.png" alt="Team Member" class="img-responsive"> -->
+                        <figcaption class="overlay">
+                            <h5>voluptatem quia voluptas </h5>
+                            <p>sit aspernatur aut odit aut fugit,</p>
+                            <ul class="social-links text-center">
+                                <li><a href=""><i class="fa fa-twitter fa-lg"></i></a></li>
+                                <li><a href=""><i class="fa fa-facebook fa-lg"></i></a></li>
+                                <li><a href=""><i class="fa fa-google-plus fa-lg"></i></a></li>
+                            </ul>
+                        </figcaption>
+                    </div>
+                    <h4>John Filmr Doe</h4>
+                    <span>Managing Director</span>
+                </figure>
+                <!-- end single member -->
+
+                <!-- single member -->
+                <figure class="team-member col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp animated"
+                    data-wow-duration="500ms" data-wow-delay="300ms">
+                    <div class="member-thumb">
+                        <img src="{% static 'core/img/team/member-2.png' %}" alt="Team Member" class="img-responsive">
+                        <!-- <img src="img/team/member-2.png" alt="Team Member" class="img-responsive"> -->
+                        <figcaption class="overlay">
+                            <h5>voluptatem quia voluptas </h5>
+                            <p>sit aspernatur aut odit aut fugit,</p>
+                            <ul class="social-links text-center">
+                                <li><a href=""><i class="fa fa-twitter fa-lg"></i></a></li>
+                                <li><a href=""><i class="fa fa-facebook fa-lg"></i></a></li>
+                                <li><a href=""><i class="fa fa-google-plus fa-lg"></i></a></li>
+                            </ul>
+                        </figcaption>
+                    </div>
+                    <h4>Martin Matrone</h4>
+                    <span>Lead Developer</span>
+                </figure>
+                <!-- end single member -->
+
+                <!-- single member -->
+                <figure class="team-member col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp animated"
+                    data-wow-duration="500ms" data-wow-delay="600ms">
+                    <div class="member-thumb">
+                        <img src="{% static 'core/img/team/member-3.png' %}" alt="Team Member" class="img-responsive">
+                        <!-- <img src="img/team/member-3.png" alt="Team Member" class="img-responsive"> -->
+                        <figcaption class="overlay">
+                            <h5>voluptatem quia voluptas </h5>
+                            <p>sit aspernatur aut odit aut fugit,</p>
+                            <ul class="social-links text-center">
+                                <li><a href=""><i class="fa fa-twitter fa-lg"></i></a></li>
+                                <li><a href=""><i class="fa fa-facebook fa-lg"></i></a></li>
+                                <li><a href=""><i class="fa fa-google-plus fa-lg"></i></a></li>
+                            </ul>
+                        </figcaption>
+                    </div>
+                    <h4>Steve Flaulkin</h4>
+                    <span>Sr. UI Designer</span>
+                </figure>
+                <!-- end single member -->
+
+                <!-- single member -->
+                <figure class="team-member col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp animated"
+                    data-wow-duration="500ms" data-wow-delay="900ms">
+                    <div class="member-thumb">
+                        <img src="{% static 'core/img/team/member-1.png' %}" alt="Team Member" class="img-responsive">
+                        <!-- <img src="img/team/member-1.png" alt="Team Member" class="img-responsive"> -->
+                        <figcaption class="overlay">
+                            <h5>voluptatem quia voluptas </h5>
+                            <p>sit aspernatur aut odit aut fugit,</p>
+                            <ul class="social-links text-center">
+                                <li><a href=""><i class="fa fa-twitter fa-lg"></i></a></li>
+                                <li><a href=""><i class="fa fa-facebook fa-lg"></i></a></li>
+                                <li><a href=""><i class="fa fa-google-plus fa-lg"></i></a></li>
+                            </ul>
+                        </figcaption>
+                    </div>
+                    <h4>John Filmr Doe</h4>
+                    <span>Managing Director</span>
+                </figure>
+                <!-- end single member -->
+
+            </div>
+        </div>
+    </section>
+
+    <!--
+        End Meet Our Team
+        ==================================== -->
+
+    <!--
+        Some fun facts
+        ==================================== -->
+
+    <section id="facts" class="facts">
+        <div class="parallax-overlay">
+            <div class="container">
+                <div class="row number-counters">
+
+                    <div class="sec-title text-center mb50 wow rubberBand animated" data-wow-duration="1000ms">
+                        <h2>Some Fun Facts</h2>
+                        <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
+                    </div>
+
+                    <!-- first count item -->
+                    <div class="col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp animated"
+                        data-wow-duration="500ms">
+                        <div class="counters-item">
+                            <i class="fa fa-clock-o fa-3x"></i>
+                            <strong data-to="3200">0</strong>
+                            <!-- Set Your Number here. i,e. data-to="56" -->
+                            <p>Hours of Work</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp animated" data-wow-duration="500ms"
+                        data-wow-delay="300ms">
+                        <div class="counters-item">
+                            <i class="fa fa-users fa-3x"></i>
+                            <strong data-to="120">0</strong>
+                            <!-- Set Your Number here. i,e. data-to="56" -->
+                            <p>Satisfied Clients</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp animated" data-wow-duration="500ms"
+                        data-wow-delay="600ms">
+                        <div class="counters-item">
+                            <i class="fa fa-rocket fa-3x"></i>
+                            <strong data-to="360">0</strong>
+                            <!-- Set Your Number here. i,e. data-to="56" -->
+                            <p> Projects Delivered </p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12 text-center wow fadeInUp animated" data-wow-duration="500ms"
+                        data-wow-delay="900ms">
+                        <div class="counters-item">
+                            <i class="fa fa-trophy fa-3x"></i>
+                            <strong data-to="6454">0</strong>
+                            <!-- Set Your Number here. i,e. data-to="56" -->
+                            <p>Awards Won</p>
+                        </div>
+                    </div>
+                    <!-- end first count item -->
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--
+        End Some fun facts
+        ==================================== -->
+
+
+    <!--
+        Contact Us
+        ==================================== -->
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="row mb50">
+
+                <div class="sec-title text-center mb50 wow fadeInDown animated" data-wow-duration="500ms">
+                    <h2>Let’s Discuss</h2>
+                    <div class="devider"><i class="fa fa-heart-o fa-lg"></i></div>
+                </div>
+
+                <div class="sec-sub-title text-center wow rubberBand animated" data-wow-duration="1000ms">
+                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                        totam rem aperiam, eaque ipsa quae ab illo inventore</p>
+                </div>
+
+                <!-- contact address -->
+                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 wow fadeInLeft animated" data-wow-duration="500ms">
+                    <div class="contact-address">
+                        <h3>Cras at ultrices erat, sed vulputate!</h3>
+                        <p>2345 Setwant natrer, 1234,</p>
+                        <p>Washington. United States.</p>
+                        <p>(401) 1234 567</p>
+                    </div>
+                </div>
+                <!-- end contact address -->
+
+                <!-- contact form -->
+                <div class="col-lg-8 col-md-8 col-sm-7 col-xs-12 wow fadeInDown animated" data-wow-duration="500ms"
+                    data-wow-delay="300ms">
+                    <div class="contact-form">
+                        <h3>Say hello!</h3>
+                        <form action="#" id="contact-form">
+                            <div class="input-group name-email">
+                                <div class="input-field">
+                                    <input type="text" name="name" id="name" placeholder="Name" class="form-control">
+                                </div>
+                                <div class="input-field">
+                                    <input type="email" name="email" id="email" placeholder="Email"
+                                        class="form-control">
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <textarea name="message" id="message" placeholder="Message"
+                                    class="form-control"></textarea>
+                            </div>
+                            <div class="input-group">
+                                <input type="submit" id="form-submit" class="pull-right" value="Send message">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- end contact form -->
+
+                <!-- footer social links -->
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 wow fadeInRight animated" data-wow-duration="500ms"
+                    data-wow-delay="600ms">
+                    <ul class="footer-social">
+                        <li><a href="https://www.behance.net/Themefisher"><i class="fa fa-behance fa-2x"></i></a></li>
+                        <li><a href="https://www.twitter.com/Themefisher"><i class="fa fa-twitter fa-2x"></i></a></li>
+                        <li><a href="https://dribbble.com/themefisher"><i class="fa fa-dribbble fa-2x"></i></a></li>
+                        <li><a href="https://www.facebook.com/Themefisher"><i class="fa fa-facebook fa-2x"></i></a></li>
+                    </ul>
+                </div>
+                <!-- end footer social links -->
+
+            </div>
+        </div>
+
+        <!-- Google map -->
+        <div id="map_canvas" class="wow bounceInDown animated" data-wow-duration="500ms"></div>
+        <!-- End Google map -->
+
+    </section>
+
+    <!--
+        End Contact Us
+        ==================================== -->
+
+
+    <footer id="footer" class="footer">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp animated" data-wow-duration="500ms">
+                    <div class="footer-single">
+                        <img src="{% static 'core/img/footer-logo.png' %}" alt="">
+                        <p>eusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp animated" data-wow-duration="500ms"
+                    data-wow-delay="300ms">
+                    <div class="footer-single">
+                        <h6>Subscribe </h6>
+                        <form action="#" class="subscribe">
+                            <input type="text" name="subscribe" id="subscribe">
+                            <input type="submit" value="&#8594;" id="subs">
+                        </form>
+                        <p>eusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp animated" data-wow-duration="500ms"
+                    data-wow-delay="600ms">
+                    <div class="footer-single">
+                        <h6>Explore</h6>
+                        <ul>
+                            <li><a href="#">Inside Us</a></li>
+                            <li><a href="#">Flickr</a></li>
+                            <li><a href="#">Google</a></li>
+                            <li><a href="#">Forum</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-6 col-xs-12 wow fadeInUp animated" data-wow-duration="500ms"
+                    data-wow-delay="900ms">
+                    <div class="footer-single">
+                        <h6>Support</h6>
+                        <ul>
+                            <li><a href="#">Contact Us</a></li>
+                            <li><a href="#">Market Blog</a></li>
+                            <li><a href="#">Help Center</a></li>
+                            <li><a href="#">Pressroom</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="copyright text-center">
+                        Copyright © 2015 <a href="http://themefisher.com/">Themefisher</a>. All rights reserved.
+                        Designed & developed by <a href="http://themefisher.com/">Themefisher</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="javascript:void(0);" id="back-top"><i class="fa fa-angle-up fa-3x"></i></a>
+
+
+
+    <div class="modal-body">
+        <h5>Popover in a modal</h5>
+        <p>This <a href="#" role="button" class="btn btn-secondary popover-test" title="Popover title" data-content="Popover body content is set in this attribute.">button</a> triggers a popover on click.</p>
+        <hr>
+        <h5>Tooltips in a modal</h5>
+        <p><a href="#" class="tooltip-test" title="Tooltip">This link</a> and <a href="#" class="tooltip-test" title="Tooltip">that link</a> have tooltips on hover.</p>
+      </div>
+
+
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="padding-top:20vh">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 60%;" style="display:flex;flex-direction: column; align-items: center;">
+                <div class="modal-header">
+                    <img  src="{% static 'core/img/logo2.PNG' %}" 50% alt="Logo">
+                    <h3 class="modal-title" id="exampleModalLabel">Registro</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" >
+                        <div >
+                        <a type="button" class="btn btn-success btn-sm" type="submit" href="{% url "registro" %}" value="editar" ><span class="material-icons">Usuario Registrado</span></a>
+                        </div>
+                        <hr>
+                        <div>
+                        <a type="button" class="btn btn-warning btn-sm" type="submit" href="{% url "registro_residentes" %}" value="editar" ><span class="material-icons">Usuario No Registrado</span></a>    
+                        </div>
+                        <hr>
+                        <div>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Salir</button>
+                        </div>
+                </div>   
+            </div>    
+        </div>
+    </div>
+
+
+    <!-- Essential jQuery Plugins
+		================================================== -->
+    <!-- Main jQuery -->
+    <script src="{% static 'core/js/jquery-1.11.1.min.js' %}"></script>
+    <!-- Single Page Nav -->
+    <script src="{% static 'core/js/jquery.singlePageNav.min.js' %}"></script>
+    <!-- Twitter Bootstrap -->
+    <script src="{% static 'core/js/bootstrap.min.js' %}"></script>
+    <!-- jquery.fancybox.pack -->
+    <script src="{% static 'core/js/jquery.fancybox.pack.js' %}"></script>
+    <!-- jquery.mixitup.min -->
+    <script src="{% static 'core/js/jquery.mixitup.min.js' %}"></script>
+    <!-- jquery.parallax -->
+    <script src="{% static 'core/js/jquery.parallax-1.1.3.js' %}"></script>
+    <!-- jquery.countTo -->
+    <script src="{% static 'core/js/jquery-countTo.js' %}"></script>
+    <!-- jquery.appear -->
+    <script src="{% static 'core/js/jquery.appear.js' %}"></script>
+    <!-- Contact form validation -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.32/jquery.form.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.11.1/jquery.validate.min.js"></script>
+    <!-- Google Map -->
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <!-- jquery easing -->
+    <script src="{% static 'core/js/jquery.easing.min.js' %}"></script>
+    <!-- jquery easing -->
+    <script src="{% static 'core/js/wow.min.js' %}"></script>
+
+    
+</script>  
+    
+    <script>
+        var wow = new WOW({
+            boxClass: 'wow',      // animated element css class (default is wow)
+            animateClass: 'animated', // animation css class (default is animated)
+            offset: 120,          // distance to the element when triggering the animation (default is 0)
+            mobile: false,       // trigger animations on mobile devices (default is true)
+            live: true        // act on asynchronously loaded content (default is true)
+        }
+        );
+        wow.init();
+    </script>
+    <!-- Custom Functions -->
+    <script src="{% static 'core/js/custom.js' %}"></script>
+
+    <script type="text/javascript">
+        
+        
+        $(function () {
+            /* ========================================================================= */
+            /*	Contact Form
+            /* ========================================================================= */
+
+            $('#contact-form').validate({
+                rules: {
+                    name: {
+                        required: true,
+                        minlength: 2
+                    },
+                    email: {
+                        required: true,
+                        email: true
+                    },
+                    message: {
+                        required: true
+                    }
+                },
+                messages: {
+                    name: {
+                        required: "come on, you have a name don't you?",
+                        minlength: "your name must consist of at least 2 characters"
+                    },
+                    email: {
+                        required: "no email, no message"
+                    },
+                    message: {
+                        required: "um...yea, you have to write something to send this form.",
+                        minlength: "thats all? really?"
+                    }
+                },
+
+                submitHandler: function (form) {
+                    $(form).ajaxSubmit({
+                        type: "POST",
+                        data: $(form).serialize(),
+                        url: "process.php",
+                        success: function () {
+                            $('#contact-form :input').attr('disabled', 'disabled');
+                            $('#contact-form').fadeTo("slow", 0.15, function () {
+                                $(this).find(':input').attr('disabled', 'disabled');
+                                $(this).find('label').css('cursor', 'default');
+                                $('#success').fadeIn();
+                            });
+                        },
+                        error: function () {
+                            $('#contact-form').fadeTo("slow", 0.15, function () {
+                                $('#error').fadeIn();
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+            x.className += " responsive";
+        } else {
+        x.className = "topnav";
+        }
+        }
+       
+        
+        $(document).ready(function(){
+        $('.sidenav').sidenav();
+        });
+
+        function mouseOver() {
+        document.getElementById("barra").click();
+        }
+        
+        $(document).on("click","#BtnLogin", function(e) {
+        e.stopImmediatePropagation();
+        $("#loginModal").modal("show");
+        }
+        )        
+    
+        function myFunction() {
+        var x = document.getElementById("myTopnav");
+        if (x.className === "topnav") {
+            x.className += " responsive";
+        } else {
+        x.className = "topnav";
+        }
+} 
+    </script>
+</body>
+
+</html>

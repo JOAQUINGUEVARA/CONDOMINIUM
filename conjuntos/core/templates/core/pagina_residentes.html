@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% load static %}
+{% block content %}
+
+<title>{% block tittle %}{% endblock %}Inicio | CONDOMINIUM</title>
+
+<style>
+  
+ nav >ul{ margin: 0 auto; width: 80px; }
+    nav ul li{
+        display: block;
+        float: left;
+        /* margin-left:-40px; */
+        position: relative;
+    }
+    nav ul a{
+        display: block;
+        float: left;
+        width: 180px;
+        padding: 10px 20px;
+    }
+    
+    #dropdown-accesos {
+      top:-60px;
+    }
+
+    body { padding-top:20px; }
+    .panel-body .btn:not(.btn-block) { width:120px;margin-bottom:10px; }
+
+    .sidenav li>a {padding:0 32px !important}
+      .collapsible-body>ul>li>a {
+        padding: 0 48px !important;
+        font-weight: 400 !important;
+      }
+      body{
+        background-image: url({% static "core/img/ciudad.jpg" %}) ;
+        background-repeat: no-repeat;
+        height: 400px;
+        width: 480px;
+        background-size: cover;
+         /* margin-left: 50px; */
+        
+    }
+</style>
+<body>
+<div class="navbar-fixed">
+    <ul id="dropdown1" class="dropdown-content">
+        <li><a href="{% url 'importar_xls_apartamentos' %}">Importar Información Apartamentos de xls</a></li>
+        <li><a href="{% url 'importar_xls_residentes' %}">Importar Información Residentes de xls</a></li>
+        <li><a href="{% url 'importar_xls_parqueaderos' %}">Importar Información Parqueaderos de xls</a></li>
+    </ul>  
+    <nav>
+      <div class="nav-wrapper">
+        <a style="font-size: calc(12px + 1vw);transform:translate(3vw,0)" href="#!" class="brand-logo"><i class="material-icons">people</i>INFORMACION RESIDENTES</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'solicitudes_residentes' %}">Solicitudes Residentes</a></li>  
+          <li><a href="{% url 'informacion_residentes' %}">Información Residentes</a></li>
+          <li><a href="{% url 'envio_correos_masivos_residentes' %}">Correos Residentes</a></li>
+          <li><a href="{% url 'pagina_envio_tokens' %}">Tokens</a></li>
+          <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Importar Información<i class="material-icons right">arrow_drop_down</i></a></li>
+          <li class="active" ><a  href="{% url 'pagina_administrador' %}">Regresar</a></li>
+        </ul>
+      </div>
+    </nav>
+</div>
+</body>
+
+<ul class="sidenav" id="mobile-demo">
+<li><a href="{% url 'solicitudes_residentes' %}">Solicitudes Residentes</a></li>  
+<li><a href="{% url 'informacion_residentes' %}">Información Residentes</a></li>
+<li><a href="{% url 'envio_correos_masivos_residentes' %}">Correos Residentes</a></li>
+<li><a href="{% url 'pagina_envio_tokens' %}">Tokens</a></li>
+<li><a href="{% url 'importar_xls_apartamentos' %}">Importar Información Apartamentos de xls</a></li>
+<li><a href="{% url 'importar_xls_residentes' %}">Importar Información Residentes de xls</a></li>
+<li><a href="{% url 'importar_xls_parqueaderos' %}">Importar Información parqueaderos de xls</a></li>
+<li><a href="{% url 'pagina_administrador' %}">Regresar</a></li>
+</ul>
+
+{% block javascript %}
+<script>
+  $(".dropdown-trigger").dropdown();
+  $('.dropdown-button').dropdown({
+        inDuration: 300,
+        outDuration: 225,
+        constrainWidth: false,
+        gutter: 0, // Spacing from edge
+        belowOrigin: true, // Displays dropdown below the button
+        alignment: 'right', // Displays dropdown with edge aligned to the left 
+        stopPropagation: false // Stops event propagation
+       
+  });
+  $( document ).ready(function(){
+        $('.sidenav').sidenav();
+        $('.collapsible').collapsible();
+        $(".dropdown-trigger").dropdown({ hover: true });
+  });
+  $(document).ready(function() {$('.button-collapse').sidenav('show'); });    
+</script>
+{% endblock %}
+
+    
+            
+
+{% endblock %}

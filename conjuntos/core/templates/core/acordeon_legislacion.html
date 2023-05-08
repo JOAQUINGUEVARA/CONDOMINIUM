@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.0.45/css/materialdesignicons.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+<!-- Javascript -->
+<script src="{% static '/vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static '/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script> -->
+<script src="{% static '/js/main.js' %}"></script>
+
+<style>
+.accordion {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  transition: 0.4s;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .accordion:hover {
+  background-color: #ccc;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  display: none;
+  overflow: hidden;
+}
+</style>
+
+<title>{% block tittle %}{% endblock %}Inicio | CONDOMINIUM</title>
+
+{% block head %}
+<body>
+  <nav>
+      <div class="nav-wrapper">
+        <a href="#!" class="brand-logo"><i class="material-icons">cloud</i>Legislación</a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="{% url 'main' %}">Regresar</a></li>
+        </ul>
+      </div>
+  </nav>
+</body>
+{% endblock %}
+
+{% block content %}
+<div class="box-cyd">
+  <div class="container-cyd">
+    <h2>Legislación</h2> 
+    {% for legislacion in legislacion %}
+      <button class="accordion">{{ legislacion.title }}</button>
+      <div class="panel">
+      <p>{{legislacion.content|striptags|safe}}
+          {% if request.user.is_staff %}
+            | <a href="#">Editar</a>
+            | <a href="#">Borrar</a>
+          {% endif %}
+      </p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+    } else {
+      panel.style.display = "block";
+    }
+  });
+}
+</script>
+
+{% endblock %}

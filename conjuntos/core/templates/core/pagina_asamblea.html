@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% comment %} {% load material_form %}
+{% form form=form %}{% endform %} {% endcomment %}
+{% load static %}
+{% block content %}
+
+<title>{% block tittle %}{% endblock %}Inicio | CONDOMINIUM</title>
+
+
+<body>
+  <nav>
+      <div class="nav-wrapper">
+        <a href="#!" class="brand-logo"><i class="material-icons">people</i>Asamblea</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="{% url 'registro_asamblea' %}">Registro Asamblea</a></li>
+          <li><a href="{% url 'ingreso_encuestas' %}">Ingreso Encuestas</a></li>
+          <li><a href="{% url 'resultado_encuestas' %}">Resultados Encuestas</a></li>
+          <li><a href="{% url 'main' %}">Regresar</a></li>
+          <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+        </ul>
+      </div>
+  </nav>
+</body>
+</html>
+{% endblock %}

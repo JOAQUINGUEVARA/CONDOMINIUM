@@ -1,0 +1,70 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+
+<title>{% block tittle %}Log In | CONDOMINIUM {% endblock %}</title>
+
+<style>
+.container-login {
+  position: relative;
+	margin:auto;
+	display:-webkit-flex; 
+	display: -ms-flexbox; 
+	display: flex;
+	-webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+	box-sizing: border-box;
+	width: 50vh;
+	height: 60vh;
+	background:ghostwhite ;
+	/*box-shadow:1px 1px 2px #333;*/
+	-webkit-filter: drop-shadow(0px 0px 5px #333);
+	filter: drop-shadow(0px 0px 5px #333);
+	font-family:Georgia, "Times New Roman", Times, serif;
+	font-size: 2vh;
+	text-align: center;
+	white-space: normal;
+  margin-top: 20px;
+}
+</style>
+<style>.errorlist{color:red;}</style>
+
+  <div class="container-login">
+    <div class="row mt-3">
+      <div class="col-md-12 mx-auto mb-9">
+        {% if 'register' in request.GET %}
+          <p style="color:green;">Usuario registrado correctamente, ya puedes identificarte.</p>
+        {% endif %}
+        <form action="" method="post">{% csrf_token %}
+          </br>
+          <div style="font-size: 4vh;margin-top:80px;">Iniciar sesión</div>
+          {% if form.non_field_errors %}
+            <p style="color:red">Usuario o contraseña incorrectos, prueba de nuevo.</p>
+          {% endif %}
+          <p>
+            <input type="text" name="username" autofocus maxlength="254" required
+              id="id_username" class="form-control" placeholder="Nombre de usuario"/>
+          </p>
+          <p>
+            <input type="password" name="password" required
+              id="id_password" class="form-control" placeholder="Contraseña"/>
+          </p>
+          <p><input type="submit" class="btn btn-primary btn-block" value="Acceder"></p>
+        </form>
+        <p>
+          ¿Ha olvidado su clave? Puede restaurarla <a href="{% url 'registration:password_reset' %}">aquí</a>.
+        </p>
+        <p>
+          ¿No tiene clave? solicite token y registrése <a href="{% url 'registro_residentes' %}">aquí</a>.
+        </p>
+        <p>
+          Solicitar Token <a href="{% url 'solicitud_token' %}">aquí</a>.
+        </p>
+        <br/>
+        <br/>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

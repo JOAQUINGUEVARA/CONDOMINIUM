@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<meta charset="UTF-8">
+{% load static %}
+
+<style>
+  body {
+    font-family: 'Lora';
+    /* background-attachment: fixed; */
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat; /* Do not repeat the image */
+    height: 10vh;
+   }
+  .container-suadministrador{
+    background-color:orange;
+    width: 70%;
+    margin-right: auto;
+    margin-right: auto;
+  }
+  .container{
+    background-color:rgb(222, 224, 223);
+    }
+  .titulo{
+      margin-bottom: -20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #056636;
+      color: white;
+  }
+  .user-box{
+    transform:translate(0,10vh)
+  }
+  @media only screen and (min-width: 993px){
+  nav a.button-collapse {
+    display: block;
+  }
+  }
+  th{
+
+  }
+  .sidenav-overlay{
+    background-color: aliceblue;
+  }
+</style>
+<title>{% block title %}{% endblock %}</title>
+
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width"/>
+
+<!--- PONE LINEAS HORIZONTALES --->
+<!-- <link href="{% static 'core/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet"> -->
+<!-- <link href="{% static 'core/vendor/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css"> -->
+<!-- <link href="{% static 'core/vendor/font-awesome/css/font-awesome.css' %}" rel="stylesheet" type="text/css"> -->
+<!-- <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'> -->
+<!-- <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'> -->
+
+{% block filter %}{% endblock %}
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+
+<link type="text/css" rel="stylesheet" href="static/materialize/js/materialize.js">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+<link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.0.45/css/materialdesignicons.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+{% block head %}{% endblock %}
+</head>
+
+<!-- <body style="background-image: url({% static 'core/img/ciudad.jpg' %});height: 600px;"> -->
+
+  <!---Sweet Alert 2 --->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'utils/notificationswal.js' %}"></script>
+
+  {% block content %}{% endblock %}
+</body>
+
+<!-- <img src="{% static 'conjuntos/logo_conjunto.png' %}" alt="..."> -->
+<!-- <div class="media d-flex align-items-center"><img src="{% static 'img/logo_conjunto.png' %}" alt="..." width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm"></div> -->
+{% block javascript %}
+{% endblock javascript %}

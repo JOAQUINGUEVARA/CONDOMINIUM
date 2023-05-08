@@ -1,0 +1,68 @@
+{% extends "core/base.html" %}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% load static %}
+{% block content %}
+{% load humanize %}
+{{ form.media }}
+
+<style>
+ul li:before {
+  background: linear-gradient(45deg, #f69ec4, #f9dd94);
+}
+ul {
+  display: block;
+  margin-left: -5px;
+}
+
+ul li {
+  display: block;
+  position: relative;
+}
+
+ul li:not(:last-child) {
+  margin-bottom: 16px;
+}
+
+ul li:before {
+  content: "";
+  position: absolute;
+  top: 1.2em;
+  left: -30px;
+  margin-top: -.9em;
+  background: #f69ec4;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+}
+</style>
+
+<div class="navbar-fixed">
+    <nav>
+        <div class="nav-wrapper">
+        <a style="font-size: calc(12px + 1vw)" href="#!" class="brand-logo"><i class="material-icons">summarize</i>REPORTES PENDIENTES</a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+            <li  class="active"><a href="{% url 'pagina_consejo' %}" >Regresar</a></li>
+        </ul>
+        </div>
+    </nav>
+</div>
+
+<ul class="sidenav" id="mobile-demo">
+<li  class="active"><a href="{% url 'pagina_consejo' %}" >Regresar</a></li>
+</ul>
+
+</div>
+<div style="padding-top: 20px;margin-left:2vw;margin-right: 2vw ;margin:auto;width:80%;" class="container-activos">
+    <div style="display:flex;align-items:center;justify-content:center;flex-direction:row;justify-content: space-between;background-color:azure;">  
+        <div style="display:flex;align-items:center;justify-content:flex-start;color:darkred;width:180px;margin-top:10px" ><h6>Usuario: {{user}}</h6></div>
+    </div>
+    <div class="container1" style="width: 20%;font-size:larger;margin-left: auto;margin-right: auto;">
+    <ul>
+        <li><a href="{% url 'reporte_reuniones_consejo_pdf' tipo=1 estado=2 %}"  style="color:black;">Pendientes Compromisos Consejo</a></li>
+        <li><a href="{% url 'reporte_informe_revisor_pdf' tipo=3 %}"  style="color:black;">Pendientes Recomendaciones Revisor Fiscal</a></li>
+        <!-- <li><a href="{% url 'reporte_pendientes_decisiones_asamblea_pdf' %}"  style="color:black;">Pendientes Decisiones Asamblea</a></li> -->
+    </ul>
+</div>
+
+{% endblock %}

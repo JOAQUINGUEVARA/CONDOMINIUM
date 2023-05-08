@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% comment %} {% load material_form %}
+{% form form=form %}{% endform %} {% endcomment %}
+{% load static %}
+{% block content %}
+<style>
+  #label{
+    color:black;
+    font-weight: bold;
+
+  }
+  body { padding-top:20px; }
+    .panel-body .btn:not(.btn-block) { width:120px;margin-bottom:10px; }
+
+    .sidenav li>a {padding:0 32px !important}
+      .collapsible-body>ul>li>a {
+        padding: 0 48px !important;
+        font-weight: 400 !important;
+      }
+</style>
+<title>{% block tittle %}Correspondencia | CONDOMINIUM{% endblock %}</title>
+
+{% bloc head %}
+<head>
+  <meta charset="utf-8">
+  <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script> -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+{% endblock %}
+
+<body>
+  <div class="navbar-fixed">
+      <nav>
+        <div class="nav-wrapper">
+          <a style="font-size: calc(12px + 1vw);transform:translate(3vw,0)" href="#!" class="brand-logo"><i class="material-icons">mail</i>Correspondencia</a>
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+          <ul class="right hide-on-med-and-down">
+            <li><a href="{% url 'ingreso_correspondencia' id=0 %}">Correspondencia</a></li>
+            <li><a href="{% url 'consulta_correspondencia' %}">Consulta Correspondencia</a></li>
+            <li class="active" ><a  href="{% url 'vigilancia' %}">Regresar</a></li>
+            <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+          </ul>
+        </div>
+      </nav>
+      <div><h6 style="color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
+        ">Usuario:{{request.user.username}}</h6></div>
+      </div>
+
+    <ul class="sidenav" id="mobile-demo">
+      <li><a href="{% url 'ingreso_correspondencia' id=0 %}">Correspondencia</a></li>
+      <li><a href="{% url 'consulta_correspondencia' %}">Consulta Correspondencia</a></li>
+      <li class="active" ><a  href="{% url 'vigilancia' %}">Regresar</a></li>
+      <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+    </ul>
+</body>
+{% endblock %}

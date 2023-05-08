@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang='es'>
+    {% extends "core/base_sin_material.html" %}
+    {% load crispy_forms_tags %}
+    {% load static %}
+    {% block content %}
+    
+    {% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+    {% bootstrap_css %}         {# Embed Bootstrap CSS #}
+    {% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+    {{ form.media }}            {# Adds date-picker required JS and CSS #}
+    
+    <head>
+    
+    </head>
+           
+    <style>
+   
+           
+    #id_cc_nit{
+      width: 300px;
+    }
+    #id_tipo_identificacion{
+      width: 300px;
+    }
+    #id_servicio_provee{
+      width: 500px;
+    }
+    #id_nombre{
+      width: 500px;
+    }
+    #id_telefono{
+      width: 400px;
+    }
+    #id_celular{
+      width: 400px;
+    }
+    #id_direccion{
+      width: 500px;
+    }
+    #id_email{
+      width: 500px;
+    }
+    #id_persona_contacto{
+      width: 500px;
+    }
+    #id_telefono_contacto{
+      width: 200px;
+    }
+    #id_celular_contacto{
+      width: 200px;
+    }
+    #id_email_contacto{
+      width: 300px;
+    }
+    
+    /* @media (max-width: 1600px) {
+    .container-doc {
+      width: 100%;
+    }
+    .form-row{
+      font-size: 5em;
+    }
+    } */
+    </style>
+    <!-- <main role="main"> -->
+      <div class="container-doc">
+          <div class="col-md-6 mx-auto mb-6">
+                <div class="titulo">
+                    <h2>INFORMACION PROPONENTE</h2>
+                </div>
+                </br>
+                <div class="container">
+                  <form role="form" method="post">
+                    </br>
+                    {% csrf_token %}
+                    
+                      <div style="display:flex;flex-direction:column;">
+                        <div style="display:flex;margin-left:20px">{{ form.cc_nit|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.tipo_identificacion|as_crispy_field }}</div>
+                        
+                        <div style="display:flex;flex-direction:row;align-items: center;">
+                            <div style="display:flex;margin-left:20px;">{{ form.servicio_provee|as_crispy_field }}</div>
+                            <div style="display:flex;margin-left:20px;transform:translate(0,5px)"><a id="btnGuardaServicio" type="button" href="{% url 'crear_servicio' %}" class="btn btn-primary" value="nuevo" >Crear Servicio</a></div>
+                        </div>
+                        <div style="display:flex;margin-left:20px;">{{ form.nombre|as_crispy_field }}</div>
+                        
+                        <div style="display:flex;margin-left:20px;">{{ form.telefono|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.celular|as_crispy_field }}</div>
+                        
+                        
+                        <div style="display:flex;margin-left:20px;">{{ form.direccion|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.email|as_crispy_field }}</div>
+                        
+                        
+                        <div style="display:flex;margin-left:20px;">{{ form.persona_contacto|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.telefono_contacto|as_crispy_field }}</div>
+                       
+                        <div style="display:flex;margin-left:20px;">{{ form.celular_contacto|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.email_contacto|as_crispy_field }}</div>
+
+                        <div style="display:flex;margin-left:20px;">{{ form.calificacion|as_crispy_field }}</div>
+                      </div>
+                    
+                    <button id="BtnGuardar" type="submit" class="btn btn-primary">Guardar</button>
+                    <button id="btnSalir" class="btn btn-warning" data-dismiss="modal">Salir</button>
+                  </form>
+                </div>
+                
+          </div> 
+      </div>
+    <!-- </main> -->
+    
+    
+    {% block javascript %}
+    <script>
+        $(document).on("click","#btnSalir", function(e) {
+          window.location.href = "{% url 'lista_proponentes' %}";
+        })
+
+        $("#id_cc_nit").change(function () {
+        const cc_nit = $(this).val();
+        let posicion = cc_nit.indexOf('.');
+        if (posicion !== -1){
+          alert('No se pueden ingresar puntos en la identificación')
+        }
+        $.ajax({
+          url: "{% url 'guarda_identificacion' %}",
+          data: {'cc_nit': cc_nit},
+          type: 'GET',
+          dataType: 'json',
+          success: function (data) {
+          if (data.exists){
+            document.getElementById('BtnGuardar').disabled = true;
+            alert('Proponente ya Creado!')
+          }
+          }    
+        });
+        });
+
+        $("#id_tipo_identificacion").change(function () {
+        const tipo_identificacion = $(this).val();
+        $.ajax({
+          url: "{% url 'guarda_tipo_identificacion' %}",
+          data: {'tipo_identificacion': tipo_identificacion},
+          type: 'GET',
+          dataType: 'json',
+              
+        });
+        });
+
+    </script> 
+    {% endblock %}             
+    {% endblock %}
