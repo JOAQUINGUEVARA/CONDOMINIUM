@@ -87,10 +87,10 @@
     </div>      
     <hr width=50% style="color:black;size:20">
     <div class="container" style="background-color:rgb(227, 222, 245)">
-        & for pqr in pqr &}
+        {% for pqr in pqr %}
           <h2 class="mb-4">{{pqr.title}}</h2>
           <class="mb-4">{{pqr.content}}</h2>
-        {& endfor &}
+        {% endfor %}
         {% for l in respuesta_pqr %}
             <div class="container" style="background-color:rgb(250, 250, 250)">
                 <div class="col-md-9 mx-auto">

@@ -93,37 +93,36 @@
   }
   
 </style>
-<head>
-  
-</head>
-<body>
-  <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script type="text/javascript" src="js/materialize.min.js"></script>
-    <nav>
-      <div class="nav-wrapper">
-          <div>
-          <a style="font-size: calc(1em + 1vw);" href="#!" class="brand-logo"><i class="material-icons">sports_tennis</i>Reservas Zonas Comunes</a>
-          </div>
-          <div>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-              <li class="active"><a href="{% url 'home' %}" >Regresar</a></li>
-          </ul>
-          </div>
-      </div>
-    </nav>
-</body>
 
-</html>
-<body>
 
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="js/materialize.min.js"></script>
+<head> 
+  <div class="sidebar" >
+      <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+          <div class="py-2 px-3 mb-20 " style="background-color: white;">
+          <div style="color:rgb(8, 8, 8);">Menu Reservas</div>
+          </div>
+          <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+              <br>
+              <li>
+                  <a  href="{% url 'home' %}" class="nav-link px-0 align-middle" style="color:rgb(188, 245, 174)">
+                  <i class="material-icons">undo</i><span class="ms-1 d-none d-sm-inline">Regresar</span> </a>
+              </li>
+          </ul>     
+      </div>    
+  </div>
+</head>   
+
+<body>
   <div class="container">
       <div id="container-all-col" >
           <div id="container-reserva" style="display:flex;flex-direction: row;" >
               <div id="container-derecha">
                 <div id="titulos" style="display:flex;align-items:baseline;justify-content:flex-start;margin-top:10px;color:forestgreen;flex-direction: column">
-                    <div>
+                    <!-- <div>
                       <h6 style="display:flex;color:firebrick;margin-top:5px;">Usuario: {{user}}</h6>
-                    </div>   
+                    </div> -->   
                     <div style="display:flex;align-items:baseline;flex-direction:row;justify-content:center;" >  
                         <div style="display:flex;width:50px;color:midnightblue;"><h5>Zona:</div>
                         <div style="display:flex;color:floralwhite;margin-left:10px;color:midnightblue"><h5>{{ nombreZona }}</h5></div>    

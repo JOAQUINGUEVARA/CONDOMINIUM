@@ -185,7 +185,11 @@
                     <td>{{ingreso.interior}}</td>
                     <td>{{ingreso.apartamento}}</td>
                     <td>{{ingreso.vigilante}}</td>
+                    {% if ingreso.hora_salida %}
+                    <td>-</td>
+                    {% else %}
                     <td><a id = "btnSalida" class="btn-floating btn-short waves-effect waves-light red" value="salida" ><i class="material-icons">add</i></a></td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             <div class="col s15 m15">

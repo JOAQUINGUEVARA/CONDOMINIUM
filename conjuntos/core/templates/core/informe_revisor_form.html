@@ -63,7 +63,7 @@
 {% block javascript %}
 <script>
     $(document).on("click","#btnSalir", function(e) {
-          window.location.href = "{% url 'lista_informes_revisor' %}";
+          window.location.href = "{% url 'lista_informes_revisor' page=1 %}";
     })
     
     $(document).ready(function(){

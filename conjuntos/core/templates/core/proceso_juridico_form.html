@@ -101,33 +101,35 @@
             <form role="form" method="post">
                 {% csrf_token %}
                     <div style="display:flex;flex-direction:column;">
-                    <div style="display:flex;margin-left:20px">{{ form.proceso_numero|as_crispy_field }}</div>
-                                       
-                    <div style="display:flex;flex-direction:row;align-items: center;">
-                        <div style="display:flex;margin-left:20px;">{{ form.tipo_proceso|as_crispy_field }}</div>
-                        <div style="display:flex;margin-left:20px;transform:translate(0,5px)"><a id="btnGuardaServicio" type="button" href="{% url 'crea_tipo_proceso' %}" class="btn btn-primary" value="nuevo" >Crear Tipo Proceso</a></div>
+                      <div style="display:flex;margin-left:20px">{{ form.proceso_numero|as_crispy_field }}</div>
+                                        
+                      <div style="display:flex;flex-direction:row;align-items: center;">
+                          <div style="display:flex;margin-left:20px;">{{ form.tipo_proceso|as_crispy_field }}</div>
+                          <div style="display:flex;margin-left:20px;transform:translate(0,5px)"><a id="btnGuardaServicio" type="button" href="{% url 'crea_tipo_proceso' %}" class="btn btn-primary" value="nuevo" >Crear Tipo Proceso</a></div>
+                      </div>
+                      <div style="display:flex;flex-direction:row;align-items: center;">
+                        <div style="display:flex;margin-left:20px;">{{ form.fecha_inicial|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.abogado|as_crispy_field }}</div>
+                      </div>
+                      <div style="display:flex;flex-direction:row;align-items: center;">
+                        <div style="display:flex;margin-left:20px;">{{ form.demandante|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.demandado|as_crispy_field }}</div>
+                      </div>
+                      <div style="display:flex;margin-left:20px;">{{ form.juzgado|as_crispy_field }}</div>
+                      <div style="display:flex;margin-left:20px;">{{ form.contenido|as_crispy_field }}</div>
+                      <div style="display:flex;flex-direction:row;align-items: center;">
+                        <div style="display:flex;margin-left:20px;">{{ form.interior|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.apartamento|as_crispy_field }}</div>
+                      </div>
+                      <div style="display:flex;flex-direction:row;align-items: center;">  
+                        <div style="display:flex;margin-left:20px;">{{ form.fecha_final|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.valor_demanda|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;color: black;font-size: medium;font-weight: 500;">Activo:{{ form.activo }}</div>
+                      </div>  
+                      </br>
                     </div>
-                    <div style="display:flex;margin-left:20px;">{{ form.fecha_inicial|as_crispy_field }}</div>
-                    
-                    <div style="display:flex;margin-left:20px;">{{ form.abogado|as_crispy_field }}</div>
-                    <div style="display:flex;margin-left:20px;">{{ form.demandante|as_crispy_field }}</div>
-                    
-                    
-                    <div style="display:flex;margin-left:20px;">{{ form.demandado|as_crispy_field }}</div>
-                    <div style="display:flex;margin-left:20px;">{{ form.juzgado|as_crispy_field }}</div>
-                    <div style="display:flex;margin-left:20px;">{{ form.contenido|as_crispy_field }}</div>
-                    
-                    
-                    <div style="display:flex;margin-left:20px;">{{ form.interior|as_crispy_field }}</div>
-                    <div style="display:flex;margin-left:20px;">{{ form.apartamento|as_crispy_field }}</div>
-                   
-                    <div style="display:flex;margin-left:20px;">{{ form.fecha_final|as_crispy_field }}</div>
-                    <div style="display:flex;margin-left:20px;">{{ form.valor_demanda|as_crispy_field }}</div>
-                    <div style="display:flex;margin-left:20px;color: black;font-size: medium;font-weight: 500;">Activo:{{ form.activo }}</div>
-                    </br>
-                    </div>
-                <button id="btnReunionConsejo" type="submit" class="btn btn-primary" value="Submit">Guardar</button>
-                <button id="btnSalir" class="btn btn-warning" data-dismiss="modal">Salir</button>
+                    <button id="btnReunionConsejo" type="submit" class="btn btn-primary" value="Submit">Guardar</button>
+                    <button id="btnSalir" class="btn btn-warning" data-dismiss="modal">Salir</button>
             </form>
             </div>
         </div>    

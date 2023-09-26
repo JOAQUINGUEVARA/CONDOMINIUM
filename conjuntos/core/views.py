@@ -16,11 +16,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required,permission_required
 from django.template.loader import render_to_string
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 import datetime 
 from datetime import datetime, timedelta,date
 from time import gmtime, strftime
-#from bootstrap_modal_forms.generic import BSModalCreateView
+#from bootstrap_modal_forms.generic import BSModalLoginRequiredMixin,CreateView
 from django.db.models import Subquery,F, Count, Value,Q
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models.signals import post_save,post_delete
@@ -29,10 +29,8 @@ from django import forms
 #from django.contrib.auth.models import User
 #from django.contrib.auth import get_user_model
 #User = get_user_model()
-from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.core.mail import EmailMessage
-from django.contrib.auth.mixins import LoginRequiredMixin
 #from django.db.models.signals import pre_save
 from django.template.loader import render_to_string
 from django.contrib import messages
@@ -54,6 +52,12 @@ from .forms import NewUserForm
 from django.contrib.auth import login
 from django.contrib import messages
 import time
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
+from django.contrib.auth.decorators import login_required
+from registration.forms import UserCreationFormWithEmail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
 
 from .models import IngresoPeatonal, ProponenteProyecto,Visitante,Correspondencia,ZonaComun,UserPerfil,Residente,Parqueadero,Mascota,Deposito,Contrato, MiembroConsejo,Reservas,Vigilante
 from .models import Autorizado,Vehiculo,Interior,Apartamento,UserPerfil,Parametros,TipoAutoriza,PlataformaWebVehiculo,PlataformaWebPeatonal,TipoPlataformaWeb,AutorizacionVehiculo,ReunionConsejo,DecisionConsejo,CompromisoConsejo
@@ -64,10 +68,10 @@ from upload.models import AnexoProveedor,AnexoProponente,AnexoProponenteProyecto
 from upload.models import AnexoContrato,AnexoMantenimiento,AnexoObra,AnexoAvanceObra,AnexoReparacion,AnexoReunionConsejo,AnexoInformeRevisor,AnexoProcesoJuridico,AnexoGestionProcesoJuridico
 
 from .forms import VisitanteForm,DatosCorrespondenciaForm,DatosIngresoPeatonalForm,ResidenteForm,CreaCorrespondenciaForm,UserPerfilForm,MiembroStaffForm,TipoContratoForm,VigilanteForm,GestionProcesoJuridicoForm
-from .forms import AutorizadoForm,AutorizadoPlataformaWebPeatonalForm,AutorizadoPlataformaWebVehiculoForm,DatosIngresoVehicularForm,VisitanteVehiculoForm,ResidenteLoginForm,VehiculoForm,MantenimientoForm,ActivoFijoForm
+from .forms import AutorizadoForm,AutorizadoPlataformaWebPeatonalForm,AutorizadoPlataformaWebVehiculoForm,DatosIngresoVehicularForm,VisitanteVehiculoForm,ResidenteLoginForm,VigilanteLoginForm,VehiculoForm,MantenimientoForm,ActivoFijoForm
 from .forms import ContratoForm,ProveedorForm,ServicioProveedorForm,ObrasForm,ReparacionesForm,AvanceObrasForm,ReunionConsejoForm,DecisionConsejoForm,CompromisoConsejoForm,MiembroConsejoForm,CargaFotoMiembroConsejoForm
 from .forms import CargaFotoActivoFijoForm,CargaFotoMiembroStaffForm,InformeRevisorForm,RecomendacionRevisorForm,ProcesoJuridicoForm,TipoProcesoForm,ParqueaderoForm,MascotaForm,TipoActivoFijoForm,PrestamoActivoForm
-from .forms import ZonaComunForm,CargaFotoZonaComunForm,SolicitudTokenForm,ResidenteTempForm,DatosReservaZonasComunesForm,ProponenteForm,ProyectosForm,ProponenteProyectoForm,TipoProyectoForm,AutorizadoVehicularForm
+from .forms import ZonaComunForm,CargaFotoZonaComunForm,SolicitudTokenResidenteForm,SolicitudTokenVigilanteForm,ResidenteTempForm,DatosReservaZonasComunesForm,ProponenteForm,ProyectosForm,ProponenteProyectoForm,TipoProyectoForm,AutorizadoVehicularForm
 from .forms import AsambleaForm,DecisionAsambleaForm,TipoAsambleaForm,ContactForm,ComiteConvivenciaForm,CargaFotoMiembroComiteForm,BajaActivoForm,EmailForm,EmailAnexoForm
 
 from registration.forms import SignupForm
@@ -79,7 +83,7 @@ from .tables import CorrespondenciaTable,ZonasComunesTable,ResidenteTable,Reside
 from .tables import ResidenteOtroTable,UserPerfilTable,AutorizacionesPeatonalTable,AutorizacionesPlataformaWebPeatonalTable,AutorizacionesPlataformaWebVehiculoTable,ActivoFijo1Table,ActivoFijo2Table,ActivoFijoTable
 from .tables import Proveedores1Table,Proveedores2Table,PrestamosActivosFijosTable,BajaActivosFijosTable,CorreosResidentesTable
 from .tables import ObrasTable,ReparacionesTable,MiembrosConsejoTable,MiembrosStaffTable,ReunionConsejoTable,InformeRevisorTable,ProcesosJuridicosTable,ApartamentosTable,ComiteConvivenciaTable
-from .tables import Reservas,ProponentesTable,ProyectosTable,ProyectosDetalleTable,ProponentesProyectoTable,VigilantesTable,AutorizacionVehiculoTable,IngresoPeatonalTable,IngresoVehicularTable
+from .tables import Reservas,ProponentesTable,ProponentesTable1,ProyectosTable,ProyectosDetalleTable,ProponentesProyectoTable,VigilantesTable,AutorizacionVehiculoTable,IngresoPeatonalTable,IngresoVehicularTable
 
 from pages.models import Panel,Comunicado
 
@@ -95,15 +99,15 @@ from django_tables2.views import SingleTableMixin
 
 from django.conf import settings
 
-from cv2 import *
+#from cv2 import *
 #from SimpleCV import Camera, Display, Image
 from time import sleep
 
-import cv2
+#import cv2
 
-import pygame #importa pygame
-import pygame.camera #importa camera desde video capture
-from pygame.locals import* #importa comandos locales
+#import pygame #importa pygame
+#import pygame.camera #importa camera desde video capture
+#from pygame.locals import* #importa comandos locales
 
 from django.core import serializers
 from django.core.serializers import serialize
@@ -112,10 +116,10 @@ from openpyxl import Workbook
 import openpyxl
 
 
-import pandas as pd
+#import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_pdf import PdfPages
+#import matplotlib.pyplot as plt
+#from matplotlib.backends.backend_pdf import PdfPages
 
 from django.utils.crypto import get_random_string
 import hashlib
@@ -130,6 +134,11 @@ def formatNumber(number, decimals, espanol=True):
     return ''.join(d.get(s, s) for s in f"{number:,.{decimals}f}") \
         if espanol \
         else f"{number:,.{decimals}f}"
+
+
+""" def profile(request):
+    tipo_usuario = 5
+    return redirect('core:user_home',tipo_usuario) """
 
 ############################# Home ###################################
 
@@ -155,7 +164,6 @@ def login_request(request):
             # Recuperamos las credenciales validadas
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-
             # Verificamos las credenciales del usuario
             user = authenticate(username=username, password=password)
             tipo_usuario = 0
@@ -164,7 +172,7 @@ def login_request(request):
                 # Hacemos el login manualmente
                 do_login(request, user)
                 # Y le redireccionamos a la portada
-                if request.user.is_superuser :
+                if request.user.is_superuser or username == 'Administrador':
                     messages.success(request, "Ud. Ha ingresado exitosamente como administrador!")
                     request.session['ingreso_administrador'] = 1
                     request.session['ingreso_revisor'] = 0
@@ -211,24 +219,34 @@ def login_request(request):
                                 return redirect('pagina_vigilancia')
 
                             else:
+                               print(request.user.email)
                                if Residente.objects.filter(email=request.user.email).exists():
-                                    messages.success(request, "Ud. Ha ingresado exitosamente como vigilante!")
+                                    print('aqui')
+                                    messages.success(request, "Ud. Ha ingresado exitosamente como residente!")
                                     request.session['ingreso_vigilante'] = 0
                                     request.session['ingreso_revisor'] = 0
                                     request.session['ingreso_administrador'] = 0
                                     request.session['ingreso_consejo'] = 0
                                     request.session['ingreso_residente'] = 1
                                     tipo_usuario = 5
+                                    print(tipo_usuario)
                                     request.session['tipo_usuario'] = tipo_usuario
                                     return redirect('user_home',tipo_usuario)
                    
+            else:
+                mensaje = 'Usuario No Registrado'
+                mensaje1 ='Debe entrar por la opción <¿No tiene Clave? e iniciar todo el proceso de registro.'
+                mensaje2 = ''
+                mensaje3 = ''
+                tipo_usuario = 0
+                return render(request, "core/mensaje_error_login.html", {'mensaje': mensaje,'mensaje1': mensaje1,'mensaje2': mensaje2,'mensaje3': mensaje3,'tipo_usuario':tipo_usuario})
         else:
-            mensaje = 'Usuario No Registrado'
-            mensaje1 ='Debe entrar por la opción <¿No tiene Clave? e iniciar todo el proceso de registro.'
+            mensaje = 'Error Formulario'
+            mensaje1 ='Intente de Nuevo'
             mensaje2 = ''
             mensaje3 = ''
             tipo_usuario = 0
-            return render(request, "core/mensaje_error_login.html", {'mensaje': mensaje,'mensaje1': mensaje1,'mensaje2': mensaje2,'mensaje3': mensaje3,'tipo_usuario':tipo_usuario})
+            return render(request, "core/mensaje_error_login.html", {'mensaje': mensaje,'mensaje1': mensaje1,'mensaje2': mensaje2,'mensaje3': mensaje3,'tipo_usuario':tipo_usuario})    
     # Si llegamos al final renderizamos el formulario
     
     return render(request, "users/login.html", {'form': form})
@@ -241,14 +259,70 @@ def logout(request):
     tipo_usuario = 0
     return redirect('user_home',tipo_usuario)
 
-from .forms import UserCreationFormWithEmail
 
 # Create your views here.
 
-class SignUpResidenteView(CreateView):
+
+""" class SignUpResidenteView(LoginRequiredMixin,CreateView):
+    form_class = UserCreationForm()
+    template_name = 'registration/signup.html'
+
+    def get_success_url(self):
+        return reverse_lazy('user_home',args=[5])   
+ 
+    def get_form(self, form_class=None):
+        form = super(SignUpResidenteView, self).get_form()
+        # Modificar en tiempo real
+        form.fields['username'].widget = forms.TextInput(
+            attrs={'class':'form-control mb-2', 'placeholder':'Nombre de usuario'})
+        form.fields['email'].widget = forms.EmailInput(
+            attrs={'class':'form-control mb-2', 'placeholder':'Dirección email'})
+        form.fields['password1'].widget = forms.PasswordInput(
+            attrs={'class':'form-control mb-2', 'placeholder':'Contraseña'})
+        form.fields['password2'].widget = forms.PasswordInput(
+            attrs={'class':'form-control mb-2', 'placeholder':'Repite la contraseña'})
+        return form 
+    
+    def form_valid(self, form):
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            password1 = form.cleaned_data['password1']
+            user = form.save(commit=False)
+            if MiembroConsejo.objects.filter(email=email).exists():
+                user.is_staff=True
+            else:
+                user.is_staff=False
+            user.is_active = True    
+            #user.password = password1    
+            user.save()
+            htmly = get_template('core/email_form.html')
+            d = { 'username': username }
+            subject, from_email, to = 'welcome', 'your_email@gmail.com', email
+            html_content = htmly.render(d)
+            msg = EmailMultiAlternatives(subject, html_content, from_email, [to])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+            ##################################################################
+            messages.success(self.request, f'Su cuenta ha sido creada ! puede logearse')
+            #EnvioMailResidente(apartamento.id,mensaje,asunto,email)
+            return redirect('login')
+        tipo_usuario=self.request.session['tipo_Usuario']
+        return redirect('user_home',tipo_usuario)    
+        #return redirect('home') """
+
+class SignUpResidenteView(LoginRequiredMixin,CreateView):
     form_class = UserCreationFormWithEmail
     template_name = 'registration/signup.html'
 
+    def get_initial(self,*args,**kwargs):
+        id =self.kwargs['id']
+        residente = Residente.objects.get(id=id)
+        email = residente.email 
+        initial=super(SignUpResidenteView,self).get_initial(**kwargs)
+        initial[email] = email 
+        return initial
+    
     def get_success_url(self):
         return reverse_lazy('user_home',args=[5])   
 
@@ -265,19 +339,73 @@ class SignUpResidenteView(CreateView):
             attrs={'class':'form-control mb-2', 'placeholder':'Repite la contraseña'})
         return form
     
+""" def SignUpResidenteView(request,id):
+    # Creamos el formulario de autenticación vacío
+    template_name = 'registration/signup.html'
+    form = UserCreationForm()
+    if request.method == "POST":
+        # Añadimos los datos recibidos al formulario
+        form = UserCreationForm(data=request.POST)
+        # Si el formulario es válido...
+        if form.is_valid():
+            # Creamos la nueva cuenta de usuario
+            user = form.save()
+            messages.success(request, f'Su cuenta ha sido creada ! puede logearse')
+            # Si el usuario se crea correctamente
+            if user is not None:
+                # Hacemos el login manualmente
+                do_login(request, user)
+                # Y le redireccionamos a la portada
+                return redirect('registro')
+
+    # Si llegamos al final renderizamos el formulario
+    return render(request, "users/register.html", {'form': form}) """
+
+class SignUpVigilanteView(LoginRequiredMixin,CreateView):
+    form_class = UserCreationFormWithEmail
+    template_name = 'registration/signup.html'
+
+    def get_initial(self,*args,**kwargs):
+        id =self.kwargs['id']
+        vigilante = Vigilante.objects.get(id=id)
+        email = vigilante.email 
+        initial=super(SignUpVigilanteView,self).get_initial(**kwargs)
+        initial[email] = email 
+        return initial
+    
+    def get_success_url(self):
+        return reverse_lazy('user_home',args=[5])   
+
+    def get_form(self, form_class=None):
+        form = super(SignUpVigilanteView, self).get_form()
+        # Modificar en tiempo real
+        form.fields['username'].widget = forms.TextInput(
+            attrs={'class':'form-control mb-2', 'placeholder':'Nombre de usuario'})
+        form.fields['email'].widget = forms.EmailInput(
+            attrs={'class':'form-control mb-2', 'placeholder':'Dirección email'})
+        form.fields['password1'].widget = forms.PasswordInput(
+            attrs={'class':'form-control mb-2', 'placeholder':'Contraseña'})
+        form.fields['password2'].widget = forms.PasswordInput(
+            attrs={'class':'form-control mb-2', 'placeholder':'Repite la contraseña'})
+        return form
+    
     def form_valid(self, form):
         if form.is_valid():
-            user = form.save(commit=False)
-            if MiembroConsejo.objects.filter(email=email).exists():
-                User.is_staff=True
+            email = form.cleaned_data['email']
+            print(email)
+            if Vigilante.objects.filter(email=email).exists():
+                user = form.save(commit=False)
+                user.save()
             else:
-                User.is_staff=False
-            user.save()
-        tipo_usuario=request.session['tipo_Usuario']
-        return redirect('user_home',tipo_usuario)    
-        #return redirect('home')
-
-class SignUpVigilanteView(CreateView):
+                if MiembroStaff.objects.filter(email=email).exists():
+                    user = form.save(commit=False)
+                    user.save()
+                else:
+                    messages.warning(self.request, 'No está registrado como vigilante o staff del conjunto')    
+        tipo_usuario=self.request.session['tipo_Usuario']
+        return redirect('user_home',tipo_usuario)
+    
+""" class SignUpVigilanteView(LoginRequiredMixin,CreateView):
     form_class = UserCreationFormWithEmail
     template_name = 'registration/signup.html'
 
@@ -307,9 +435,10 @@ class SignUpVigilanteView(CreateView):
                 if MiembroStaff.objects.filter(email=email).exists():
                     user = form.save(commit=False)
                     user.save()
-                    messages.warning(self.request, 'No está registrado como vigilante o staff del conjunto')    
-        tipo_usuario=request.session['tipo_Usuario']
-        return redirect('user_home',tipo_usuario)    
+                else:
+                messages.warning(self.request, 'No está registrado como vigilante o staff del conjunto')    
+        tipo_usuario=self.request.session['tipo_Usuario']
+        return redirect('user_home',tipo_usuario)     """
         #return redirect('home')
 
 def RegistroResidenteView(request):
@@ -321,7 +450,7 @@ def RegistroResidenteView(request):
             interior_sol = residente_form.cleaned_data['interior']
             email_sol = residente_form.cleaned_data['email']
             token_sol = residente_form.cleaned_data['token']
-            if Residente.objects.filter(interior_id = interior_sol,apartamento_id = apartamento_sol, email = email_sol,token=token_sol).exists():
+            if Residente.objects.filter(interior = interior_sol,apartamento = apartamento_sol, email = email_sol,token=token_sol).exists():
                 residente = Residente.objects.get(interior_id = interior_sol,apartamento_id = apartamento_sol, email = email_sol,token=token_sol)
                 sapartamento = residente.apartamento.numero
                 nombre_res = residente.nombre
@@ -335,7 +464,7 @@ def RegistroResidenteView(request):
                     mensaje3 = 'Ingrese con el usuario y clave con que se registró inicialmente, si olvidó la clave pida cambio de clave en <Login> por la opción <Olvidó su clave?>'
                     return render(request, "core/mensaje_error_login.html", {'emali':email_sol,'mensaje': mensaje,'mensaje1': mensaje1,'mensaje2': mensaje2,'mensaje3': mensaje3})
                 else:
-                    return redirect('sign_up',residente.id)
+                    return redirect('sign_up_residente',residente.id)
             else:
                 url = 'crear_residente_uno'
                 parametro1 = interior_sol
@@ -347,6 +476,37 @@ def RegistroResidenteView(request):
         form = ResidenteLoginForm(request.POST,instance)
         return render(request,'core/registro_residente.html',{'form':form})        
 
+def RegistroVigilanteView(request):
+    instance=Vigilante()
+    if request.method=='POST':
+        vigilante_form = VigilanteLoginForm(request.POST,instance)
+        if vigilante_form.is_valid():
+            email_sol = vigilante_form.cleaned_data['email']
+            token_sol = vigilante_form.cleaned_data['token']
+            if Vigilante.objects.filter(email=email_sol,token=token_sol).exists():
+                vigilante = Vigilante.objects.get(email = email_sol,token=token_sol)
+                nombre_vig = vigilante.nombre
+                if User.objects.filter(email=email_sol).exists():
+                    vigilante = Vigilante.objects.get(email=email_sol)
+                    url = 'user_home'
+                    mensaje = 'Ya existe un usuario registrado con éste mail: '+email_sol
+                    mensaje1='Ingrese con el usuario y clave con que se registró inicialmente, si olvidó la clave pida cambio de clave en <Login> por la opción <Olvidó su clave?>'
+                    mensaje2=''
+                    mensaje3 = ''
+                    return render(request, "core/mensaje_error_login.html", {'emali':email_sol,'mensaje': mensaje,'mensaje1': mensaje1,'mensaje2': mensaje2,'mensaje3': mensaje3})
+                else:
+                    return redirect('sign_up_residente',vigilante.id)
+            else:
+                url = 'crear_vigilante_uno'
+                parametro1 = email_sol
+                parametro2 = ''
+                parametro3 = ''
+                mensaje = 'Vigilante con ésta información no existe en la base de datos, debe solicitar a la administración para solicitarle la inclusión de sus datos'
+                return render(request, "core/mensaje_error_tres_parametros.html", {'mensaje': mensaje,'url':url,'parametro1':parametro1,'parametro2':parametro2,'parametro3':parametro3})
+    else:
+        form = VigilanteLoginForm(request.POST,instance)
+        return render(request,'core/registro_vigilante.html',{'form':form})        
+    
 @transaction.atomic
 def update_profile(request):
     if request.method == 'POST':
@@ -653,7 +813,7 @@ def AccesoPeatonalListaView(request):
     for i in f.qs:
         lista.append(i.id)
     request.session['lista_filtrada'] = lista
-    RequestConfig(request, paginate={"per_page": 15, "page": 1}).configure(ingresos)
+    RequestConfig(request, paginate={"per_page": 10, "page": 1}).configure(ingresos)
     return render(request, "core/ingreso_peatonal_lista.html", {"ingresos":ingresos,'filter': f,'tipo_usuario':tipo_usuario})
     
 
@@ -716,37 +876,37 @@ def DireccionaSalidaPaginaAutorizacionesView(request):
 ################################## Paginas Generales ##########################
 
 class PaginaZonasComunesView(TemplateView):
-    template_name = 'core\pagina_zonas_comunes.html'
+    template_name = 'core/pagina_zonas_comunes.html'
 
 class PaginaAutorizacionesView(TemplateView):
-    template_name = 'core\pagina_autorizaciones.html'
+    template_name = 'core/pagina_autorizaciones.html'
 
 class PaginaAccesosView(TemplateView):
-    template_name = 'core\pagina_accesos.html'
+    template_name = 'core/pagina_accesos.html'
 
 class InformacionGeneralView(TemplateView):
-    template_name = 'core\pagina_informacion_general.html'
+    template_name = 'core/pagina_informacion_general.html'
 
 class MantenimientoView(TemplateView):
-    template_name = 'core\pagina_mantenimiento.html'
+    template_name = 'core/pagina_mantenimiento.html'
 
 class PaginaRevisorView(TemplateView):
-    template_name = 'core\pagina_revisor.html'
+    template_name = 'core/pagina_revisor.html'
 
 class AsambleaView(TemplateView):
-    template_name = 'core\pagina_asamblea.html'
+    template_name = 'core/pagina_asamblea.html'
 
 class PaginaCorrespondenciaView(TemplateView):
-    template_name = 'core\pagina_correspondencia.html'
+    template_name = 'core/pagina_correspondencia.html'
 
 class PqrView(TemplateView):
-    template_name = 'core\pagina_pqr.html'
+    template_name = 'core/pagina_pqr.html'
 
 class JuridicoView(TemplateView):
-    template_name = 'core\juridico.html'
+    template_name = 'core/juridico.html'
 
 class SistemaView(TemplateView):
-    template_name = 'core\pagina_sistema.html'
+    template_name = 'core/pagina_sistema.html'
 
 def MainView(request):
     request.session['idzona'] = ''
@@ -762,13 +922,13 @@ def MensajePaginaEnConstruccionView(request,id):
     return render(request, "core/mensaje_pagina_en_construccion.html", {'mensaje': mensaje,'parametro':parametro})
 
 class LegislacionView(TemplateView):
-    template_name = 'core\legislacion.html'        
+    template_name = 'core/legislacion.html'        
 
 class AboutView(TemplateView):
-    template_name = 'core\empresa.html'
+    template_name = 'core/empresa.html'
 
 class PaginaAdministradorView(TemplateView):
-    template_name = 'core\pagina_administrador.html'
+    template_name = 'core/pagina_administrador.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -776,10 +936,10 @@ class PaginaAdministradorView(TemplateView):
         return context
 
 class VigilanciaView(TemplateView):
-    template_name = 'core\pagina_vigilancia.html'
+    template_name = 'core/pagina_vigilancia.html'
 
 class PaginaAlertasView(TemplateView):
-    template_name = 'core\pagina_alertas.html'
+    template_name = 'core/pagina_alertas.html'
 
 ##################################### Alertas ################################
 
@@ -804,16 +964,16 @@ def AlertaReciboGasView(request):
 ###################################### Correspondencia ############################
 
 class IngresoCorrespondenciaView(TemplateView):
-    template_name = 'core\ingreso_correspondencia.html' 
+    template_name = 'core/ingreso_correspondencia.html' 
 
 class MensajeCorrespondenciaView(TemplateView):
-    template_name = 'core\mensaje_correspondencia.html'    
+    template_name = 'core/mensaje_correspondencia.html'    
 
 class CalendarioView(TemplateView):
-    template_name = 'core\calendario.html'    
+    template_name = 'core/calendario.html'    
 
 class PaginaInformacionResidentesView(TemplateView):
-    template_name = 'core\pagina_residentes.html'
+    template_name = 'core/pagina_residentes.html'
 
 class CreaCorrespondenciaView(LoginRequiredMixin,CreateView):
     model = Correspondencia
@@ -875,7 +1035,7 @@ def CorrespondenciaListView(request):
     for i in f.qs:
         lista.append(i.id)
     request.session['lista_filtrada'] = lista
-    RequestConfig(request, paginate={"per_page": 15, "page": 1}).configure(correspondencia)
+    RequestConfig(request, paginate={"per_page": 11, "page": 1}).configure(correspondencia)
     return render(request, "core/correspondencia_lista.html", {'correspondencia':correspondencia,'tipo_usuario':tipo_usuario,'filter':f})
     
 def ReporteCorrespondenciaXlsView(request):
@@ -956,7 +1116,8 @@ def EntregasCorrespondenciaView(request):
             #data = {'id':id,'entregado':False,'fechahora_entrega':datetime.now()}
         else:
            data = {'id':id,'entregado':True}     
-
+    else:
+        data = {'id':id,'entregado':False}
     return JsonResponse(data)
 
 @csrf_exempt
@@ -1000,7 +1161,7 @@ def DireccionaCorrespondenciaView(request):
 @login_required
 def ZonasComunesListaView(request):
     zonas_comunes = ZonasComunesTable(ZonaComun.objects.all())
-    #apartamentos = ApartamentosTable(Apartamento.objects.all())
+    zonas_comunes.paginate(page=request.GET.get("page", 1), per_page=10)
     return render(request, 'core/zonas_comunes_lista.html',{'zonas_comunes':zonas_comunes})    
 
 class CreaZonaComunView(LoginRequiredMixin,CreateView):
@@ -1288,7 +1449,7 @@ def AccesoVehicularListaView(request):
     for i in f.qs:
         lista.append(i.id)
         request.session['lista_filtrada'] = lista
-    RequestConfig(request, paginate={"per_page": 15, "page": 1}).configure(ingresos)
+    ingresos.paginate(page=request.GET.get("page", 1), per_page=10)
     return render(request, "core/ingreso_vehicular_lista.html", {"ingresos":ingresos,'filter':f,'tipo_usuario':tipo_usuario})
             
 def ReporteIngresoVehicularXlsView(request):
@@ -1377,7 +1538,6 @@ class CreaAutorizadoVehicularView(LoginRequiredMixin,CreateView):
         conjunto = Conjunto.objects.latest('id')
         email_sol = conjunto.email
         apartamento = Apartamento.objects.get(id=autorizado.apartamento_id)
-        xxx
         message ="Sr. Administrador, se ha ingresado una autorización de ingreso vehicular del Apartamento :"+apartamento.numero+" Identificacion: "+autorizado.identificacion+" Nombre: "+autorizado.nombre+" Placa: "+autorizado.placa
         subject = "Autorización Ingreso Vehicular "
         from_email = settings.EMAIL_HOST_USER
@@ -1764,69 +1924,36 @@ class CrearVehiculoView(LoginRequiredMixin,CreateView):
     model = Vehiculo
     template_name = 'core/vehiculo_form.html'
     form_class = VehiculoForm
-    #success_url = reverse_lazy('informacion_residentes')
+    success_url = reverse_lazy('redirecciona_informacion_residentes')
 
     def get_initial(self,*args,**kwargs):
-        idinterior =self.kwargs['idinterior']
-        idapartamento =self.kwargs['idapartamento'] 
+        idinterior = self.request.session['idinterior']
+        idapartamento =self.request.session['idapartamento'] 
         initial=super(CrearVehiculoView,self).get_initial(**kwargs)
         initial['interior']= idinterior
         initial['apartamento']= idapartamento
         return initial
-
-    def form_valid(self, form):
-        if form.is_valid():
-            object = form.save(commit=False)
-            object.interior_id = self.kwargs['idinterior']
-            object.apartamento_id = self.kwargs['idapartamento']
-            idinterior = self.kwargs['idinterior']
-            idapartamento = self.kwargs['idapartamento']
-            residente = Residente.objects.filter(interior_id=idinterior,apartamento_id=idapartamento).latest('id')
-            object.save()
-            return redirect('informacion_residente_detalle',id=residente.id)
-        else:
-            messageform='Información Inválida'
-            return render(self.request, "core/mensaje_error.html", {'form': messageform})
-        return HttpResponseRedirect('informacion_residentes')
 
 
 class CrearParqueaderoView(LoginRequiredMixin,CreateView):
     model = Parqueadero
     template_name = 'core/parqueadero_form.html'
     form_class = ParqueaderoForm
-    #success_url = reverse_lazy('informacion_residentes')
+    success_url = reverse_lazy('redirecciona_informacion_residentes')
 
     def get_initial(self,*args,**kwargs):
-        idinterior =self.kwargs['idinterior']
-        idapartamento =self.kwargs['idapartamento'] 
+        idinterior = self.request.session['idinterior']
+        idapartamento =self.request.session['idapartamento'] 
         initial=super(CrearParqueaderoView,self).get_initial(**kwargs)
         initial['interior']= idinterior
         initial['apartamento']= idapartamento
         return initial
     
-    def form_valid(self, form):
-        if form.is_valid():
-            object = form.save(commit=False)
-            object.interior_id = self.kwargs['idinterior']
-            object.apartamento_id = self.kwargs['idapartamento']
-            idinterior = self.kwargs['idinterior']
-            idapartamento = self.kwargs['idapartamento']
-            residente = Residente.objects.filter(interior_id=idinterior,apartamento_id=idapartamento).latest('id')
-            object.save()
-            return redirect('informacion_residente_detalle',id=residente.id)
-        else:
-            messageform='Información Inválida'
-            return render(self.request, "core/mensaje_error.html", {'form': messageform})
-        return HttpResponseRedirect('informacion_residentes')
-
-""" class ResidenteView(TemplateView):
-    template_name = 'core\pagina_residentes.html' """
-
 class BlogView(TemplateView):
-    template_name = 'core\blog.html'
+    template_name = 'core/blog.html'
 
 class ConsejeroView(TemplateView):
-    template_name = 'core\pagina_consejero.html'
+    template_name = 'core/pagina_consejero.html'
 
 def InformacionResidentesView(request):
     queryset = Residente.objects.select_related().all()
@@ -1836,7 +1963,7 @@ def InformacionResidentesView(request):
     for i in f.qs:
         lista.append(i.id)
     request.session['lista_filtrada'] = lista
-    RequestConfig(request, paginate={"per_page": 25, "page": 1}).configure(residentes)
+    RequestConfig(request, paginate={"per_page": 10, "page": 1}).configure(residentes)
     return render(request, "core/residentes_lista.html", {'residentes':residentes,'filter': f})
    
     
@@ -1867,12 +1994,19 @@ def InformacionResidenteDetalleView(request,id):
     residente = Residente.objects.get(id=id)
     idinterior = residente.interior_id
     idapartamento = residente.apartamento_id
+    request.session['idinterior'] = idinterior
+    request.session['idapartamento'] = idapartamento
+    request.session['idresidente'] = id
     residentes = Residente.objects.filter(interior_id=idinterior,apartamento=idapartamento)
     vehiculos = Vehiculo.objects.filter(interior_id=idinterior,apartamento_id=idapartamento)
     mascotas = Mascota.objects.filter(interior_id=idinterior,apartamento_id=idapartamento)
     parqueaderos = Parqueadero.objects.filter(interior_id=idinterior,apartamento_id=idapartamento)
     depositos = Deposito.objects.filter(interior_id=idinterior,apartamento_id=idapartamento)
-    return render(request, "core/residentes_detalle.html", {"residentes":residentes,'vehiculos':vehiculos,'parqueaderos':parqueaderos,'mascotas':mascotas,'depositos':depositos})
+    return render(request, "core/residentes_detalle.html", {"residentes":residentes,'vehiculos':vehiculos,'parqueaderos':parqueaderos,'mascotas':mascotas,'depositos':depositos,'idinterior':idinterior,'idapartamento':idapartamento})
+
+def DireccionaInformacionResidenteDetalleView(request):
+    idresidente = request.session['idresidente']
+    return redirect('informacion_residente_detalle',idresidente)
 
 def BorrarResidenteView(request,id):
     Residente.objects.filter(id=id).delete()
@@ -1883,31 +2017,37 @@ class CrearMascotaView(LoginRequiredMixin,CreateView):
     model = Mascota
     template_name = 'core/mascota_form.html'
     form_class = MascotaForm
-    #success_url = reverse_lazy('informacion_residentes')
+    success_url = reverse_lazy('redirecciona_informacion_residentes')
 
     def get_initial(self,*args,**kwargs):
-        idinterior =self.kwargs['idinterior']
-        idapartamento =self.kwargs['idapartamento'] 
+        idinterior =self.request.session['idinterior']
+        idapartamento =self.request.session['idapartamento'] 
         initial=super(CrearMascotaView,self).get_initial(**kwargs)
         initial['interior']= idinterior
         initial['apartamento']= idapartamento
 
         return initial
 
-    def form_valid(self, form):
+    """ def form_valid(self, form):
         if form.is_valid():
             object = form.save(commit=False)
-            object.interior_id = self.kwargs['idinterior']
-            object.apartamento_id = self.kwargs['idapartamento']
-            idinterior = self.kwargs['idinterior']
-            idapartamento = self.kwargs['idapartamento']
-            residente = Residente.objects.filter(interior_id=idinterior,apartamento_id=idapartamento).latest('id')
-            object.save()
-            return redirect('informacion_residente_detalle',id=residente.id)
+            #object.interior_id = self.request.session['idinterior']
+            #object.apartamento_id = self.request.session['idapartamento'] 
+            idinterior = self.request.session['idinterior'] 
+            idapartamento = self.request.session['idapartamento'] 
+            residente = Residente.objects.filter(interior_id=idinterior,apartamento_id=idapartamento)
+            for r in residente:
+                idresidente = r.id
+            return redirect('informacion_residente_detalle',id=idresidente)
         else:
             messageform='Información Inválida'
             return render(self.request, "core/mensaje_error.html", {'form': messageform})
-        return HttpResponseRedirect('informacion_residentes')
+        return HttpResponseRedirect('informacion_residentes') """
+
+def RedireccionaInformacionResidentesView(request):
+    idresidente = request.session['idresidente']
+    print(idresidente)
+    return redirect('informacion_residente_detalle',idresidente)
 
 class EditarMascotaView(LoginRequiredMixin,UpdateView):
     model = Mascota
@@ -1926,12 +2066,11 @@ class EditarMascotaView(LoginRequiredMixin,UpdateView):
 
 def BorraMascotaView(request,id):
     mascota = Mascota.objects.get(id=id)
-    mascota = Mascota.objects.filter(id=id).delete()
+    Mascota.objects.filter(id=id).delete()
     idinterior = mascota.interior_id
     idapartamento = mascota.apartamento_id
-    # Pueden ser varios, tomo el ultimo para poder tomar un id de un residente de ese interior/apartamento
-    residente = Residente.objects.filter(interior_id=idinterior,apartamento_id=idapartamento).latest('id')
-    return redirect('informacion_residentes_detalle',residente.id) 
+    idresidente = request.session['idresidente']
+    return redirect('informacion_residente_detalle',idresidente) 
 
 class CrearResidenteView(LoginRequiredMixin,CreateView):
     model = Residente
@@ -1939,7 +2078,7 @@ class CrearResidenteView(LoginRequiredMixin,CreateView):
     form_class = ResidenteForm
     success_url = reverse_lazy('informacion_residentes')
 
-class CrearResidenteTempView(CreateView):
+class CrearResidenteTempView(LoginRequiredMixin,CreateView):
     model = ResidenteTemp
     template_name = 'core/residente_form.html'
     form_class = ResidenteTempForm
@@ -2077,7 +2216,6 @@ def SeleccionEmailAnexoView(request,id,tipomail):
     #template_name = "core/seleccion_con_sin_anexo.html"
 
 def EnvioCorreosMasivosResidentesView(request):
-    Residente.objects.update(envio_email=False)
     queryset = Residente.objects.all()
     f = ResidentesFilter(request.GET, queryset=queryset)
     lista = []
@@ -2085,17 +2223,19 @@ def EnvioCorreosMasivosResidentesView(request):
     for i in f.qs:
         lista.append(i.id)
     request.session['lista_filtrada'] = lista
+    residentes.paginate(page=request.GET.get("page", 1), per_page=11)
     return render(request, "core/pagina_correo_residentes.html", {'residentes':residentes,'filter': f})
 
 def ajaxSwitchMarcaResidentesCorreosView(request):
     id = request.GET.get('id', None)
+    print('id:'+str(id))
     residente = Residente.objects.get(id=id)
     if residente.envio_email == True:
-        envio_email = False
+        envio = False
     else:
-        envio_email = True
-    Residente.objects.filter(id=id).update(aprobado=envio_email)    
-    data = {'envio':envio_mail}
+        envio = True
+    Residente.objects.filter(id=id).update(envio_email=envio)
+    data = {'envio':envio}
     return JsonResponse(data) 
 
 def MarcaEnvioCorreoResidentesView(request):
@@ -2111,8 +2251,8 @@ def MarcaEnvioCorreoResidentesView(request):
     residentes = Residente.objects.filter(envio_email=True)        
     f = ResidentesFilter(request.GET, queryset=residentes)
     residentes = CorreosResidentesTable(f.qs)
-    return render(request, "core/pagina_correo_residentes_result.html", {'residentes':residentes})                    
-
+    #return render(request, "core/pagina_correo_residentes_result.html", {'residentes':residentes})                    
+    return redirect("envio_correos_masivos_residentes")                    
  
 def crea_user_perfil(request):
     interior = Interior.objects.all()
@@ -2228,7 +2368,7 @@ def NuevoUsuarioView(request):
 
 ##################################### INGRESO VEHICULAR ############################
 
-def VerFotoVehiculo(request):
+""" def VerFotoVehiculo(request):
     cap=cv2.VideoCapture(0)
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     out = cv2.VideoWriter('outpu.avi',fourcc,20.0,(640,480))
@@ -2245,7 +2385,7 @@ def VerFotoVehiculo(request):
     cap.release()
     out.release()        
     cv2.destroyAllWindows()        
-    return redirect('/ingreso_vehicular_busqueda_parametro')
+    return redirect('/ingreso_vehicular_busqueda_parametro') """
 
 def DireccionaSalidaAccesoPeatonalView(request):
     tipo_usuario = request.session['tipo_usuario'] 
@@ -2293,9 +2433,8 @@ def DireccionaPaginaVigilanciaPeatonalView(request):
 
 def DireccionaSalidaAutorizacionesVehicularView(request):
     tipo_usuario = request.session['tipo_usuario']
-    print('Tipo Usuario: ',tipo_usuario)
     if tipo_usuario == 1:
-       return redirect('pagina_accesos')
+       return redirect('pagina_autorizaciones')
     else:
         if tipo_usuario == 4:
             return redirect('pagina_vigilancia')
@@ -2405,7 +2544,7 @@ def IngresoVehicularBusquedaParametroView(request):
     return render(request,'core/ingreso_vehicular.html', {'results':results,'submitbutton': submitbutton,'ingresos':ingresos,'placa':placa})
     
 def AccesoVehicularView(request):
-    return render(request,'core\ingreso_vehicular.html')
+    return render(request,'core/ingreso_vehicular.html')
 
 class CreaIngresoVehicularView(LoginRequiredMixin,CreateView):
     model = IngresoVehiculo
@@ -2520,6 +2659,39 @@ class CreaActivoFijoView(LoginRequiredMixin,CreateView):
         initial['nombre']=self.request.session['nombre_activo']
         return initial
 
+    def form_valid(self, form):
+        if form.is_valid():
+            activo = form.save(commit=True)
+        else:
+            messageform='Información Inválida'
+            return render(self.request, "error_message.html", {'form': messageform})
+        return HttpResponseRedirect(self.get_success_url())
+
+""" def DatosActivosFijos(request):
+    form = ActivoFijoForm()
+    context = {'form': form}
+    html_form = render_to_string('core/activo_fijo_form.html',
+    context,
+    request=request,
+        )
+    return JsonResponse({'html_form': html_form}) """
+
+""" def GuardaDatosActivosFijosView(request):
+    fecha_liberacion = datetime.datetime.strptime(request.GET.get('fecha_liberacion'), "%d/%m/%Y").date()
+    responsable_liberacion = request.GET.get('responsable_liberacion')
+    idinjerto = request.session['idinjerto']
+    idextraccion =  request.session['idextraccion']
+    extraccion = Extraccion.objects.get(id=idextraccion)
+    Extraccion.objects.filter(id=idextraccion).update(fecha_liberacion=fecha_liberacion)
+    fecha_hora_inicio = extraccion.fecha_hora_inicio
+    fecha_hora_inicio = fecha_hora_inicio.date()
+    InjertosExtraccion.objects.filter(id=idinjerto).update(fecha_liberacion=fecha_liberacion,
+    responsable_liberacion=responsable_liberacion,estado='H',responsable_desecho='',fecha_descarte=None,acta_descarte_no='',
+    causa_descarte_verif_limp=1,responsable_desecho_verif_limp=1,acta_descarte_verif_limp='',fecha_descarte_verif_limp=None)
+    Extraccion.objects.filter(id=idextraccion).update(dias_cuarentena = fecha_liberacion - fecha_hora_inicio)
+
+    return redirect('liberacion_extracciones', idextraccion) """
+
 class EditaActivoFijoView(LoginRequiredMixin,UpdateView):
     model = ActivoFijo
     fields = ['nombre','tipo_activo','descripcion','marca','serial','valor_libros','cantidad','mantenimiento','frecuencia_mantenimiento','ultimo_mantenimiento','placa_numero','prestado','estado']
@@ -2546,24 +2718,26 @@ def ActivosFijosDetalleView(request,id):
     anexos = AnexoBajaActivoFijo.objects.filter(baja_activo_id__in=bajas)
     bajas = BajaActivosFijosTable(bajas)
     request.session['idactivo'] = id
+    print(id)
+    activo = ActivoFijo.objects.get(id=id)
+    tiene_mantenimiento = activo.mantenimiento
     mantenimientos = MantenimientosTable(Mantenimiento.objects.filter(activo_fijo_id=id))
-    return render(request, "core/activos_fijos_detalle.html", {"activo1":activo1,"activo2":activo2,"mantenimientos":mantenimientos,"prestamos":prestamos,"bajas":bajas,"anexos":anexos})
+    return render(request, "core/activos_fijos_detalle.html", {"activo1":activo1,"activo2":activo2,"mantenimientos":mantenimientos,"prestamos":prestamos,"bajas":bajas,"anexos":anexos,"tiene_mantenimiento":tiene_mantenimiento})
 
 @login_required
 def ActivosFijosListaView(request):
     queryset = ActivoFijo.objects.select_related().all().order_by('nombre')
     f = ActivosFijosFilter(request.GET, queryset=queryset)
-    activo1 =ActivoFijo1Table(f.qs)
+    activos =ActivoFijo1Table(f.qs)
     lista = []
-    activos_fijos = ProponentesTable(f.qs)
     for i in f.qs:
         lista.append(i.id)
     request.session['lista_filtrada'] = lista
     request.session['tipo_activo'] = ''
     request.session['nombre_activo'] = ''
     request.session['UltimaPaginaVisitada']='Activos'
-    RequestConfig(request, paginate={"per_page": 10, "page": 1}).configure(activo1)
-    return render(request, "core/activos_fijos_lista.html", {"activo1":activo1,'filter':f})
+    activos.paginate(page=request.GET.get("page", 1), per_page=15)
+    return render(request, "core/activos_fijos_lista.html", {"activos":activos,'filter':f})
 
 class CreaTipoActivoFijoView(LoginRequiredMixin,CreateView):
     model = TipoActivo
@@ -2608,9 +2782,28 @@ class CreaPrestamoActivoView(LoginRequiredMixin,CreateView):
         return initial
     
     def get_success_url(self):
-        idactivo = self.object.id
+        idprestamo = self.object.id
+        idactivo = self.request.session['idactivo']
         ActivoFijo.objects.filter(id=idactivo).update(prestado=True)
         return reverse_lazy('activos_fijos_detalle',args=[idactivo])
+
+class DevolucionActivoFijoView(LoginRequiredMixin,UpdateView):
+    model = PrestamoActivoFijo
+    ###idactivo = request.session['idactivo']
+    fields = ['fecha_devuelto']
+    template_name = 'core/devolucion_activo_fijo_form.html'
+    ###success_url = reverse_lazy('activos_fijos_detalle',args=[idactivo])
+
+    def get_success_url(self, **kwargs):
+        idactivo = self.object.activo_fijo_id
+        ActivoFijo.objects.filter(id=idactivo).update(prestado=False)
+        idprestamo = self.object.id
+        PrestamoActivoFijo.objects.filter(id=idprestamo).update(devuelto=True)         
+        return reverse_lazy('activos_fijos_detalle', args=(self.object.activo_fijo_id,))
+
+def DireccionaDevolucionActivosView(request):
+    idactivo = request.session['idactivo']
+    return redirect('activos_fijos_detalle',idactivo)
     
 class BorraPrestamoActivoFijoView(LoginRequiredMixin,DeleteView):
     model = PrestamoActivoFijo
@@ -2624,7 +2817,7 @@ class BorraPrestamoActivoFijoView(LoginRequiredMixin,DeleteView):
 
 def cabecera_activos_fijos_pdf(pdf,pagina,titulo):
     pdf.setFont('Helvetica', 12)
-    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.PNG'
+    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.png'
     pdf.drawImage(archivo_imagen, 40, 740, 120, 90,preserveAspectRatio=True)
     pdf.drawString(250,780, titulo)
     pdf.setFont('Helvetica', 9)
@@ -2655,7 +2848,7 @@ def tabla_activos_fijos_pdf(pdf,pagina,filas_hoja,lista,ultima_pagina):
     #Creamos una lista de tuplas que van a contener a las personas
     detalles = [(cuerpo.nombre,cuerpo.tipo_activo.descripcion,cuerpo.cantidad,cuerpo.prestado,cuerpo.marca,cuerpo.serial,cuerpo.estado) for cuerpo in cuerpo]
     #Establecemos el tamaño de cada una de las columnas de la tabla
-    detalle = Table([encabezados] + detalles, colWidths=[6 * cm, 5 * cm, 2 * cm, 2. * cm,2. * cm,2. * cm,5 * cm])
+    detalle = Table([encabezados] + detalles, colWidths=[5 * cm, 4 * cm, 2 * cm, 2. * cm,2. * cm,2. * cm,2 * cm])
     #Aplicamos estilos a las celdas de la tabla
     detalle.setStyle(TableStyle(
         [
@@ -2669,7 +2862,7 @@ def tabla_activos_fijos_pdf(pdf,pagina,filas_hoja,lista,ultima_pagina):
     ))
     # Restamos a y por cada fila de la grid
     #Establecemos el tamaño de la hoja que ocupará la tabla
-    detalle.wrapOn(pdf, 500, 600)
+    detalle.wrapOn(pdf, 480, 600)
     #Definimos la coordenada donde se dibujará la tabla
     detalle.drawOn(pdf, 30,y)
     y -= 10
@@ -2777,12 +2970,12 @@ def PrestamosActivosListaView(request):
     request.session['lista_filtrada'] == lista    
     prestamos =PrestamosActivosFijosTable(f.qs)
     request.session['UltimaPaginaVisitada']='Prestamos Activos'
-    RequestConfig(request, paginate={"per_page": 10, "page": 1}).configure(prestamos)
+    prestamos.paginate(page=request.GET.get("page", 1), per_page=10)
     return render(request, "core/prestamos_activos_fijos_lista.html", {"prestamos":prestamos,'filter':f})
 
 def cabecera_activos_fijos_prestamo_pdf(pdf,pagina,titulo):
     pdf.setFont('Helvetica', 12)
-    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.PNG'
+    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.png'
     pdf.drawImage(archivo_imagen, 40, 740, 120, 90,preserveAspectRatio=True)
     pdf.drawString(250,780, titulo)
     pdf.setFont('Helvetica', 9)
@@ -2813,11 +3006,11 @@ def tabla_activos_fijos_prestamo_pdf(pdf,pagina,filas_hoja,lista,ultima_pagina,i
     y = c
     total = cuerpo_total.aggregate(Sum('cantidad'))['cantidad__sum']
     #Creamos una tupla de encabezados para neustra tabla
-    encabezados = ['Fecha','Activo Fijo','Responsable','Cantidad','Devuelto']  
+    encabezados = ['Fecha','Activo Fijo','Responsable','Cantidad','Fecha_Devuelto','Devuelto']  
     #Creamos una lista de tuplas que van a contener a las personas
-    detalles = [(cuerpo.fecha,cuerpo.activo_fijo.nombre,cuerpo.responsable,cuerpo.cantidad,cuerpo.devuelto) for cuerpo in cuerpo]
+    detalles = [(cuerpo.fecha,cuerpo.activo_fijo.nombre,cuerpo.responsable,cuerpo.cantidad,cuerpo.fecha_devuelto,cuerpo.devuelto) for cuerpo in cuerpo]
     #Establecemos el tamaño de cada una de las columnas de la tabla
-    detalle = Table([encabezados] + detalles, colWidths=[3 * cm, 5 * cm, 5 * cm, 2 * cm,2 * cm])
+    detalle = Table([encabezados] + detalles, colWidths=[3 * cm, 5 * cm, 5 * cm, 2 * cm,2.2 * cm,2 * cm])
     #Aplicamos estilos a las celdas de la tabla
     detalle.setStyle(TableStyle(
         [
@@ -2836,7 +3029,7 @@ def tabla_activos_fijos_prestamo_pdf(pdf,pagina,filas_hoja,lista,ultima_pagina,i
     detalle.drawOn(pdf, 30,y)
     y -= 10
     if pagina == ultima_pagina: 
-        pdf.drawString(430, y, u"Total : "+('{:,}'.format(total)+'.00'))
+        pdf.drawString(405, y, u"Total : "+('{:,}'.format(total)+'.00'))
 
 def ReportePrestamosActivosFijosPdfView(request,id,tipo_rep):
     idprestamo = id
@@ -2893,7 +3086,7 @@ def PaginasReportePrestamosActivosFijosPdfView(request,pagina):
  
 def cabecera_activos_fijos_baja_pdf(pdf,pagina,titulo):
     pdf.setFont('Helvetica', 12)
-    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.PNG'
+    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.png'
     pdf.drawImage(archivo_imagen, 40, 740, 120, 90,preserveAspectRatio=True)
     pdf.drawString(250,780, titulo)
     pdf.setFont('Helvetica', 9)
@@ -2953,9 +3146,9 @@ def BajasActivosListaView(request):
         lista.append(i.id)
     request.session['lista_filtrada'] == lista    
     bajas = BajaActivosFijosTable(f.qs)
-    anexos = AnexoBajaActivoFijo.objects.filter(activo_fijo_id__in=lista )
+    anexos = AnexoBajaActivoFijo.objects.filter(baja_activo_id__in=lista )
     request.session['UltimaPaginaVisitada']='Baja Activos'
-    RequestConfig(request, paginate={"per_page": 10, "page": 1}).configure(bajas)
+    bajas.paginate(page=request.GET.get("page", 1), per_page=10)
     return render(request, "core/baja_activos_fijos_lista.html", {'bajas':bajas,'filter':f,'anexos':anexos})
 
 class CreaBajaActivoView(LoginRequiredMixin,CreateView):
@@ -2983,6 +3176,11 @@ class BorraBajaActivoFijoView(LoginRequiredMixin,DeleteView):
         baja = BajaActivoFijo.objects.get(id=idbaja)
         idactivo = baja.activo_fijo_id
         return reverse_lazy('activos_fijos_detalle',args=[idactivo])
+
+def DireccionaCreaBajasView(request):
+    idactivo = request.session['idactivo']
+    print(idactivo)
+    return redirect('activos_fijos_detalle',idactivo)
     
 def ReporteBajasActivosFijosPdfView(request,id,tipo_rep):
     idbaja = id
@@ -3047,7 +3245,8 @@ def MantenimientosListaView(request):
     for i in f.qs:
         lista.append(i.id)
     request.session['lista_filtrada'] = lista
-    RequestConfig(request, paginate={"per_page": 25, "page": 1}).configure(mantenimientos)
+    request.session['UltimaPaginaVisitada'] == 'Mantenimientos'
+    mantenimientos.paginate(page=request.GET.get("page", 1), per_page=10)
     return render(request, "core/mantenimientos_lista.html", {'mantenimientos':mantenimientos,'filter': f})    
 
 @login_required
@@ -3070,17 +3269,26 @@ def ActivoMantenimientos(request):
     return redirect('activo_fijo_uno',idactivo) 
     
 class CreaMantenimientoView(LoginRequiredMixin,CreateView):
+
     model = Mantenimiento
     template_name = 'core/mantenimiento_form.html'
     form_class = MantenimientoForm
     success_url = reverse_lazy('lista_mantenimientos')
     
     def get_success_url(self):
+        self.request.session['idactivo'] = self.object.id
         if self.request.session['UltimaPaginaVisitada'] == 'Activos':
             return reverse_lazy('activos_fijos_lista')
         else:
             if self.request.session['UltimaPaginaVisitada'] == 'Mantenimientos':    
                 return reverse_lazy('lista_mantenimientos')
+
+def DireccionaCreaMantenimientoView(request):
+    if request.session['UltimaPaginaVisitada']== 'Mantenimientos':
+        return redirect('lista_mantenimientos')
+    else:
+        idactivo = request.session['idactivo']
+        return redirect('activos_fijos_detalle',idactivo)
 
 class EditaMantenimientoView(LoginRequiredMixin,UpdateView):
     model = Mantenimiento
@@ -3111,7 +3319,7 @@ def cabecera_mantenimientos_pdf(pdf,pagina,titulo):
     #Canvas.setStrokeColorRGB(255, 0, 0)
     #Canvas.setFillColorRGB(0.2, 0.2, 0.2)
     pdf.setFont('Helvetica', 12)
-    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.PNG'
+    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.png'
     #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
     pdf.drawImage(archivo_imagen, 40, 740, 120, 90,preserveAspectRatio=True)
     pdf.drawString(250,780, titulo)
@@ -3315,7 +3523,7 @@ def ContratosListaView(request):
     for i in f.qs:
         lista.append(i.id)
     request.session['lista_filtrada'] = lista
-    RequestConfig(request, paginate={"per_page": 25, "page": 1}).configure(contratos)
+    contratos.paginate(page=request.GET.get("page", 1), per_page=10)
     return render(request, "core/contratos_lista.html", {'contratos':contratos,'filter': f})
 
 @login_required
@@ -3355,13 +3563,13 @@ class BorraContratoView(LoginRequiredMixin,DeleteView):
     template_name = 'core/confirmar_borrado_registro.html'
 
 class PaginaProveedoresView(TemplateView):
-    template_name = 'core\pagina_proveedores.html'
+    template_name = 'core/pagina_proveedores.html'
 
 def cabecera_contratos_pdf(pdf,pagina,titulo):
     #Canvas.setStrokeColorRGB(255, 0, 0)
     #Canvas.setFillColorRGB(0.2, 0.2, 0.2)
     pdf.setFont('Helvetica', 12)
-    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.PNG'
+    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.png'
     #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
     pdf.drawImage(archivo_imagen, 40, 740, 120, 90,preserveAspectRatio=True)
     pdf.drawString(250,780, titulo)
@@ -3543,7 +3751,7 @@ def ListaProveedoresView(request):
     for i in f.qs:
         lista.append(i.id)
     request.session['lista_filtrada'] = lista
-    RequestConfig(request, paginate={"per_page": 25, "page": 1}).configure(proveedores)
+    proveedores.paginate(page=request.GET.get("page", 1), per_page=10)
     return render(request, "core/proveedores_lista.html", {'proveedores':proveedores,'filter': f})
 
 @login_required
@@ -3594,7 +3802,7 @@ class BorraProveedorView(LoginRequiredMixin,DeleteView):
 
 def cabecera_proveedores_pdf(pdf,pagina,titulo):
     pdf.setFont('Helvetica', 12)
-    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.PNG'
+    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.png'
     #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
     pdf.drawImage(archivo_imagen, 40, 740, 120, 90,preserveAspectRatio=True)
     pdf.drawString(250,780, titulo)
@@ -3747,7 +3955,7 @@ def ListaProponentesView(request):
     request.session['cc_nit'] = ''
     request.session['tipo_identificacion'] = ''
     request.session['servicio_provee'] = ''
-    RequestConfig(request, paginate={"per_page": 25, "page": 1}).configure(proponentes)
+    proponentes.paginate(page=request.GET.get("page", 1), per_page=9)
     return render(request, "core/proponentes_lista.html", {'proponentes':proponentes,'filter': f})
 
 @login_required    
@@ -3790,7 +3998,7 @@ class EditaProponenteView(LoginRequiredMixin,UpdateView):
 
 class BorraProponenteView(LoginRequiredMixin,DeleteView):
     model = Proponente
-    success_url = reverse_lazy('Lista_proponentes')
+    success_url = reverse_lazy('lista_proponentes')
     template_name = 'core/confirmar_borrado_registro.html'
 
 
@@ -3912,7 +4120,7 @@ def ImprimirProponentesXlsView(request):
 
 def cabecera_proponentes_pdf(pdf,pagina,titulo):
     pdf.setFont('Helvetica', 12)
-    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.PNG'
+    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.png'
     #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
     pdf.drawImage(archivo_imagen, 40, 740, 120, 90,preserveAspectRatio=True)
     pdf.drawString(250,780, titulo)
@@ -4080,7 +4288,7 @@ def ListaProyectosView(request):
     for i in f.qs:
         lista.append(i.id)
     request.session['lista_filtrada'] = lista
-    RequestConfig(request, paginate={"per_page": 25, "page": 1}).configure(proyectos)
+    proyectos.paginate(page=request.GET.get("page", 1), per_page=10)
     return render(request, "core/proyectos_lista.html", {'proyectos':proyectos,'filter': f})
     
 
@@ -4106,12 +4314,17 @@ class AdicionaProponenteProyectoView(LoginRequiredMixin,CreateView):
 
 @login_required
 def ProyectoDetalleView(request,id):
+    request.session['idproyecto'] = id
     proyecto = ProyectosDetalleTable(Proyecto.objects.filter(id=id))
     proponentes = ProponenteProyecto.objects.filter(proyecto_id=id)
     anexos_proyecto = AnexoProyecto.objects.filter(proyecto_id=id)
     lproponente_proyecto = ProponenteProyecto.objects.filter(proyecto_id=id)
     anexos_proponente_proyecto = AnexoProponenteProyecto.objects.filter(proponente_proyecto_id__in=Subquery(lproponente_proyecto.values('id')))
     return render(request, "core/proyecto_detalle.html", {'proyecto':proyecto,'proponentes':proponentes,'anexos_proyecto':anexos_proyecto,'anexos_proponente_proyecto':anexos_proponente_proyecto})
+
+def DireccionaProyectoView(request):
+    idproyecto = request.session['idproyecto']
+    return redirect('proyecto_detalle',idproyecto) 
 
 def GuardaIdProyectoView(request):
     id = request.GET.get('id', None)
@@ -4155,7 +4368,7 @@ def cabecera_proyectos_pdf(pdf,pagina,titulo):
     #Canvas.setStrokeColorRGB(255, 0, 0)
     #Canvas.setFillColorRGB(0.2, 0.2, 0.2)
     pdf.setFont('Helvetica', 12)
-    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.PNG'
+    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.png'
     #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
     pdf.drawImage(archivo_imagen, 40, 740, 120, 90,preserveAspectRatio=True)
     pdf.drawString(250,780, titulo)
@@ -4413,6 +4626,7 @@ def ListaObrasView(request):
     for i in f.qs:
         lista.append(i.id)
     request.session['lista_filtrada'] = lista
+    obras.paginate(page=request.GET.get("page", 1), per_page=10)
     return render(request, "core/obras_lista.html", {'obras':obras,'filter': f})        
 
 @login_required
@@ -4483,7 +4697,7 @@ def cabecera_obras_pdf(pdf,pagina,titulo):
     #Canvas.setStrokeColorRGB(255, 0, 0)
     #Canvas.setFillColorRGB(0.2, 0.2, 0.2)
     pdf.setFont('Helvetica', 12)
-    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.PNG'
+    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.png'
     #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
     pdf.drawImage(archivo_imagen, 40, 540, 120, 90,preserveAspectRatio=True)
     pdf.drawString(250,580, titulo)
@@ -4781,6 +4995,7 @@ def ListaReparacionesView(request):
     for i in f.qs:
         lista.append(i.id)
     request.session['lista_filtrada'] = lista
+    reparaciones.paginate(page=request.GET.get("page", 1), per_page=10)
     return render(request, "core/reparaciones_lista.html", {'reparaciones':reparaciones,'filter': f})
 
 @login_required
@@ -4815,7 +5030,7 @@ def cabecera_reparaciones_pdf(pdf,pagina,titulo):
     #Canvas.setStrokeColorRGB(255, 0, 0)
     #Canvas.setFillColorRGB(0.2, 0.2, 0.2)
     pdf.setFont('Helvetica', 12)
-    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.PNG'
+    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.png'
     #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
     pdf.drawImage(archivo_imagen, 40, 740, 120, 90,preserveAspectRatio=True)
     pdf.drawString(250,780, titulo)
@@ -4968,13 +5183,11 @@ def ReporteReparacionesXlsView(request):
 ################################### CONSEJO ####################################
 
 class PaginaConsejoView(TemplateView):
-    template_name = 'core\pagina_consejo.html'
+    template_name = 'core/pagina_consejo.html'
 
 @login_required
-def ListaReunionConsejoView(request):
+def ListaReunionesConsejoView(request,page=1):
     tipo_usuario = request.session['tipo_usuario']
-    #reuniones_consejo = ReunionConsejoTable(ReunionConsejo.objects.all().order_by('-fecha'))
-    #return render(request, "core/reuniones_consejo_lista.html", {"reuniones_consejo":reuniones_consejo})
     request.session['user'] = request.user.id
     request.session['detalle_reporte_reunion_consejo'] = 0
     queryset = ReunionConsejo.objects.all().order_by('-fecha')
@@ -4985,19 +5198,21 @@ def ListaReunionConsejoView(request):
         lista.append(i.id)
     request.session['lista_filtrada'] = lista
     request.session["idreunion"] = 0
-    #compromisos = CompromisoConsejo.objects.filter(reunion_consejo_id__in=lista)
+    paginator = Paginator(reuniones_consejo, 10)
+    try:
+        reuniones_consejo = paginator.page(page)
+    except EmptyPage:
+        reuniones_consejo = paginator.page(paginator.num_pages)
     return render(request, "core/reuniones_consejo_lista.html", {"reuniones_consejo":reuniones_consejo,'filter':f,'tipo_usuario':tipo_usuario})
 
 class CreaReunionConsejoView(LoginRequiredMixin,CreateView):
     model = ReunionConsejo
     template_name = 'core/reunion_consejo_form.html'
     form_class = ReunionConsejoForm
-    success_url = reverse_lazy('lista_reuniones_consejo')
+    success_url = reverse_lazy('lista_reuniones_consejo',args=[1] )
     
     def get_form(self):
         form = super().get_form()
-        form.fields["hora_inicio"].widget = DateTimePickerInput()
-        form.fields["hora_final"].widget = DateTimePickerInput()
         return form
     
 class EditaReunionConsejoView(LoginRequiredMixin,UpdateView):
@@ -5012,7 +5227,7 @@ class EditaReunionConsejoView(LoginRequiredMixin,UpdateView):
 class BorraReunionConsejoView(LoginRequiredMixin,DeleteView):
     model = ReunionConsejo
     template_name = 'core/confirmar_borrado_registro.html'
-    success_url = reverse_lazy('lista_reuniones_consejo')
+    success_url = reverse_lazy('lista_reuniones_consejo',args=[1])
 
 
 class AplicaCompromisoConsejoView(LoginRequiredMixin,UpdateView):
@@ -5023,20 +5238,22 @@ class AplicaCompromisoConsejoView(LoginRequiredMixin,UpdateView):
     def get_success_url(self):
         tipo_usuario = self.request.session['tipo_usuario']
         idcompromiso = self.object.id
-        compromiso = CompromisoConsejo.objects.get(id=idcompromiso) 
-        reunion = compromiso.reunion_consejo_id
+        self.request.session['idcompromiso'] = idcompromiso
+        compromiso = CompromisoConsejo.objects.get(id=idcompromiso)
+        idreunion = compromiso.reunion_consejo_id
         consejo = MiembroConsejo.objects.filter(activo=True)
         asunto = "Cumplimiento compromiso consejo"
         for i in consejo:
             mensaje = "Sr. Consejero: "+i.nombre+" se le informa que la administración ha aplicado el compromiso de la reunion de consejo : "+compromiso.compromiso
             EnvioMailOtros(mensaje,asunto,i.email)
-        return reverse_lazy('compromiso_detalle',args=[idcompromiso])
-    
+        return reverse_lazy('detalle_reunion_consejo',args=[idreunion])
+
+ 
 def cabecera_reunion_consejo_pdf(pdf,pagina,titulo):
     #Canvas.setStrokeColorRGB(255, 0, 0)
     #Canvas.setFillColorRGB(0.2, 0.2, 0.2)
     pdf.setFont('Helvetica', 12)
-    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.PNG'
+    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.png'
     #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
     pdf.drawImage(archivo_imagen, 40, 740, 120, 90,preserveAspectRatio=True)
     pdf.drawString(240,780, titulo)
@@ -5078,7 +5295,7 @@ def tabla_reunion_consejo_pdf(pdf,pagina,filas_hoja,lista,ultima_pagina,detalle,
     sw = 0
     for j in cuerpo:
         linea =j.contenido.strip()
-        tiempo_reunion = float((datetime.strptime(str(j.hora_final), '%H:%M:%S')-datetime.strptime(str(j.hora_inicio), '%H:%M:%S')).seconds/3600.0)
+        tiempo_reunion = round(float((datetime.strptime(str(j.hora_final), '%H:%M:%S')-datetime.strptime(str(j.hora_inicio), '%H:%M:%S')).seconds/3600.0),2)
         if detalle == 0:
             if sw > 0 :
                 encabezados=[]
@@ -5176,10 +5393,11 @@ def tabla_compromiso_reunion_consejo_pdf(pdf,pagina,filas_hoja,lista,ultima_pagi
                 detalles = [(j.reunion_consejo.fecha,j.compromiso[inicial:final],j.cumplido,j.fecha_cumplido)]
                 detalle = Table([encabezados] + detalles, colWidths=[1.5 * cm,15 * cm,1.5 * cm,1.5 * cm])
             else: 
+                encabezados = ''
                 detalles = [('',j.compromiso[inicial:final],'','')]
                 detalle = Table([encabezados] + detalles, colWidths=[1.5 * cm,15 * cm,1.5 * cm,1.8 * cm])
-            if i==0 :
-                detalle.setStyle(TableStyle(
+            
+            detalle.setStyle(TableStyle(
                 [
                 #La primera fila(encabezados) va a estar centrada
                 ('ALIGN',(0,0),(3,0),'CENTER'),
@@ -5217,7 +5435,7 @@ def tabla_decisiones_reunion_consejo_pdf(pdf,pagina,filas_hoja,lista,ultima_pagi
         cuerpo_total = DecisionConsejo.objects.filter(reunion_consejo_id__in=lista).select_related
     sw = 0
     encabezados = ['Fecha','Decision','Favor','Contra','Abstención']
-    largo = 125
+    largo = 115
     for j in cuerpo:
         segmentos = int(len(j.decision)/largo)
         if segmentos<1:
@@ -5462,7 +5680,7 @@ def ReporteReunionesConsejoXlsView(request,tipo,estado):
 
 class BorraAnexoReunionConsejoView(LoginRequiredMixin,DeleteView):
     model = AnexoReunionConsejo
-    success_url = reverse_lazy('lista_reuniones_consejo')
+    success_url = reverse_lazy('lista_reuniones_consejo',args=[1])
     template_name = 'core/confirmar_borrado_registro.html'
 
     def get_success_url(self):
@@ -5476,6 +5694,7 @@ def ReunionConsejoContenidoView(request,id):
 
 @login_required
 def DetalleReunionConsejoView(request,id):
+    request.session['id_reunion_consejo'] = id
     request.session['detalle_reporte_reunion_consejo'] = 1
     reuniones_consejo = ReunionConsejo.objects.filter(id=id)
     anexos = AnexoReunionConsejo.objects.filter(reunion_id=id)
@@ -5499,18 +5718,40 @@ class CreaDecisionConsejoView(LoginRequiredMixin,CreateView):
         idreunion = self.object.reunion_consejo_id
         return reverse_lazy('detalle_reunion_consejo',args=[idreunion])
 
+  
 class BorraDecisionConsejoView(LoginRequiredMixin,DeleteView):
     model = DecisionConsejo
-    #success_url = reverse_lazy('lista_reuniones_consejo')
     template_name = 'core/confirmar_borrado_registro.html'
 
     def get_success_url(self):
         idreunion = self.object.reunion_consejo_id
         return reverse_lazy('detalle_reunion_consejo',args=[idreunion])
 
+
+class EditaDecisionConsejoView(LoginRequiredMixin,UpdateView):
+    model = DecisionConsejo
+    fields = ['decision','numero_votos_favor','numero_votos_contra','numero_votos_abstencion']
+    template_name = 'core/decision_reunion_consejo_form.html'
+    success_url = reverse_lazy('lista_reuniones_consejo',args=[1])
+
+    def get_success_url(self):
+        idreunion = self.object.reunion_consejo_id
+        return reverse_lazy('detalle_reunion_consejo',args=[idreunion])
+
+def GuardaIdDecisionReunionConsejo(request):
+    id = request.GET.get('id', None)
+    request.session['id_decision_reunion_consejo'] = id
+    data = {'id':id}
+    return JsonResponse(data) 
+    
+def DireccionaReunionConsejoDecision(request):
+    id_decision = request.session['id_decision_reunion_consejo']
+    reunion_consejo = DecisionConsejo.objects.get(id=id_decision)
+    idreunion = reunion_consejo.reunion_consejo_id 
+    return redirect('detalle_reunion_consejo',idreunion) 
+
 class BorraCompromisoConsejoView(LoginRequiredMixin,DeleteView):
     model = CompromisoConsejo
-    #success_url = reverse_lazy('lista_reuniones_consejo')
     template_name = 'core/confirmar_borrado_registro.html'
 
     def get_success_url(self):
@@ -5519,7 +5760,7 @@ class BorraCompromisoConsejoView(LoginRequiredMixin,DeleteView):
 
 class CreaCompromisoConsejoView(LoginRequiredMixin,CreateView):
     model = CompromisoConsejo
-    template_name = 'core/compromiso_reunion_consejo_form.html'
+    template_name = 'core/compromiso_consejo_form.html'
     form_class = CompromisoConsejoForm
     
     def get_success_url(self):
@@ -5541,17 +5782,6 @@ class CreaCompromisoConsejoView(LoginRequiredMixin,CreateView):
             mensaje = "Error"
             return render(self.request, "core/mensaje_error_usuario.html", {'mensaje':mensaje})
 
-@login_required
-def CompromisoDetalleView(request,id):
-    tipo_usuario = request.session['tipo_usuario']
-    compromiso = CompromisoConsejo.objects.get(id=id)
-    idreunion = compromiso.reunion_consejo_id
-    reunion = ReunionConsejo.objects.filter(id=idreunion)
-    #reuniones_consejo = ReunionConsejo.objects.filter(id=compromiso.reunion_consejo_id)
-    anexos = AnexoReunionConsejo.objects.filter(reunion_id=idreunion)
-    #decisiones = DecisionConsejo.objects.filter(reunion_consejo_id=reunion.id)
-    compromisos = CompromisoConsejo.objects.filter(reunion_consejo_id=idreunion)
-    return render(request, "core/compromiso_reunion_consejo.html", {"reunion":reunion,'anexos':anexos,'compromisos':compromisos,'tipo_usuario':tipo_usuario})
 
 def PublicaReunionConsejoView(request,id):
     reunion = ReunionConsejo.objects.get(id=id)
@@ -5630,25 +5860,27 @@ class CreaMiembroConsejoView(LoginRequiredMixin,CreateView):
         return redirect('lista_miembros_consejo')
 
   
-class EditaDecisionConsejoView(LoginRequiredMixin,UpdateView):
-    model = DecisionConsejo
-    fields = ['decision','numero_votos_favor','numero_votos_contra','numero_votos_abstencion']
-    template_name = 'core/miembro_consejo_form.html'
-    success_url = reverse_lazy('lista_reuniones_consejo')
-
-    def get_success_url(self):
-        idreunion = self.object.reunion_consejo_id
-        return reverse_lazy('detalle_reunion_consejo',args=[idreunion])
-
 class EditaCompromisoConsejoView(LoginRequiredMixin,UpdateView):
     model = CompromisoConsejo
     fields = ['compromiso','cumplido','fecha_cumplido']
-    template_name = 'core/compromiso_reunion_consejo_form.html'
-    success_url = reverse_lazy('lista_reuniones_consejo')
+    template_name = 'core/compromiso_consejo_form.html'
+    success_url = reverse_lazy('lista_reuniones_consejo page=1')
 
     def get_success_url(self):
         idreunion = self.object.reunion_consejo_id
         return reverse_lazy('detalle_reunion_consejo',args=[idreunion])
+
+def GuardaIdCompromisoReunionConsejo(request):
+    id = request.GET.get('id', None)
+    request.session['id_compromiso_reunion_consejo'] = id
+    data = {'id':id}
+    return JsonResponse(data) 
+
+def DireccionaReunionConsejoCompromiso(request):
+    idreunion = request.session['id_reunion_consejo']
+    #compromiso_consejo = CompromisoConsejo.objects.get(id=idcompromiso)
+    #reunion_consejo_id =  compromiso_consejo.reunion_consejo_id
+    return redirect('detalle_reunion_consejo',idreunion) 
 
 def ajaxSwitchEnvioConsejeroView(request):
     id = request.GET.get('id', None)
@@ -5790,7 +6022,7 @@ def CargaFotoMiembroStaffView(request,id):
 ############################## Revisor ####################################
 
 @login_required
-def ListaInformesRevisorView(request):
+def ListaInformesRevisorView(request,page=1):
     tipo_usuario = request.session['tipo_usuario']
     request.session['idinforme'] = 0
     request.session['user'] = request.user.id
@@ -5802,7 +6034,11 @@ def ListaInformesRevisorView(request):
         lista.append(i.id)
     request.session['lista_filtrada'] = lista
     recomendaciones = RecomendacionRevisor.objects.filter(informe_revisor_id__in=lista)
-    
+    paginator = Paginator(informes_revisor, 3) # 5 users per page
+    try:
+        informes_revisor = paginator.page(page)
+    except EmptyPage:
+        informes_revisor = paginator.page(paginator.num_pages)
     return render(request, "core/informes_revisor_lista.html", {"informes_revisor":informes_revisor,'recomendaciones':recomendaciones,'filter':f,'tipo_usuario':tipo_usuario})
 
 @login_required
@@ -5811,6 +6047,7 @@ def InformeRevisorDetalleView(request,id):
     informe_revisor = InformeRevisor.objects.filter(id=id)
     recomendacion = RecomendacionRevisor.objects.filter(informe_revisor_id=id)
     anexos = AnexoInformeRevisor.objects.filter(informe_revisor_id=id)
+    request.session['idinforme'] = id
     return render(request, "core/informe_revisor_detalle.html", {'informe_revisor':informe_revisor,'recomendacion':recomendacion,'anexos':anexos})
 
 def InformeRevisorContenidoView(request,id):
@@ -5821,7 +6058,11 @@ class CreaInformeRevisorView(LoginRequiredMixin,CreateView):
     model = InformeRevisor
     template_name = 'core/informe_revisor_form.html'
     form_class = InformeRevisorForm
-    success_url = reverse_lazy('lista_informes_revisor')
+    success_url = reverse_lazy('lista_informes_revisor page=1')
+
+def DireccionaInformeRevisorView(request):
+    idinforme = request.session['idinforme']
+    return redirect('informe_revisor_detalle',idinforme)
 
 def AjaxGuardaIdInformeView(request):
     id = request.GET.get('id', None)
@@ -5841,7 +6082,7 @@ class EditaInformeRevisorView(LoginRequiredMixin,UpdateView):
 
 class BorraInformeRevisorView(LoginRequiredMixin,DeleteView):
     model = InformeRevisor
-    success_url = reverse_lazy('lista_informes_revisor')
+    success_url = reverse_lazy('lista_informes_revisor page=1')
     template_name = 'core/confirmar_borrado_registro.html'
 
 import re
@@ -5852,7 +6093,7 @@ def cabecera_informes_revisor_pdf(pdf,pagina,titulo):
     #Canvas.setStrokeColorRGB(255, 0, 0)
     #Canvas.setFillColorRGB(0.2, 0.2, 0.2)
     pdf.setFont('Helvetica', 12)
-    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.PNG'
+    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.png'
     #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
     pdf.drawImage(archivo_imagen, 40, 740, 120, 90,preserveAspectRatio=True)
     pdf.drawString(250,780, titulo)
@@ -6042,7 +6283,7 @@ class ReportesInformeRevisorPdfView(TemplateView):
         self.request.session['lista_filtrada'] = ''
         #self.request.session['detalle_reporte_reunion_consejo'] = 0 """
 
-def ReporteInformeRevisorPdfView(request,tipo):
+def ReporteInformeRevisorPdfView(request,tipo,estado):
     idinforme = request.session['idinforme']
     filas_hoja = 25
     lista = request.session['lista_filtrada']
@@ -6141,10 +6382,12 @@ def ReporteInformeRevisorXlsView(request):
             exec("worksheet.write('C"+nn+"','"+k.recomendacion+"' )")
             if k.cumplido == True:
                 exec("worksheet.write('D"+nn+"','Si' )")
+                sfecha_cumplido= k.fecha_cumplido.strftime("%m/%d/%Y")
+                exec("worksheet.write('E"+nn+"','"+sfecha_cumplido+"' )")
             else:
                 exec("worksheet.write('D"+nn+"','No' )")
-            sfecha_cumplido= k.fecha_cumplido.strftime("%m/%d/%Y")
-            exec("worksheet.write('E"+nn+"','"+sfecha_cumplido+"' )")
+                sfecha_cumplido=''
+                exec("worksheet.write('E"+nn+"','"+sfecha_cumplido+"' )")
         n = n + 1    
 
     workbook.close()
@@ -6156,7 +6399,7 @@ def ReporteInformeRevisorXlsView(request):
 
 class BorraAnexoInformeRevisorView(LoginRequiredMixin,DeleteView):
     model = AnexoInformeRevisor
-    success_url = reverse_lazy('lista_informes_revisor')
+    success_url = reverse_lazy('lista_informes_revisor page=1')
     template_name = 'core/confirmar_borrado_registro.html'
 
     def get_success_url(self):
@@ -6237,7 +6480,7 @@ def RecomendacionDetalleView(request,id):
 ######################################## Juridico #################################
 
 @login_required
-def ListaProcesosJuridicosView(request):
+def ListaProcesosJuridicosView(request,page=1):
     request.session["idproceso"] = 0
     request.session['numero_proceso'] = ''
     request.session['tipo_proceso'] = ''
@@ -6248,6 +6491,11 @@ def ListaProcesosJuridicosView(request):
     for i in f.qs:
         lista.append(i.id)
     request.session['lista_filtrada'] = lista
+    paginator = Paginator(procesos_juridicos, 1)
+    try:
+        procesos_juridicos = paginator.page(page)
+    except EmptyPage:
+        procesos_juridicos = paginator.page(paginator.num_pages)
     return render(request, "core/procesos_juridicos_lista.html",  {'procesos_juridicos':procesos_juridicos,'filter': f})
 
 
@@ -6294,7 +6542,7 @@ class CreaProcesoJuridicoView(LoginRequiredMixin,CreateView):
     def get_success_url(self):
         self.request.session['numero_proceso'] = ''
         self.request.session['tipo_proceso'] = ''
-        return reverse_lazy('lista_procesos_juridicos')
+        return reverse_lazy('lista_procesos_juridicos',args=[1])
 
 class EditaProcesoJuridicoView(LoginRequiredMixin,UpdateView):
     model = ProcesoJuridico
@@ -6307,7 +6555,7 @@ class EditaProcesoJuridicoView(LoginRequiredMixin,UpdateView):
 
 class BorraProcesoJuridicoView(LoginRequiredMixin,DeleteView):
     model = ProcesoJuridico
-    success_url = reverse_lazy('lista_procesos_juridicos')
+    success_url = reverse_lazy('lista_procesos_juridicos',args=[1])
     template_name = 'core/confirmar_borrado_registro.html'
 
 def AjaxGuardaIdProcesoView(request):
@@ -6361,7 +6609,7 @@ def ReporteGestionProcesoPdfView(request,id):
 
 def cabecera_procesos_pdf(pdf,pagina,titulo):
     pdf.setFont('Helvetica', 12)
-    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.PNG'
+    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.png'
     pdf.drawImage(archivo_imagen, 40, 540, 120, 90,preserveAspectRatio=True)
     pdf.drawString(250,580, titulo)
     pdf.setFont('Helvetica', 9)
@@ -6683,7 +6931,7 @@ def ReporteProcesosJuridicosXlsView(request):
 
 class BorraAnexoProcesoJuridicoView(LoginRequiredMixin,DeleteView):
     model = AnexoProcesoJuridico
-    success_url = reverse_lazy('lista_procesos_juridicos')
+    success_url = reverse_lazy('lista_procesos_juridicos',args=[1])
     template_name = 'core/confirmar_borrado_registro.html'
 
     def get_success_url(self):
@@ -6882,9 +7130,8 @@ def import_xls_parqueaderos(request):
 
 #################################### Tokens ############################
 
-def SolicitudTokenView(request):
-    tipo_usuario=request.session['tipo_usuario']
-    form = SolicitudTokenForm(request.POST or None)
+def SolicitudTokenResidenteView(request):
+    form = SolicitudTokenResidenteForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             idapartamento = form.cleaned_data['apartamento']
@@ -6894,7 +7141,8 @@ def SolicitudTokenView(request):
                 token = get_random_string(length=12)
                 residente = Residente.objects.get(email=email)
                 apartamento = Apartamento.objects.get(id=residente.apartamento_id)
-                mensaje =" su token para accesar al sistema de conjunto-web es: "+token+' Ingrese por <login> <usuario no registrado> y con éste token complete el registro'
+                Residente.objects.filter(email=email,interior_id=idinterior,apartamento_id=idapartamento).update(token=token)
+                mensaje =" su token para accesar al sistema de conjunto-web es: "+token+' Ingrese por <login> <usuario no registrado Residente> y con éste token complete el registro'
                 asunto = "Envío Token para registro en conjunto-web"
                 EnvioMailResidente(apartamento.id,mensaje,asunto,email)
                 messages.add_message(request, messages.INFO,"Se le ha enviado el token a su email, para iniciar el registro")
@@ -6909,8 +7157,35 @@ def SolicitudTokenView(request):
             messages.add_message(request, messages.ERROR,"Error Formulario")
             messages.error(request,"Error formulario")
     else:
-        form = SolicitudTokenForm()        
+        form = SolicitudTokenResidenteForm()        
     return render(request, template_name="core/registro_residente.html",context={'form':form})
+
+def SolicitudTokenVigilanteView(request):
+    form = SolicitudTokenVigilanteForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            email = form.cleaned_data['email']    
+            if Vigilante.objects.filter(email=email).exists():
+                token = get_random_string(length=12)
+                vigilante = Vigilante.objects.get(email=email)
+                Vigilante.objects.filter(email=email).update(token=token)
+                mensaje =" su token para accesar al sistema de conjunto-web es: "+token+' Ingrese por <login> <usuario no registrado vigilante> y con éste token complete el registro'
+                asunto = "Envío Token para registro en conjunto-web"
+                EnvioMailOtros(mensaje,asunto,email)
+                messages.add_message(request, messages.INFO,"Se le ha enviado el token a su email, para iniciar el registro")
+                #messages.info(request, f"Se le ha enviado el token a su email, para iniciar el registro")
+                return render(request, template_name="core/mensaje_login_token.html",context={'url':'home',})
+            else:
+                messages.add_message(request, messages.INFO,"El email ingresado no esta registrado en la información del conjunto, Solicite actualizar su información en la administración")
+                #messages.error(request,"El email ingresado no esta registrado en la información del conjunto, Solicite actualizar su información en la administración")
+                return render(request, template_name="core/mensaje_login_token.html",context={'url':'home'})
+               
+        else:
+            messages.add_message(request, messages.ERROR,"Error Formulario")
+            messages.error(request,"Error formulario")
+    else:
+        form = SolicitudTokenVigilanteForm()        
+    return render(request, template_name="core/registro_vigilante.html",context={'form':form})
 
 def MarcaTokensResidentesView(request):
     lista = request.session['lista_filtrada']
@@ -6923,10 +7198,10 @@ def MarcaTokensResidentesView(request):
     residentes = Residente.objects.filter(envio_token=True)        
     f = ResidentesFilter(request.GET, queryset=residentes)
     residentes = TokensResidentesTable(f.qs)
-    return render(request, "core/pagina_token_residentes_result.html", {'residentes':residentes})   
+    return render(request, "core/pagina_tokens_residentes.html", {'residentes':residentes})   
 
 def EnvioTokensResidentesView(request):
-    Residente.objects.update(envio_token=False)
+    #Residente.objects.update(envio_token=False)
     queryset = Residente.objects.all()
     f = ResidentesTokenFilter(request.GET, queryset=queryset)
     lista = []
@@ -6943,7 +7218,7 @@ def ajaxSwitchTokenResidentesView(request):
         envio_token = False
     else:
         envio_token = True
-    Residente.objects.filter(id=id).update(aprobado=envio_token)    
+    Residente.objects.filter(id=id).update(envio_token=envio_token)    
     data = {'envio':envio_token}
     return JsonResponse(data) 
 
@@ -6962,7 +7237,7 @@ def GenerarTokensView(request):
 ############################################# ASAMBLEA  ####################################    
 
 class PaginaAsambleaView(TemplateView):
-    template_name = 'core\pagina_asamblea.html'
+    template_name = 'core/pagina_asamblea.html'
 
 def DireccionaSalidaPaginaAsambleaView(request):
     tipo_usuario = request.session['tipo_usuario']
@@ -6975,7 +7250,7 @@ def DireccionaSalidaPaginaAsambleaView(request):
             return redirect('user_home',tipo_usuario)    
 
 @login_required            
-def ListaAsambleaView(request):
+def ListaAsambleaView(request,page=1):
     request.session['user'] = request.user.id
     request.session['detalle_reporte_asamblea'] = 0
     request.session['tipo_asamblea'] = 1
@@ -6989,6 +7264,11 @@ def ListaAsambleaView(request):
         lista.append(i.id)
     request.session['lista_filtrada'] = lista
     request.session["idasamblea"] = 0
+    paginator = Paginator(asambleas, 9)
+    try:
+        asambleas = paginator.page(page)
+    except EmptyPage:
+        asambleas = paginator.page(paginator.num_pages)
     return render(request, "core/asamblea_lista.html", {"asambleas":asambleas,'filter':f})
 
 @login_required
@@ -7004,7 +7284,7 @@ class CreaAsambleaView(LoginRequiredMixin,CreateView):
     model = Asamblea
     template_name = 'core/asamblea_form.html'
     form_class = AsambleaForm
-    success_url = reverse_lazy('lista_asambleas')
+    success_url = reverse_lazy('lista_asambleas',args=[1])
     
     def get_initial(self,*args,**kwargs):
         initial=super(CreaAsambleaView,self).get_initial(**kwargs)
@@ -7015,7 +7295,7 @@ class CreaAsambleaView(LoginRequiredMixin,CreateView):
 class BorraAsambleaView(LoginRequiredMixin,DeleteView):
     model = Asamblea
     template_name = 'core/confirmar_borrado_registro.html'
-    success_url = reverse_lazy('lista_asambleas')
+    success_url = reverse_lazy('lista_asambleas',args=[1])
 
 class EditaAsambleaView(LoginRequiredMixin,UpdateView):
     model = Asamblea
@@ -7061,7 +7341,7 @@ class BorraDecisionAsambleaView(LoginRequiredMixin,DeleteView):
    
 def cabecera_asamblea_pdf(pdf,pagina,titulo):
     pdf.setFont('Helvetica', 12)
-    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.PNG'
+    archivo_imagen = settings.STATIC_ROOT+'/img/logo_conjunto.png'
     #Definimos el tamaño de la imagen a cargar y las coordenadas correspondientes
     pdf.drawImage(archivo_imagen, 40, 740, 120, 90,preserveAspectRatio=True)
     pdf.drawString(240,780, titulo)
@@ -7216,10 +7496,6 @@ def tabla_decisiones_asamblea_pdf(pdf,pagina,filas_hoja,lista,ultima_pagina,id):
     #Uso el factor 16 que seria los pixel por cada registro que resto
     c = 700 - registros_cuerpo*16
     y = c
-    """ if id > 0 :
-        cuerpo_total = DecisionAsamblea.objects.filter(asamblea_id=id).select_related
-    else:
-        cuerpo_total = DecisionAsamblea.objects.filter(asamblea_id__in=lista).select_related     """
     sw = 0
     encabezados = ['Fecha','Decisión','Votos Favor','Votos Contra']
     largo = 120
@@ -7242,19 +7518,20 @@ def tabla_decisiones_asamblea_pdf(pdf,pagina,filas_hoja,lista,ultima_pagina,id):
                 detalles = [(j.asamblea.fecha,j.decision[inicial:final],j.numero_votos_favor,j.numero_votos_contra)]
                 detalle = Table([encabezados] + detalles, colWidths=[1.5 * cm,15 * cm,1.5 * cm,1.8 * cm])
             else: 
+                encabezados=''
                 detalles = [('',j.decision[inicial:final],'','')]
                 detalle = Table([encabezados] + detalles, colWidths=[1.5 * cm,15 * cm,1.5 * cm,1.8 * cm])
-            if i==0 :
-                detalle.setStyle(TableStyle(
-                [
+            
+            detalle.setStyle(TableStyle(
+            [
                 #La primera fila(encabezados) va a estar centrada
                 ('ALIGN',(0,0),(3,0),'CENTER'),
                 #Los bordes de todas las celdas serán de color negro y con un grosor de 1
                 ('GRID', (0, 0), (-1, -1), 1, colors.black),
                 #El tamaño de las letras de cada una de las celdas será de 10
                 ('FONTSIZE', (0, 0), (-1, -1), 7),
-                ]
-                ))
+            ]
+            ))
             
             detalle.wrapOn(pdf, 500, 600)
             detalle.drawOn(pdf, 15,y)
@@ -7428,35 +7705,6 @@ def AjaxGuardaIdAsambleaView(request):
     data = {'id':id}
     return JsonResponse(data)        
 
-def PublicaAsambleaView(request,id):
-    asamblea = Asamblea.objects.get(id=id)
-    idasamblea = id
-    anexos = AnexoAsamblea.objects.filter(reunion_id=id,publicar=True)
-    envia = request.user.username
-    email = request.user.email
-    subject ="De: "+envia+" Email:  "+email+" Hora: "+strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    message = "Acta Asamblea No."+asamblea.numero_acta
-    from_email = settings.EMAIL_HOST_USER
-    message = "Acta Asamblea No."+asamblea.numero_acta
-    currentDateTime = datetime.datetime.now()
-    consejeros = MiembroConsejo.objects.filter(envio_comunicado=True)
-    con_lis = list(consejeros.email.items()) 
-    listamail= con_lis
-    destinatarios = listamail
-    mail = EmailMessage(
-            subject,
-            message,
-            from_email,
-            to=None,
-            bcc=destinatarios,
-    )
-    for anexo in anexos:
-        ruta_archivo = anexo.archivo
-        filename = anexo.descripcion
-        mail.attach_file(ruta_archivo)
-        mail.send()
-    return reverse_lazy('detalle_asamblea',args=[idasamblea])
-
 
 ########################## COMITE CONVIVENCIA #####################
 
@@ -7573,7 +7821,7 @@ def ContactView(request):
 ####################### EMAIL ################################
 
 
-class EnvioMailResidentesView(CreateView):
+class EnvioMailResidentesView(LoginRequiredMixin,CreateView):
 
     def get(self,request):
         residentes = Residente.objects.filter(enviar_mail=True)

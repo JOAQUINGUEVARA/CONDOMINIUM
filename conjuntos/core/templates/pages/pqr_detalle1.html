@@ -1,0 +1,91 @@
+{% extends "core/base.html" %}
+{% load render_table from django_tables2 %}
+{% load django_tables2 %}
+{% load static %}
+{% block content %}
+{% load humanize %}
+{{ form.media }}
+<!doctype html>
+<style>
+  .container-pqr{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:row;
+  justify-content: space-between;
+  background-color:azure;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  }
+  .container-detalle{
+      font-size: calc(1.5em + 1vw);
+  }
+  @media screen and (max-width: 600px) {
+  .container-pqr{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    justify-content: space-between;
+    background-color:azure;
+  
+  }
+}
+</style>
+
+<head> 
+    <div class="navbar-fixed">
+        <nav>
+          <div class="nav-wrapper">
+            <a style="font-size: calc(2em + 1vw);transform:translate(3vw,0)" href="#!" class="brand-logo"><i class="material-icons">home</i>PQR</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+              <li class="active"><a href="{% url 'lista_pqr' %}"></i>Regresar</a></li>
+            </ul>
+          </div>
+        </nav>
+    </div>
+</head>
+
+<ul class="sidenav" id="mobile-demo">
+  <li class="active" ><a href="{% url 'lista_pqr' %}"></i>Regresar</a></li>
+</ul>
+
+<div class="container-pqr">
+    <div style="display:flex;align-items:center;justify-content:flex-start;color:darkred;width:180px;margin-top:10px" ><h6>Usuario: {{user}}</h6></div>
+    <a style="display:flex;font-size: calc(7px + 1vw);margin: auto;color:black" type="button" type="submit" href="#" value="autoriza" ><span>PQR</span></a>
+</div>
+<hr width=50% style="color:black;size:20">
+      
+<div class="container-detalle" style="background-color:aliceblue;width:80%;margin-left: auto;margin-right: auto;">
+    {% for pqr in pqr %}
+        <h4>{{pqr.title}}</h4>
+        <p>{{pqr.content|striptags|safe}}</p>
+        <div>Creada en:{{ pqr.created }} |&nbsp;</div>
+        <div>
+            | <a href="{% url 'buscar_respuesta_pqr' pqr.id %}">Responder</a>
+        </div>
+        <div>
+            {% if pqr.foto %}
+            <img style="margin-top:20px;color:blue;" class="product-item-img mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" src="{{pqr.foto.url}}" alt="">
+            {% endif %}
+        </div>
+    {% endfor %}    
+</div>
+    
+</body>
+
+{% block javascript %}
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+</script>
+{% endblock %}
+{% endblock %}
+
+

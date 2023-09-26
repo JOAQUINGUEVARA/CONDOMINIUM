@@ -1,0 +1,218 @@
+{% extends "core/base.html" %}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% load static %}
+{% block content %}
+{% load humanize %}
+{{ form.media }}
+
+<style>
+
+</style>
+
+<div class="navbar-fixed">
+    <nav>
+        <div class="nav-wrapper">
+        <a style="font-size: calc(12px + 1vw)" href="#!" class="brand-logo"><i class="material-icons">chair</i>{{titulo}}</a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+            {% if retorno == 'reporte_activos_fijos' %}
+            <li  class="active"><a href="{% url 'activos_fijos_lista' %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_activos_fijos_prestamo' %}
+            <li  class="active"><a href="{% url 'prestamos_activos_lista' }" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_proponentes' %}
+            <li  class="active"><a href="{% url 'lista_proponentes'  %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_proyectos' %}
+            <li  class="active"><a href="{% url 'lista_proyectos' %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_proveedores' %}
+            <li  class="active"><a href="{% url 'lista_proveedores' %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_contratos' %}
+            <li  class="active"><a href="{% url 'lista_contratos' %}" >Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_mantenimientos' %}
+            <li  class="active"><a href="{% url 'lista_mantenimientos' %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_obras' %}
+            <li  class="active"><a href="{% url 'lista_obras' %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_reparaciones' %}
+            <li  class="active"><a href="{% url 'lista_reparaciones' %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_informes_revisor' %}
+            <li  class="active"><a href="{% url 'lista_informes_revisor' %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_compromisos_reunion_consejo_pdf' %}
+            <li  class="active"><a href="{% url 'lista_reuniones_consejo' %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_decisiones_reunion_consejo_pdf' %}
+            <li  class="active"><a href="{% url 'lista_reuniones_consejo' %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_reunion_consejo_pdf' %}
+            <li  class="active"><a href="{% url 'lista_reuniones_consejo' %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_procesos_juridicos' %}
+            <li  class="active"><a href="{% url 'lista_procesos_juridicos' %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_informe_revisor_pdf' %}
+            <li  class="active"></li><a href="{% url 'lista_informes_revisor' %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_recomendaciones_informe_revisor_pdf' %}
+            <li  class="active"></li><a href="{% url 'lista_informes_revisor' %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_gestion_procesos_juridicos' %}
+            <li  class="active"></li><a href="{% url 'lista_procesos_juridicos' %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_asambleas_pdf' %}
+            <li  class="active"></li><a href="{% url 'lista_asambleas' %}" >Regresar</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_decisiones_asamblea_pdf' %}
+            <li  class="active"></li><a href="{% url 'lista_asambleas' %}" >Regresar</a></li>
+            {% endif %}
+           </td>
+        </ul>
+        </div>
+    </nav>
+</div>
+
+<ul class="sidenav" id="mobile-demo">
+  {% if retorno == 'reporte_activos_fijos' %}
+  <li  class="active"><a href="{% url 'activos_fijos_lista' %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_activos_fijos_prestamo' %}
+  <li  class="active"><a href="{% url 'prestamos_activos_lista' }" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_proponentes' %}
+  <li  class="active"><a href="{% url 'lista_proponentes'  %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_proyectos' %}
+  <li  class="active"><a href="{% url 'lista_proyectos' %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_proveedores' %}
+  <li  class="active"><a href="{% url 'lista_proveedores' %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_contratos' %}
+  <li  class="active"><a href="{% url 'lista_contratos' %}" >Pagina No.{{n}}</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_mantenimientos' %}
+  <li  class="active"><a href="{% url 'lista_mantenimientos' %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_obras' %}
+  <li  class="active"><a href="{% url 'lista_obras' %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_reparaciones' %}
+  <li  class="active"><a href="{% url 'lista_reparaciones' %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_informes_revisor' %}
+  <li  class="active"><a href="{% url 'lista_informes_revisor' %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_compromisos_reunion_consejo_pdf' %}
+  <li  class="active"><a href="{% url 'lista_reuniones_consejo' %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_decisiones_reunion_consejo_pdf' %}
+  <li  class="active"><a href="{% url 'lista_reuniones_consejo' %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_reunion_consejo_pdf' %}
+  <li  class="active"><a href="{% url 'lista_reuniones_consejo' %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_procesos_juridicos' %}
+  <li  class="active"><a href="{% url 'lista_procesos_juridicos' %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_informe_revisor_pdf' %}
+  <li  class="active"></li><a href="{% url 'lista_informes_revisor' %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_recomendaciones_informe_revisor_pdf' %}
+  <li  class="active"></li><a href="{% url 'lista_informes_revisor' %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_gestion_procesos_juridicos' %}
+  <li  class="active"></li><a href="{% url 'lista_procesos_juridicos' %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_asambleas_pdf' %}
+  <li  class="active"></li><a href="{% url 'lista_asambleas' %}" >Regresar</a></li>
+  {% endif %}
+  {% if retorno == 'reporte_decisiones_asamblea_pdf' %}
+  <li  class="active"></li><a href="{% url 'lista_asambleas' %}" >Regresar</a></li>
+  {% endif %}
+</ul>
+
+<!-- <div class="container-doc">
+    <div class="col-md-6 mx-auto mb-6">
+        <div class="titulo" style="font-size:medium;">
+            <h2>{{titulo}}</h2>
+        </div>
+        </br>
+    </div>    
+</div> -->
+<div style="padding-top: 20px;margin-left:2vw;margin-right: 2vw ;margin:auto;width:80%;" class="container-activos">
+    <div style="display:flex;align-items:center;justify-content:center;flex-direction:row;justify-content: space-between;background-color:azure;">  
+        <div style="display:flex;align-items:center;justify-content:flex-start;color:darkred;width:180px;margin-top:10px" ><h6>Usuario: {{user}}</h6></div>
+    </div>
+    <div class="container1" style="width: 20%;font-size:larger;margin-left: auto;margin-right: auto;">
+    <ul>
+        {% for n in paginas %}
+            {% if retorno == 'reporte_activos_fijos' %}
+            <li><a href="{% url 'reporte_pagina_pdf_activos_fijos' pagina=n %}"  style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_activos_fijos_prestamo' %}
+            <li><a href="{% url 'paginas_reporte_prestamo_pdf_activos_fijos' pagina=n %}"  style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_proponentes' %}
+            <li><a href="{% url 'paginas_reporte_proponentes_pdf' pagina=n %}"  style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_proyectos' %}
+            <li><a href="{% url 'paginas_reporte_proyectos_pdf' pagina=n %}"  style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_proveedores' %}
+            <a href="{% url 'paginas_reporte_proveedores_pdf' pagina=n %}"  style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_contratos' %}
+            <li><a href="{% url 'paginas_reporte_contratos_pdf' pagina=n %}"  style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_mantenimientos' %}
+            <li><a href="{% url 'paginas_reporte_mantenimientos_pdf' pagina=n %}"  style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_obras' %}
+            <li><a href="{% url 'paginas_reporte_obras_pdf' pagina=n %}"  style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_reparaciones' %}
+            <li class="list-group-item list-group-item-action"><a href="{% url 'paginas_reporte_reparaciones_pdf' pagina=n %}"  style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_procesos_juridicos' %}
+            <li class="list-group-item list-group-item-action"><a href="{% url 'paginas_procesos_juridicos_pdf' pagina=n %}"  style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_compromisos_reunion_consejo_pdf' %}
+            <li class="list-group-item list-group-item-action"><a href="{% url 'paginas_reporte_reuniones_consejo_pdf' pagina=n tipo=1 %}"  style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_decisiones_reunion_consejo_pdf' %}
+            <li class="list-group-item list-group-item-action"><a href="{% url 'paginas_reporte_reuniones_consejo_pdf' pagina=n tipo=2 %}"  style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_reunion_consejo_pdf' %}
+            <li class="list-group-item list-group-item-action"><a href="{% url 'paginas_reporte_reuniones_consejo_pdf' pagina=n tipo=3 %}"  style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_informe_revisor_pdf' %}
+            <li  class="list-group-item list-group-item-action"></li><a href="{% url 'paginas_informe_revisor_pdf' pagina=n tipo=1 %}" style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_recomendaciones_informe_revisor_pdf' %}
+            <li  class="list-group-item list-group-item-action"></li><a href="{% url 'paginas_informe_revisor_pdf' pagina=n tipo=2 %}" style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_pendientes_recomendaciones_informe_revisor_pdf' %}
+            <li  class="list-group-item list-group-item-action"></li><a href="{% url 'paginas_informe_revisor_pdf' pagina=n tipo=3 %}" style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_gestion_procesos_juridicos' %}
+            <li  class="list-group-item list-group-item-action"></li><a href="{% url 'paginas_gestion_proceso_pdf' pagina=n %}" style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_asambleas_pdf' %}
+            <li  class="list-group-item list-group-item-action"></li><a href="{% url 'paginas_reporte_asambleas_pdf' pagina=n tipo=1 %}" style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+            {% if retorno == 'reporte_decisiones_asamblea_pdf' %}
+            <li  class="list-group-item list-group-item-action"></li><a href="{% url 'paginas_reporte_asambleas_pdf' pagina=n tipo=2 %}" style="color:black;">Pagina No.{{n}}</a></li>
+            {% endif %}
+
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

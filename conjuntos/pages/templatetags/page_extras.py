@@ -3,6 +3,7 @@ from core.models import ZonaComun,MiembroStaff
 from pages.models import Legislacion,Comunicado,Clasificado,Normatividad,Pqr,RespuestaPqr,Comunicado
 from upload.models import AnexoLegislacion,AnexoNormatividad,AnexoComunicado
 from datetime import datetime, timedelta
+import dateutil.parser
 
 register = template.Library()
 
@@ -21,7 +22,6 @@ def get_anexos_comunicado_list():
     anexos_comunicado = AnexoComunicado.objects.all().order_by('id')
     return anexos_comunicado
 
-import dateutil.parser
 @register.simple_tag
 def get_comunicados_list():
     lista = []

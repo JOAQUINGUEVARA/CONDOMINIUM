@@ -67,7 +67,7 @@
 {% block javascript %}
 <script>
     $(document).on("click","#btnSalir", function(e) {
-        window.location.href = "{% url 'lista_reuniones_consejo' %}";
+        window.location.href = "{% url 'direcciona_reunion_consejo_compromiso' %}";
     })
     $(document).ready(function(){
     $('#id_fecha_cumplido').datepicker();

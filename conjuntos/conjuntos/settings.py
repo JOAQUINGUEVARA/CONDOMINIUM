@@ -75,7 +75,7 @@ INSTALLED_APPS = [
     #'reportlab',
     'bootstrap3_datetime',
     'pwa',
-           
+         
       
 ]
 
@@ -325,8 +325,8 @@ EMAIL_HOST_PASSWORD = 'b72bc41b1b23e1'
 EMAIL_PORT = '2525'
 
 LOGIN_URL = '/user_home/0'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'user/home/0'
+LOGOUT_REDIRECT_URL = 'user_home/0'
 
 PWA_APP_NAME = "conjuntos"
 PWA_APP_DESCRIPTION = "administración de conjuntos residenciales" #app description

@@ -7,76 +7,145 @@
 <title>{% block tittle %}{% endblock %}Inicio | CONDOMINIUM</title>
 
 <style>
-  
- nav >ul{ margin: 0 auto; width: 80px; }
-    nav ul li{
-        display: block;
-        float: left;
-        /* margin-left:-40px; */
-        position: relative;
-    }
-    nav ul a{
-        display: block;
-        float: left;
-        width: 180px;
-        padding: 10px 20px;
-    }
+  body{
     
-    #dropdown-accesos {
-      top:-60px;
-    }
-
-    body { padding-top:20px; }
-    .panel-body .btn:not(.btn-block) { width:120px;margin-bottom:10px; }
-
-    .sidenav li>a {padding:0 32px !important}
-      .collapsible-body>ul>li>a {
-        padding: 0 48px !important;
-        font-weight: 400 !important;
-      }
-      body{
-        background-image: url({% static "core/img/ciudad.jpg" %}) ;
-        background-repeat: no-repeat;
-        height: 400px;
-        width: 480px;
-        background-size: cover;
-         /* margin-left: 50px; */
+    background-color: rgb(190, 226, 214);
+    
         
-    }
-</style>
-<body>
-<div class="navbar-fixed">
-    <ul id="dropdown1" class="dropdown-content">
-        <li><a href="{% url 'importar_xls_apartamentos' %}">Importar Información Apartamentos de xls</a></li>
-        <li><a href="{% url 'importar_xls_residentes' %}">Importar Información Residentes de xls</a></li>
-        <li><a href="{% url 'importar_xls_parqueaderos' %}">Importar Información Parqueaderos de xls</a></li>
-    </ul>  
-    <nav>
-      <div class="nav-wrapper">
-        <a style="font-size: calc(12px + 1vw);transform:translate(3vw,0)" href="#!" class="brand-logo"><i class="material-icons">people</i>INFORMACION RESIDENTES</a>
-        <ul class="right hide-on-med-and-down">
-          <li><a href="{% url 'solicitudes_residentes' %}">Solicitudes Residentes</a></li>  
-          <li><a href="{% url 'informacion_residentes' %}">Información Residentes</a></li>
-          <li><a href="{% url 'envio_correos_masivos_residentes' %}">Correos Residentes</a></li>
-          <li><a href="{% url 'pagina_envio_tokens' %}">Tokens</a></li>
-          <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Importar Información<i class="material-icons right">arrow_drop_down</i></a></li>
-          <li class="active" ><a  href="{% url 'pagina_administrador' %}">Regresar</a></li>
-        </ul>
-      </div>
-    </nav>
-</div>
-</body>
+  }
+  a {color:white}
+   .main-admin {display: flex;
+    flex-direction: row; 
 
-<ul class="sidenav" id="mobile-demo">
-<li><a href="{% url 'solicitudes_residentes' %}">Solicitudes Residentes</a></li>  
-<li><a href="{% url 'informacion_residentes' %}">Información Residentes</a></li>
-<li><a href="{% url 'envio_correos_masivos_residentes' %}">Correos Residentes</a></li>
-<li><a href="{% url 'pagina_envio_tokens' %}">Tokens</a></li>
-<li><a href="{% url 'importar_xls_apartamentos' %}">Importar Información Apartamentos de xls</a></li>
-<li><a href="{% url 'importar_xls_residentes' %}">Importar Información Residentes de xls</a></li>
-<li><a href="{% url 'importar_xls_parqueaderos' %}">Importar Información parqueaderos de xls</a></li>
-<li><a href="{% url 'pagina_administrador' %}">Regresar</a></li>
-</ul>
+   }
+   .table{
+    background-color: rgb(234, 242, 250);
+   }
+   th {background-color: rgb(167, 206, 245);}
+  .sidebar{
+    width:20%;
+    background-color: rgb(4, 83, 161);
+    margin-top: 5px;
+    margin-left: 10px;
+  }
+  
+  @media screen and (max-width: 700px) {
+    .sidebar {
+      width: 50%;
+      height: auto;
+      position: relative;
+    }
+    .sidebar a {float: left;}
+    div.content {margin-left: 0;}
+  }
+
+  @media screen and (max-width: 400px) {
+    .sidebar a {
+      text-align: center;
+      float: none;
+    }
+  }
+
+  .sidebar_toggler {
+  position: fixed;
+  top: 4vh;
+  right: 3vw;
+  width: 1.75rem;
+  height: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  overflow: hidden;
+}
+.sidebar_toggler span {
+  background-color: #ddd;
+  width: 100%;
+  height: 2.4px;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  /* so that it doesn't overlap the sidebar_toggler */
+}
+/* if the sidebar has 'show' class then their adjacent-sibling (i.e., sidebar_toggler) will... */
+#sidebar.show + .sidebar_toggler {
+  justify-content: center;
+}
+#sidebar.show + .sidebar_toggler span {
+  margin-top: -1.2px;
+  margin-bottom: -1.2px;
+}
+#sidebar.show + .sidebar_toggler span:first-child {
+  transform: rotate(45deg);
+}
+#sidebar.show + .sidebar_toggler span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-100%);
+}
+#sidebar.show + .sidebar_toggler span:last-child {
+  transform: rotate(-45deg);
+}
+  
+</style>
+<body style="background-image: url({% static '/img/ciudad.jpg' %});"></body>
+<div class="main-admin">
+  <div class="sidebar"  class="menu-sidebar">
+      <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+        <div class="py-2 px-3 mb-20 " style="background-color: white;">
+          <div style="color:rgb(8, 8, 8);">Menu Información Residentes</div>
+        </div>
+          <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+            <div class="sidebar_toggler">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <br>
+              <li>
+                  <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle" style="color:rgb(188, 245, 174)">
+                  <i class="bi bi-people"></i><span class="ms-1 d-none d-sm-inline">Residentes</span> </a>
+                  <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
+                  <li class="w-100">
+                    <li class="divider"></li>
+                      <a href="{% url 'solicitudes_residentes' %}">Solicitudes Residentes</a>
+                      <li><a href="{% url 'informacion_residentes' %}">Información Residentes</a></li>
+                      <li><a href="{% url 'envio_correos_masivos_residentes' %}">Correos Residentes</a></li>
+                      <li><a href="{% url 'pagina_envio_tokens' %}">Tokens</a></li>
+                      <li><a href="{% url 'lista_pqr' %}">PQR</a></li>
+                  </li>
+                  </ul>
+              </li>
+              <li>
+                <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle" style="color:rgb(188, 245, 174)">
+                  <i class="bi bi-person-plus-fill"></i> <span class="ms-1 d-none d-sm-inline">Importar Información</span> </a>
+                  <ul class="collapse show nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                  <li class="w-100">
+                    <li class="divider"></li>
+                        <li><a href="{% url 'importar_xls_apartamentos' %}">Importar Información Apartamentos de xls</a></li>
+                        <li><a href="{% url 'importar_xls_residentes' %}">Importar Información Residentes de xls</a></li>
+                        <li><a href="{% url 'importar_xls_parqueaderos' %}">Importar Información Parqueaderos de xls</a></li>
+                    </li>                     
+                  </li>
+                  </ul>
+              </li>
+              <li>
+                <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle" style="color:rgb(188, 245, 174)">
+                  <i class="bi bi-reply-fill"></i> <span class="ms-1 d-none d-sm-inline">Salir</span> </a>
+                  <ul class="collapse show nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                  <li class="w-100">
+                    <li class="divider"></li>
+                        <li><a href="{% url 'pagina_administrador' %}">Regresar</a></li>
+                        <li><a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+                    </li>                     
+                  </li>
+                  </ul>
+              </li>        
+            </br>  
+          </ul>  
+        </div>
+      </div>  
+  </div>
+</div>
+</html>  
 
 {% block javascript %}
 <script>

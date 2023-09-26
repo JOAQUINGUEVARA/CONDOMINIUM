@@ -27,11 +27,15 @@
 	white-space: normal;
   margin-top: 20px;
 }
+.data-box{
+  margin-left: auto;
+  margin-right: auto;
+}
 </style>
 <style>.errorlist{color:red;}</style>
 
   <div class="container-login">
-    <div class="row mt-3">
+    <div class="data-box">
       <div class="col-md-12 mx-auto mb-9">
         {% if 'register' in request.GET %}
           <p style="color:green;">Usuario registrado correctamente, ya puedes identificarte.</p>
@@ -59,7 +63,10 @@
           ¿No tiene clave? solicite token y registrése <a href="{% url 'registro_residentes' %}">aquí</a>.
         </p>
         <p>
-          Solicitar Token <a href="{% url 'solicitud_token' %}">aquí</a>.
+          Solicitar Token Residente <a href="{% url 'solicitud_token_residente' %}">aquí</a>.
+        </p>
+        <p>
+          Solicitar Token Vigilante <a href="{% url 'solicitud_token_vigilante' %}">aquí</a>.
         </p>
         <br/>
         <br/>

@@ -65,17 +65,25 @@
     <div class="navbar-fixed">
         <nav>
             <div class="nav-wrapper">
-            <a style="font-size: calc(12px + 1vw)" href="#!" class="brand-logo"><i class="material-icons">work</i>INFORMES AUDITOR</a>
+            <a style="font-size: calc(12px + 1vw)" href="#!" class="brand-logo"><i class="material-icons">work</i>INFORMES REVISOR</a>
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-                <li  class="active"><a href="{% url 'direcciona_informes_revisor' %}" >Regresar</a></li>
+                {% if tipo_usuario == 1%}
+                <li  class="active"><a href="{% url 'pagina_administrador' %}" >Regresar</a></li>
+                {% else %}    
+                <li  class="active"><a href="{% url 'pagina_consejo' %}" >Regresar</a></li>
+                {% endif %}      
             </ul>
             </div>
         </nav>
     </div>
     
     <ul class="sidenav" id="mobile-demo">
-    <li  class="active"><a href="{% url 'pagina_administrador' %}" >Regresar</a></li>
+        {% if tipo_usuario == 1%}
+        <li  class="active"><a href="{% url 'pagina_administrador' %}" >Regresar</a></li>
+        {% else %}    
+        <li  class="active"><a href="{% url 'pagina_consejo' %}" >Regresar</a></li>
+        {% endif %}   
     </ul>
     
     <div id="filtro" style="display:flex;flex-direction: colum;align-items: center;background-color:rgb(87, 196, 247);height:120px;" class="container">
@@ -101,20 +109,32 @@
             <table>  
                 <tr>
                     <th style="border: 1px solid rgb(253, 253, 253);"><div style="display:flex;align-items:center;justify-content:flex-start;color:darkred;width:180px;margin-top:10px" ><h6>Usuario: {{user}}</h6></div></th>
-                    <th style="border: 1px solid rgb(253, 253, 253);"><a style="font-size: calc(5px + 1vw);margin: auto;color:black;" type="button" type="submit" href="#" value="autoriza" ><span>INFORMES AUDITOR</span></a></th>
+                    <th style="border: 1px solid rgb(253, 253, 253);"><a style="font-size: calc(5px + 1vw);margin: auto;color:black;" type="button" type="submit" href="#" value="autoriza" ><span>INFORMES REVISOR</span></a></th>
                     <th style="border: 1px solid rgb(253, 253, 253);"><div>Filtro</div><a type="submit" id="btnFiltros" onClick="muestra_oculta('filtro')" class="btn-floating btn-short waves-effect waves-light cyan"  value="crear" ><i class="material-icons">filter_list</i></a></th>
                     <th style="border: 1px solid rgb(253, 253, 253);"><div>XLS</div><a id="BtnImprimir" type="button" class="btn-floating btn-short waves-effect waves-light red" href="{% url "reporte_informe_revisor_xls" %}" value="imprimir"><i class="material-icons">print</i></a></th>
-                    <th style="border: 1px solid rgb(253, 253, 253);"><div>PDF</div><a id="BtnImprimir" type="button" class="btn-floating btn-short waves-effect waves-light brown" href="{% url "reporte_informe_revisor_pdf" %}" value="imprimir"><i class="material-icons">print</i></a></th>
+                    <th style="border: 1px solid rgb(253, 253, 253);"><div>PDF</div><a id="BtnImprimir" type="button" class="btn-floating btn-short waves-effect waves-light brown" href="{% url "reportes_informe_revisor_pdf" %}" value="imprimir"><i class="material-icons">print</i></a></th>
                     <th style="border: 1px solid rgb(253, 253, 253);"><div>Nuevo Informe</div><a id ="btnNuevo" type="submit" class="btn-floating btn-short waves-effect waves-light blue" href="{% url 'crea_informe_revisor' %}" value="crear" ><i class="material-icons">add</i></a></th>        
                 </tr>    
             </table>  
         </div>
         <hr width=50% style="color:black;size:20">
-        <div style="" class="container-activos">
-            <table class="table table-bordered">
-                {% render_table informes_revisor %}
+        <hr width=50% style="color:black;size:20">
+        {% for informe in informes_revisor %}
+                       
+            <table class="table table-bordered" style="background-color:aliceblue">
+            <tr>
+                <th>Fecha</th>
+                <th>Contenido</th>
+                <th>Ver Detalles</th>
+            </tr>
+            <tr>
+                <td>{{informe.fecha}}</td>        
+                <td>{{informe.contenido|striptags|safe|truncatewords:100}}|<a href="{% url "informe_revisor_contenido" informe.id %}">Ver Todo</a></td>
+                <td><a id="BtnDetalle" type="button" class="btn-floating btn-short waves-effect waves-light brown" href="{% url "informe_revisor_detalle" informe.id %}" value="detalle" ><i class="material-icons">view_headline</i></a></td>
+            </tr>   
             </table>
-        </div>    
+           
+        {% endfor %}      
     </div>
     
 </body>
@@ -126,6 +146,7 @@
     });
     $(document).ready(function(){
     $('.sidenav').sidenav();
+    $('select').formSelect();
   });
 
   function muestra_oculta(id){

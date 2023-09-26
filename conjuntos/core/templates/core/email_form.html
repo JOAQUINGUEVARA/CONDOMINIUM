@@ -56,7 +56,7 @@
 {% block javascript %}
 <script>
   $(document).on("click","#btnSalir", function(e) {
-    window.location.href = "{% url 'informacion_residentes' %}";
+    window.location.href = "{% url 'envio_correos_masivos_residentes' %}";
   })
 </script>
 {% endblock %}

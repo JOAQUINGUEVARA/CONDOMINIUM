@@ -46,7 +46,7 @@
       width: 200px;
     }
     #id_valor_anticipo{
-      width: 500px;
+      width: 200px;
     }
     #id_vigencia{
       width: 100px;
@@ -78,9 +78,10 @@
                 <form role="form" method="post">
                     {% csrf_token %}
                     <div style="display:flex;flex-direction:column;">
+                        <div style="display:flex;flex-direction:row;align-items: center;">
                         <div style="display:flex;margin-left:20px">{{ form.numero|as_crispy_field }}</div>
                         <div style="display:flex;margin-left:20px">{{ form.fecha_contrato|as_crispy_field }}</div>
-                        
+                        </div>
                         <div style="display:flex;flex-direction:row;align-items: center;">
                         <div style="display:flex;margin-left:20px;">{{ form.tipo_contrato|as_crispy_field }}</div>
                         <div style="display:flex;margin-left:20px;transform:translate(0,5px)"><a id="btnGuardaTipoContrato" type="button" href="{% url 'crear_tipo_contrato' %}" class="btn btn-primary" value="nuevo" >Crear Tipo Contrato</a></div>
@@ -91,11 +92,15 @@
                         <div style="display:flex;margin-left:20px;">{{ form.descripcion|as_crispy_field }}</div>
                         </div>
                         
+                        <div style="display:flex;flex-direction:row;align-items: center;">
                         <div style="display:flex;margin-left:20px;">{{ form.valor|as_crispy_field }}</div>
                         <div style="display:flex;margin-left:20px;">{{ form.valor_anticipo|as_crispy_field }}</div>
+                        </div>
                         
+                        <div style="display:flex;flex-direction:row;align-items: center;">
                         <div style="display:flex;margin-left:20px;">{{ form.activo|as_crispy_field }}</div>
                         <div style="display:flex;margin-left:20px;">{{ form.vigencia|as_crispy_field }}</div>
+                        </div>
                                                         
                         
                     </div> 

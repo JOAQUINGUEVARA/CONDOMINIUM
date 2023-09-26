@@ -31,18 +31,18 @@
     
 
 <!-- Updated JavaScript url -->
-    <script src="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>
+<script src="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>
 
-    <link href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet"/>
-    <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet"/>
-    
-       
-    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet"/>
+<link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet"/>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
  
     
 
@@ -58,7 +58,7 @@
             <form role="form" method="post">
                 {% csrf_token %}
                 {{ form|crispy }}
-                <button id="btnReunionConsejo" type="submit" class="btn btn-primary" value="Submit">Guardar</button>
+                <button id="btnGuardar" type="submit" class="btn btn-primary" value="Submit">Guardar</button>
                 <button id="btnSalir" class="btn btn-warning" data-dismiss="modal">Salir</button>
             </form>
             </div>
@@ -70,10 +70,9 @@
 <script>
     
     $(document).on("click","#btnSalir", function(e) {
-          window.location.href = "{% url 'lista_reuniones_consejo' %}";
+        window.location.href = "{% url 'lista_reuniones_consejo' page=1 %}";
     })
     
-
     $("#id_fecha").change(function () {
         var fecha = document.getElementById('id_fecha')
         var hora_inicio = document.getElementById('id_hora_inicio')
@@ -85,8 +84,6 @@
         
     $(document).ready(function(){
     $('#id_fecha').datepicker();
-    $('#id_hora_inicio').timepicker()
-    $('#id_hora_final').timepicker()
     });
     
     jQuery(function ($) {
@@ -109,8 +106,7 @@
     $.datepicker.setDefaults($.datepicker.regional['es']);
     });
 
-    $('#id_hora_inicio').timepicker()
-        
+            
 </script>
 
 {% endblock %}

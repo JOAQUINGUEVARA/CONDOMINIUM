@@ -39,7 +39,7 @@
       width: 500px;
     }
     #id_email{
-      width: 500px;
+      width: 300px;
     }
     #id_persona_contacto{
       width: 500px;
@@ -85,19 +85,20 @@
                         </div>
                         <div style="display:flex;margin-left:20px;">{{ form.nombre|as_crispy_field }}</div>
                         
+                        <div style="display:flex;flex-direction:row;align-items: center;">
                         <div style="display:flex;margin-left:20px;">{{ form.telefono|as_crispy_field }}</div>
                         <div style="display:flex;margin-left:20px;">{{ form.celular|as_crispy_field }}</div>
-                        
+                        </div>
                         
                         <div style="display:flex;margin-left:20px;">{{ form.direccion|as_crispy_field }}</div>
                         <div style="display:flex;margin-left:20px;">{{ form.email|as_crispy_field }}</div>
-                        
-                        
                         <div style="display:flex;margin-left:20px;">{{ form.persona_contacto|as_crispy_field }}</div>
+                        
+                        <div style="display:flex;flex-direction:row;align-items: center;">
                         <div style="display:flex;margin-left:20px;">{{ form.telefono_contacto|as_crispy_field }}</div>
-                       
                         <div style="display:flex;margin-left:20px;">{{ form.celular_contacto|as_crispy_field }}</div>
                         <div style="display:flex;margin-left:20px;">{{ form.email_contacto|as_crispy_field }}</div>
+                        </div>
 
                         <div style="display:flex;margin-left:20px;">{{ form.calificacion|as_crispy_field }}</div>
                       </div>

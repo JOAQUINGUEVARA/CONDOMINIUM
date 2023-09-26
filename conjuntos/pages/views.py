@@ -18,6 +18,7 @@ from core.filters import PqrFilter
 from django.contrib import messages
 from django.conf import settings
 from django.core.mail import EmailMessage,send_mass_mail,BadHeaderError,send_mail
+from django_tables2.config import RequestConfig
 
 
 def page(request, page_id, page_slug):
@@ -102,15 +103,17 @@ def VerDetallePqrView(request,id):
     return render(request, "pages/pqr_detalle.html", {"pqr":pqr})
 
 def VerRespuestaPqrView(request,id):
-    pqr = Pqr.objects.get(id=id)
-    if RespuestaPqr.objects.filter(pqr_id=id).exists():
-        respuesta_pqr = RespuestaPqr.objects.filter(pqr_id=id)
+    pqr_id = Pqr.objects.get(id=id)
+    pqr = Pqr.objects.filter(id=id)
+    if RespuestaPqr.objects.filter(pqr_id=pqr_id).exists():
+        respuesta_pqr = RespuestaPqr.objects.filter(pqr_id=pqr_id)
         context = {'pqr':pqr,'respuesta_pqr':respuesta_pqr}
         return render(request, "pages/pqr_lista_respuesta.html", context)
     else:
         respuesta_pqr = 'No se ha respondido la PQR'
         context = {'respuesta':respuesta_pqr}
         return render(request, "pages/pqr_lista_respuesta.html", context)
+
 
 """ def VerRespuestaPqrUsuarioView(request,id):
     pqr = Pqr.objects.get(id=id)
@@ -120,7 +123,7 @@ def VerRespuestaPqrView(request,id):
 def BuscarRespuestaPqrView(request,id):
     if RespuestaPqr.objects.filter(pqr_id=id).exists():
         respuesta_pqr = RespuestaPqr.objects.filter(pqr_id=id)
-        pqr = Pqr.objects.get(id=id)
+        pqr = Pqr.objects.filter(id=id)
         context = {'pqr':pqr,'respuesta_pqr':respuesta_pqr}
         return render(request, "pages/pqr_lista_respuesta.html", context)
     else:
@@ -164,6 +167,14 @@ class DarRespuestaPqrView(CreateView):
         redirect_url = reverse('lista_pqr') 
         return HttpResponseRedirect(redirect_url)       
 
+def DireccionaListaPqrView(request):
+    tipo_usuario = request.session['tipo_usuario']
+    if tipo_usuario == 1:
+        return redirect('lista_pqr')
+    else:
+        if tipo_usuario == 2 or tipo_usuario == 5:
+            return redirect('user_home',tipo_usuario)
+        
 class ClasificadosListView(TemplateView):
     template_name = 'pages\clasificados.html'
 
@@ -211,7 +222,8 @@ class EditarClasificadoView(UpdateView):
 def PonerVendidoClasificadoView(request,id):
     tipo_usuario = request.session['tipo_usuario']
     Clasificado.objects.filter(id=id).update(vigente=False)
-    return HttpResponseRedirect(reverse('user_home',tipo_usuario)) 
+    ##return HttpResponseRedirect(reverse('user_home',tipo_usuario)) 
+    return redirect('user_home',tipo_usuario)
 
 def DireccionaSalidaClasificadoFormView(request):
     tipo_usuario = request.session['tipo_usuario']
@@ -226,9 +238,14 @@ def AjaxContarRegistrosPendientesAdministrador(request):
     data = {'num_pqr':num_pqr}
     return JsonResponse(data)
 
-def ListaLegislacionView(request):
+def ListaLegislacionView(request,page=1):
     legislacion = Legislacion.objects.all().order_by('-id')
     anexos = AnexoLegislacion.objects.all()
+    paginator = Paginator(legislacion, 2)
+    try:
+        legislacion = paginator.page(page)
+    except EmptyPage:
+        legislacion = paginator.page(paginator.num_pages)
     return render(request, "pages/legislacion_lista.html", {"legislacion":legislacion,"anexos":anexos})
     
 def DetalleLegislacionView(request,id):
@@ -260,18 +277,23 @@ class EditarLegislacionView(UpdateView):
     form_class = LegislacionForm
     success_url = reverse_lazy('lista_legislacion')   
 
-def ListaLegislacionView(request):
+""" def ListaLegislacionView(request):
     legislacion = legislacion =Legislacion.objects.all().order_by('-id')
     anexos = AnexoLegislacion.objects.all()
-    return render(request, "pages/legislacion_lista.html", {"legislacion":legislacion,"anexos":anexos})
+    return render(request, "pages/legislacion_lista.html", {"legislacion":legislacion,"anexos":anexos}) """
     
 """ def DetalleLegislacionView(request,id):
     legislacion = legislacion =Legislacion.objects.filter(id=id)
     return render(request, "core/legislacion_lista_detalle.html", {"legislacion":legislacion}) """
 
 
-def ListaComunicadoView(request):
+def ListaComunicadoView(request,page=1):
     comunicados = Comunicado.objects.all().order_by('-id')
+    paginator = Paginator(comunicados, 4)
+    try:
+        comunicados = paginator.page(page)
+    except EmptyPage:
+        comunicados = paginator.page(paginator.num_pages)
     return render(request, "pages/comunicados_lista.html", {"comunicados":comunicados})
 
 def ComunicadoDetalleView(request,id):
@@ -305,9 +327,14 @@ class EditarComunicadoView(UpdateView):
     form_class = ComunicadoForm
     success_url = reverse_lazy('lista_comunicados')  
 
-def ListaNormatividadView(request):
+def ListaNormatividadView(request,page=1):
     normatividad = Normatividad.objects.all().order_by('-id')
     anexos = AnexoNormatividad.objects.all()
+    paginator = Paginator(normatividad, 2)
+    try:
+        normatividad = paginator.page(page)
+    except EmptyPage:
+        normatividad = paginator.page(paginator.num_pages)
     return render(request, "pages/normatividad_lista.html", {"normatividad":normatividad,"anexos":anexos})
 
 class CrearNormatividadView(CreateView):

@@ -16,6 +16,9 @@ from bootstrap_datepicker_plus.widgets import DatePickerInput,DateTimePickerInpu
 #from bootstrap_modal_forms.forms import BSModalModelForm
 from ckeditor.widgets import CKEditorWidget
 from bootstrap3_datetime.widgets import DateTimePicker
+from bootstrap3_datetime.widgets import DateTimePicker
+from django.contrib.auth.forms import UserCreationForm
+from django import forms
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -205,13 +208,13 @@ class ParqueaderoForm(forms.ModelForm):
 
     class Meta:
         model = Parqueadero
-        fields =['numero','coeficiente']
+        fields =['interior','apartamento','numero','coeficiente']
 
 class VehiculoForm(forms.ModelForm):
 
     class Meta:
         model = Vehiculo
-        fields =['placa','tipo_vehiculo','uso','marca','modelo','color','parqueadero']
+        fields =['interior','apartamento','placa','tipo_vehiculo','uso','marca','modelo','color','parqueadero']
 
 class ResidenteLoginForm(forms.ModelForm):
 
@@ -219,11 +222,23 @@ class ResidenteLoginForm(forms.ModelForm):
         model = Residente
         fields =['email','interior','apartamento','token']
 
-class SolicitudTokenForm(forms.ModelForm):
+class VigilanteLoginForm(forms.ModelForm):
+
+    class Meta:
+        model = Vigilante
+        fields =['email','token']
+
+class SolicitudTokenResidenteForm(forms.ModelForm):
 
     class Meta:
         model = Residente
         fields =['email','interior','apartamento']
+
+class SolicitudTokenVigilanteForm(forms.ModelForm):
+
+    class Meta:
+        model = Vigilante
+        fields =['email']
 
 """ class ResidenteOtroForm(forms.ModelForm):
     
@@ -235,7 +250,7 @@ class MascotaForm(forms.ModelForm):
     
     class Meta:
         model = Mascota
-        fields = ['nombre','tipo_mascota','raza','edad',]
+        fields = ['interior','apartamento','nombre','tipo_mascota','raza','edad']
         
 class DepositoForm(forms.ModelForm):
     
@@ -249,8 +264,7 @@ class UserPerfilForm(forms.ModelForm):
         model = UserPerfil
         fields =['interior','apartamento']
 
-from django import forms
-from django.contrib.auth.forms import UserCreationForm
+
 
 class NewUserForm(UserCreationForm):
 	email = forms.EmailField(required=True)
@@ -266,18 +280,6 @@ class NewUserForm(UserCreationForm):
 			user.save()
 		return user
 
-from django import forms
-
-""" class ImageUploadWCForm(forms.Form):
-
-    print("Image upload from WC form.")        
-    foto = forms.ImageField(label='Select a file')              
-    print ('Hi in Webcam', foto)        
-
-class DocScanUploadForm(forms.Form):
-    print("Image upload from WC form.")        
-    foto = forms.ImageField(label='Select a file')              
-    print ('Hi in Webcam', foto)       """  
 
 class ActivoFijoForm(forms.ModelForm):
     
@@ -287,6 +289,7 @@ class ActivoFijoForm(forms.ModelForm):
         nombre = forms.TextInput(attrs={'required': True})
         
         widgets = {
+        'fecha': forms.DateInput(attrs={'required': True},format='%d/%m/%Y'), 
         'descripcion': forms.Textarea(attrs={'cols':50,'rows':5})
                        
         }
@@ -319,6 +322,17 @@ class PrestamoActivoForm(forms.ModelForm):
          'fecha' : forms.DateInput(format='%d/%m/%Y'),
          'responsable': forms.Textarea(attrs={'cols':50,'rows':5}),
          'activo_fijo': forms.HiddenInput()                  
+        }
+
+class DevolucionPrestamoActivoForm(forms.ModelForm):
+    
+    class Meta:
+        model = PrestamoActivoFijo
+        fields = ['fecha_devuelto']
+        fecha_devuelto = forms.TextInput(attrs={'required': True})
+                
+        widgets = {
+         'fecha_devuelto' : forms.DateInput(format='%d/%m/%Y'),
         }
 
 class BajaActivoForm(forms.ModelForm):
@@ -471,8 +485,6 @@ class ReparacionesForm(forms.ModelForm):
          'observacion': forms.Textarea(attrs={'cols':50,'rows':5})                 
         }
 
-from bootstrap3_datetime.widgets import DateTimePicker
-
 class ReunionConsejoForm(forms.ModelForm):
     
     class Meta:
@@ -480,13 +492,11 @@ class ReunionConsejoForm(forms.ModelForm):
         fields = ['fecha','contenido','numero_acta','hora_inicio','hora_final']
         
         widgets = {
-         'fecha': forms.DateInput(format='%d/%m/%Y'),
+         'fecha': forms.DateInput(attrs={'required': True},format='%d/%m/%Y'),   
          'contenido': forms.Textarea(attrs={'cols':50,'rows':5}),
-         'hora_inicio': forms.TimeInput(format='%H:%M'),
-         'hora_final': forms.TimeInput(format='%H:%M'),
         }
         
-        
+       
 class DecisionConsejoForm(forms.ModelForm):
 
     class Meta:
@@ -603,7 +613,7 @@ class ProcesoJuridicoForm(forms.ModelForm):
         fields = ['proceso_numero','tipo_proceso','fecha_inicial','abogado','demandante','demandado','juzgado','contenido','interior','apartamento','fecha_final','valor_demanda','activo']
                
         widgets = {
-         'fecha': forms.DateInput(format='%d/%m/%Y'),
+         'fecha': forms.DateInput(attrs={'required': True},format='%d/%m/%Y'),
          'contenido': forms.Textarea(attrs={'cols':50,'rows':5}),
          'juzgado': forms.Textarea(attrs={'cols':50,'rows':1}),
          'hora_inicio': forms.TimeInput(format='%H:%M'),
@@ -663,7 +673,7 @@ class AsambleaForm(forms.ModelForm):
         model = Asamblea
         fields = ['fecha','tipo_asamblea','contenido','hora_inicio','hora_final','numero_acta']
         widgets = {
-            'fecha': forms.DateInput(format='%d/%m/%Y'),
+            'fecha': forms.DateInput(attrs={'required': True},format='%d/%m/%Y'), 
             'contenido': forms.Textarea(attrs={'cols':50,'rows':5})}
 
 class DecisionAsambleaForm(forms.ModelForm):

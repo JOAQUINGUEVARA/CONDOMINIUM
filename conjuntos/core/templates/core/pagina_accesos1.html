@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends "core/base.html" %}
+{% load static %}
+{% block content %}
+
+<title>{% block tittle %}{% endblock %}Inicio | CONDOMINIUM</title>
+
+<style>
+ .container-accesos{
+  width: 20%;
+  font-size:larger;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 70px;
+ }
+ @media screen and (max-width: 600px) {
+ .container-accesos{
+  width: 80%;
+  font-size:larger;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 70px;
+ }
+}
+ 
+</style>
+<div class="navbar-fixed">
+  <nav>
+    <div class="nav-wrapper">
+      <a style="font-size: calc(12px + 1vw);transform:translate(3vw,0)" href="#!" class="brand-logo"><i class="material-icons">check</i>Accesos</a>
+      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <ul class="right hide-on-med-and-down">
+        <li class="active"><a href="{% url 'direcciona_salida_pagina_accesos' %}">Regresar</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div><h6 style="color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
+    ">Usuario:{{request.user.username}}</h6></div>
+</div>
+
+<ul class="sidenav" id="mobile-demo">
+  <li class="active"><a href="{% url 'direcciona_salida_pagina_accesos' %}">Regresar</a></li>
+</ul>
+  
+
+<head>
+</head>
+<body>
+  <div class="container-accesos" >
+    <ul class="collection with-header" style="background-color: rgb(64, 190, 190);">
+      <li class="collection-header" style="background-color: rgb(76, 172, 172);color:white"><h4>Accesos</h4></li>
+      <li class="collection-item" style="background-color: rgb(217, 243, 243);"><a href="{% url 'acceso_peatonal_lista' %}"  style="color:black;">1-Peatonal</a></li>
+      <li class="collection-item" style="background-color: rgb(217, 243, 243);"><a href="{% url 'acceso_vehicular_lista' %}"  style="color:black;">2-Vehicular</a></li>
+    </ul>
+  </div>
+</body>
+{% block javascript %}
+<script>
+
+  $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+</script>  
+{% endblock %}  
+{% endblock %}

@@ -7,57 +7,99 @@
 {% block content %}
 <title>{% block tittle %}Legislación | CONDOMINIUM{% endblock %}</title>
 <head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css" />
-
+  
 </head>
 
 <style>
-   .collapsible {
-  margin:auto;
-  width: 50em;
-  background:mintcream;
-  box-shadow:1px 1px 2px #333;
-  font-family:Georgia, "Times New Roman", Times, serif;
-  font-size:16px;
-  text-align:justify;
-  flex-direction: column;
-  white-space: normal;
-  
-  }
-  .collapsible-body{
-  padding: 5px 5px 5px 5px;
-  }
-  body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-} 
+    #filtro{
+        background-color: aliceblue;
+    }
+    label{
+        color:black;
+        font-size: large;
+    }
+    
+    .titulo{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-left: 20vw;
+        font-size: calc(1em + 1vw)
+    }
+        
+    .table{
+        background-color: rgb(255, 254, 254);
+    }
+    table, th, td {
+        border: 1px solid rgb(193, 175, 243);
+    }
+    
+    .sidebar{
+    width:20%;
+    background-color: rgb(4, 83, 161);
+    margin-top: 5px;
+    margin-left: 10px;
+    }
+    a {color:white}
+   .main-legislación{display: flex;
+    flex-direction: row; 
+
+   }
+   @media screen and (max-width: 700px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+    .sidebar a {float: left;}
+    div.content {margin-left: 0;}
+    .main-legislación{
+        display: flex;
+        flex-direction: column; 
+    }
+    .navbar-container{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-content: center; 
+    }
+    }
+    @media screen and (max-width: 400px) {
+    .sidebar a {
+      width: 100%;
+      text-align: center;
+      float: none;
+    }
+    .main-legislación{
+        display: flex;
+        flex-direction: column; 
+    }
+    .navbar-container{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-content: center;  
+    }
+    }   
 </style>
 
 <body>
-  <div class="navbar-fixed">
-      <nav>
-        <div class="nav-wrapper">
-          <a style="font-size: calc(7px + 1vw);transform:translate(3vw,0)" href="#!" class="brand-logo"><i class="material-icons">home</i>Legislación</a>
-          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-          <ul class="right hide-on-med-and-down">
-            <li class="active"><a href="{% url 'home' %}"></i>Regresar</a></li>
-            <li><a href="{% url 'logout' %}"></i>Cerrar Sesión</a></li>
-          </ul>
+<div class="main-legislación">
+  <div class="sidebar" >
+      <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+        <div class="py-2 px-3 mb-20 " style="background-color: white;">
+          <div style="color:rgb(8, 8, 8);">Menu Legislación</div>
         </div>
-      </nav>
+          <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+              <br>
+              <li>
+                  <a  href="{% url 'user_home' %}" class="nav-link px-0 align-middle" style="color:rgb(188, 245, 174)">
+                    <i class="material-icons">undo</i><span class="ms-1 d-none d-sm-inline">Regresar</span> </a>
+               </li>
+          </ul>     
+      </div>    
   </div>
-
-  
-  <ul class="sidenav" id="mobile-demo">
-      <li class="active" ><a href="{% url 'home' %}"></i>Regresar</a></li>
-      <li><a href="{% url 'logout' %}"></i>Cerrar Sesión</a></li>
-  </ul>
-  <div><h6 style="color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
-    ">Usuario:{{request.user.username}}</h6>
-  </div>
-</body>
 
 {% load page_extras %}
 {% get_legislacion_list as legislacion_list %}

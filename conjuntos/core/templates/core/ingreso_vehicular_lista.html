@@ -1,189 +1,184 @@
 {% extends "core/base.html" %}
 {% load render_table from django_tables2 %}
-
+{% load django_tables2 %}
 {% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
 {% bootstrap_css %}         {# Embed Bootstrap CSS #}
 {% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
-{% load django_tables2 %}
-{% load humanize %}
 {% load static %}
 {% block content %}
 {{ form.media }}
-
+<!doctype html>
 <style>
- .container-vehicular{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:row;
-  justify-content: space-between;
-  background-color:azure;
-  width: 100%;
-  }
-  .vehicular-buttons{
-    display:flex;
-    justify-content:center;
-    flex-direction:row;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .filter-button{
-    display:flex;
-    justify-content:center;
-    flex-direction:row;
-    align-items: center;
-  }
-  .container-filter{
-    display:flex;
-    flex-direction: row;
-    align-items: center;
-    background-color:rgb(44, 158, 211);
-    height: 85px;
-    width: 100%;
-}
+  .table{
+        background-color: rgb(255, 254, 254);
+    }
+    table, th, td {
+        border: 1px solid rgb(193, 175, 243);
+    }
+    
+    .sidebar{
+    width:20%;
+    background-color: rgb(4, 83, 161);
+    margin-top: 5px;
+    margin-left: 10px;
+    }
+    
+   .main-box{display: flex;
+    flex-direction: row; 
+
+   }
+   .container-filter{
+        display:flex;
+        flex-direction:row;
+        justify-content: center;
+        padding-top: 20px;
+        margin-left:2vw;
+        margin-right: 2vw ;
+        margin:auto;
+        width:80%;
+        background-color: aliceblue;
+    }     
 
 @media screen and (max-width: 600px) {
-  .container-vehicular{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    justify-content: space-between;
-    background-color:azure;
-  
-  }
-  .vehicular-buttons{
-    display:flex;
-    justify-content:center;
-    flex-direction:row;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  table, thead, tbody, th, td, tr { 
-		display: block; 
-	}
+  .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+    .sidebar a {float: left;}
+    
+    div.content {margin-left: 0;}
+    
+    .main-box{
+        display: flex;
+        flex-direction: column; 
+    }
+    .navbar-container{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-content: center; 
+    }
+    }
+    @media screen and (max-width: 400px) {
+    .sidebar a {
+      width: 100%;
+      text-align: center;
+      float: none;
+    }
 	
 	/* Hide table headers (but not display: none;, for accessibility) */
-	thead tr { 
-		position: absolute;
-		top: -9999px;
-		left: -9999px;
-	}
 	
-	tr { border: 1px solid #ccc; }
-	
-	td { 
-		/* Behave  like a "row" */
-		border: none;
-		border-bottom: 1px solid #eee; 
-		position: relative;
-		padding-left: 50%; 
-	}
-	
-	td:before { 
-		/* Now like a table header */
-		position: absolute;
-		/* Top/left values mimic padding */
-		top: 6px;
-		left: 6px;
-		width: 45%; 
-		padding-right: 10px; 
-		white-space: nowrap;
-	}
-  td:nth-of-type(1):before { content: "Identificación"; }
-	td:nth-of-type(2):before { content: "Nombre"; }
-	td:nth-of-type(3):before { content: "TipoIngreso"; }
-	td:nth-of-type(4):before { content: "Tipo Autoriza"; }
-	td:nth-of-type(5):before { content: "Hora Ingreso"; }
-	td:nth-of-type(6):before { content: "Hora Salida"; }
-	td:nth-of-type(7):before { content: "Apartamento"; }
-  td:nth-of-type(8):before { content: "Vigilante"; }
-  td:nth-of-type(9):before { content: "Id"; }
-}
+  .container-filter{
+        display:flex;
+        flex-direction:row;
+        justify-content: center;
+        padding-top: 20px;
+        margin-left:2vw;
+        margin-right: 2vw ;
+        margin:auto;
+        width:80%;
+        background-color: aliceblue;
+    }       
+  
+    }
 </style>
 
-<head>
-  <div class="navbar-fixed">
-    <nav>
-      <div class="nav-wrapper">
-        <a style="font-size: calc(12px + 1vw)" href="#!" class="brand-logo"><i class="material-icons">assignment_turned_in</i>INGRESO VEHICULAR</a>
-        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-        <ul class="right hide-on-med-and-down">
-            <li  class="active"><a href="{% url 'direcciona_salida_acceso_vehicular' %}" >Regresar</a></li>
-        </ul>
-      </div>
-    </nav>
-  </div>
-
-  <ul class="sidenav" id="mobile-demo">
-    <li  class="active"><a href="{% url 'direcciona_salida_acceso_vehicular' %}" >Regresar</a></li>
-  </ul> 
-</head>
-       
-<body>
-  <div id="filtro">
-      <form method="get">
-        <div class="container-filter">
-              <div style="border-style:none; border-width:1; background-color:rgb(109, 203, 247);width: 120px;transform:translate(1vh,0)">
-                <div>Placa:</div><div style="background-color: white;border-radius: 5px;">{{ filter.form.placa }}</div>
-              </div>
-              <div style="border-style:none; border-width:1; background-color:rgb(109, 203, 247);width: 120px;transform:translate(2vh,0)">
-                <div>Hora Ing.:</div><div style="background-color: white;border-radius: 5px;">{{ filter.form.hora_ingreso }}</div>
-              </div>
-              <div style="border-style:none; border-width:1; background-color:rgb(109, 203, 247);width: 120px;transform:translate(3vh,0)">
-                <div>Hora Sal.:</div><div style="background-color: white;border-radius: 5px;">{{ filter.form.hora_salida }}</div>
-              </div>       
-              <div style="border-style:none; border-width:1; background-color:rgb(109, 203, 247);width: 120px;border-radius: 5px;transform:translate(5vh,0)">
-                  <div style="display:flex;">Apartamento:</div><div style="background-color: white;display:flex;border-radius: 5px;">{{ filter.form.apartamento}}</div>
-              </div>
-              <div style="border-style:none; border-width:1; background-color:rgb(109, 203, 247);width: 120px;border-radius: 5px;transform:translate(7vh,0)">
-                <div style="display:flex;">vigilante:</div><div style="background-color: white;display:flex;border-radius: 5px;">{{ filter.form.vigilante}}</div>
-            </div>
+<div id="filtro">
+  <form method="get">
+    <div class="container-filter">
+        <div style="border-style:none; border-width:1; background-color:rgb(109, 203, 247);width: 120px;transform:translate(1vh,0)">
+            <div>Placa:</div><div style="background-color: white;border-radius: 5px;">{{ filter.form.placa }}</div>
           </div>
-          <div style="color:#212529;" class="btnFiltro">
-              {% bootstrap_button 'Filtrar' %}
+          <div style="border-style:none; border-width:1; background-color:rgb(109, 203, 247);width: 120px;transform:translate(2vh,0)">
+            <div>Hora Ing.:</div><div style="background-color: white;border-radius: 5px;">{{ filter.form.hora_ingreso }}</div>
           </div>
-      </form>
-  </div>
-
-  <div>
-    <div class="container-vehicular">
-        <div style="display:flex;align-items:center;justify-content:flex-start;color:darkred;width:180px;margin-top:10px" ><h6>Usuario: {{user}}</h6></div>
-        <a style="display:flex;font-size: calc(7px + 1vw);margin: auto;color:black" type="button" type="submit" href="#" value="autoriza" ><span>INGRESO VEHICULAR</span></a>
-        <div class="filter-button">
-          <div  style="transform:translate(-7vh,0)">Filtro</div>
-          <div><a type="submit" id="btnFiltros" onClick="muestra_oculta('filtro')" style="transform:translate(-16vh,0)" class="btn-floating btn-short waves-effect waves-light cyan" value="crear" ><i class="material-icons">filter_list</i></a></div>
+          <div style="border-style:none; border-width:1; background-color:rgb(109, 203, 247);width: 120px;transform:translate(3vh,0)">
+            <div>Hora Sal.:</div><div style="background-color: white;border-radius: 5px;">{{ filter.form.hora_salida }}</div>
+          </div>       
+          <div style="border-style:none; border-width:1; background-color:rgb(109, 203, 247);width: 120px;border-radius: 5px;transform:translate(5vh,0)">
+              <div style="display:flex;">Apartamento:</div><div style="background-color: white;display:flex;border-radius: 5px;">{{ filter.form.apartamento}}</div>
+          </div>
+          <div style="border-style:none; border-width:1; background-color:rgb(109, 203, 247);width: 120px;border-radius: 5px;transform:translate(7vh,0)">
+            <div style="display:flex;">vigilante:</div><div style="background-color: white;display:flex;border-radius: 5px;">{{ filter.form.vigilante}}</div>
         </div>
-    </div>
-    <div class="vehicular-table">
-      <table class="table table-bordered">
-        {% render_table ingresos %}
-      </table>
-    </div>
-  </div>
-    
-</body>
+      </div>
+      <div style="color:#212529;display:flex;justify-content:center;" class="btnFiltro">
+          {% bootstrap_button 'Filtrar' %}
+      </div>
+  </form>
+</div>
 
+<div class="main-box">
+  <head> 
+      <div class="sidebar" >
+          <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+            <div class="py-2 px-3 mb-20 " style="background-color: white;">
+              <div style="color:rgb(8, 8, 8);">MENU ACCESOS</div>
+            </div>
+              <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                  <br>
+                  <li>
+                      <a  href="{% url 'pagina_administrador' %}" class="nav-link px-0 align-middle" style="color:rgb(188, 245, 174)">
+                        <i class="material-icons">undo</i><span class="ms-1 d-none d-sm-inline">Regresar</span> </a>
+                   </li>
+              </ul>     
+          </div>    
+      </div>
+  </head>
+  <body>
+    <div style="padding-top: 20px;margin-left:2vw;margin-right: 2vw ;margin:auto;width:100%;" >
+      <div style="display:flex;align-items:center;justify-content:center;flex-direction:column;justify-content: space-between;padding-left: 2px;padding-right: 2px;"> 
+          <table>
+            <tr>
+              <th>
+                  <div style="font-size: calc(5px + 1vw);color:black;"><span>INGRESO VEHICULAR</span></div>
+              </th>
+              <th style="border: 1px solid rgb(253, 253, 253);">
+                  <div  style="transform:translate(-7vh,0)">Filtro</div>
+                  <div><a type="submit" id="btnFiltros" onClick="muestra_oculta('filtro')" style="transform:translate(-16vh,0)" class="btn-floating btn-short waves-effect waves-light cyan" value="crear" ><i class="material-icons">filter_list</i></a></div>
+              </th>
+            </tr>    
+            <div class="ingresos-table">
+              {% render_table ingresos %}
+            </div>
+          </table>
+      </div>
+    </div>
+  </body>
+</div>
 {% block javascript %}
   <script>
-    $(document).ready(function(){
-        $('[data-toggle="tooltip"]').tooltip();
-    });
-
-    $(document).ready(function(){
-    $('.sidenav').sidenav();
-    });
-
-    $(document).ready(function(){
-    $('select').formSelect();
-    });
-    
     var sw=0;
     if (sw ==0 ){
         pone_simbolos();
         sw=1
     }
+
+    $( document ).ready(function(){
+       $('.sidenav').sidenav();
+       $('.collapsible').collapsible();
+       $(".dropdown-trigger").dropdown({ hover: true });
+     });
+
+    function pone_simbolos(){
+    $('table tr ').each(function() {
+    var s = $(this).find("#pendiente").html();
+    var thtml = ''
+    if (s == 'True') {
+        thtml = '<td><label><input type="checkbox" checked="checked" id="pendiente"><span></span></label></td>'
+        $(this).find("#pendiente").replaceWith(thtml); 
+    }
+    if (s == 'False') {
+        thtml = '<td><label><input type="checkbox" id="pendiente"><span></span></label></td>'
+        $(this).find("#pendiente").replaceWith(thtml);
+    }
+    });
+    };
+    
+    $(document).ready(function(){
+    $('select').formSelect();
+    });
 
     function muestra_oculta(id){
     if (document.getElementById){ //se obtiene el id
@@ -194,39 +189,6 @@
     window.onload = function(){/*hace que se cargue la función lo que predetermina que div estará oculto hasta llamar a la función nuevamente*/
     muestra_oculta('filtro');/* "contenido_a_mostrar" es el nombre que le dimos al DIV */
     }
-
-    function pone_simbolos(){
-    $('table tr ').each(function() {
-    var s = $(this).find("#activo").html();
-    var thtml = ''
-    if (s == 'True') {
-        thtml = '<td><label><input type="checkbox" checked="checked" id="activo"><span></span></label></td>'
-        $(this).find("#activo").replaceWith(thtml); 
-    }
-    if (s == 'False') {
-        thtml = '<td><label><input type="checkbox" id="activo" ><span></span></label></td>'
-        $(this).find("#activo").replaceWith(thtml);
-    }
-  
-    });
-    }
-
-    $(document).on("click","#activo", function(e) {
-        e.stopImmediatePropagation();
-        var currentRow=$(this).closest("tr");
-        var id = currentRow.find("#id").text();
-        var id_old = id
-        var thtml = '';
-        $.ajax({
-        url: "{% url 'ajax_switch_activo_autorizado_peatonal' %}",
-        data: {'id':id},
-        method: "GET",
-        dataType: 'json',
-        success: function (data) {
-        window.location.href = "{% url 'direcciona_salida_autorizaciones_peatonal' %}";
-        }
-        });
-    });
-  </script>
+</script>    
 {% endblock %}
 {% endblock %}

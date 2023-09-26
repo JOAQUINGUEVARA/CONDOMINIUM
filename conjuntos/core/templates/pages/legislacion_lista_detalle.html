@@ -26,74 +26,98 @@
         border: 1px solid black;
     }
 
-    nav >ul{ margin: 0 auto; width: 80px; }
-            nav ul li{
-                display: block;
-                float: left;
-                /* margin-left:-40px; */
-                position: relative;
-            }
-    nav ul a{
-                display: block;
-                float: left;
-                width: 180px;
-                padding: 10px 20px;
-            }
-            
-    #dropdown-accesos {
-              top:-60px;
+    
+    .table{
+        background-color: rgb(255, 254, 254);
     }
-    .panel-body .btn:not(.btn-block) { width:120px;margin-bottom:10px; }
+    table, th, td {
+        border: 1px solid rgb(193, 175, 243);
+    }
+    
+    .sidebar{
+    width:20%;
+    background-color: rgb(4, 83, 161);
+    margin-top: 5px;
+    margin-left: 10px;
+    }
+    
+   .main-legislación{display: flex;
+    flex-direction: row; 
 
-    .sidenav li>a {padding:0 32px !important}
-      .collapsible-body>ul>li>a {
-        padding: 0 48px !important;
-        font-weight: 400 !important;
-      }
+   }
+   @media screen and (max-width: 700px) {
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+    .sidebar a {float: left;}
+    div.content {margin-left: 0;}
+    .main-legislación{
+        display: flex;
+        flex-direction: column; 
+    }
+    .navbar-container{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-content: center; 
+    }
+    }
+    @media screen and (max-width: 400px) {
+    .sidebar a {
+      width: 100%;
+      text-align: center;
+      float: none;
+    }
+    .main-legislación{
+        display: flex;
+        flex-direction: column; 
+    }
+    .navbar-container{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-content: center;  
+    }
+    }   
+            
+    
 </style>
 
 <head> 
-   
+  <div class="main-legislación">
+      <div class="sidebar" >
+          <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+            <div class="py-2 px-3 mb-20 " style="background-color: white;">
+              <div style="color:rgb(8, 8, 8);">Legislación Detalle</div>
+            </div>
+              <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                  <br>
+                  <li>
+                      <a  href="{% url 'lista_legislacion' %}" class="nav-link px-0 align-middle" style="color:rgb(188, 245, 174)">
+                        <i class="material-icons">undo</i><span class="ms-1 d-none d-sm-inline">Regresar</span> </a>
+                   </li>
+              </ul>     
+          </div>    
+      </div>
 </head>
 
 <!-- <body style="background-image: url({% static '/img/ciudad.jpg' %});"> -->
-         
-    
-    <div class="navbar-fixed">
-        <nav>
-          <div class="nav-wrapper">
-            <a style="font-size: calc(7px + 1vw);transform:translate(3vw,0)" href="#!" class="brand-logo"><i class="material-icons">home</i>Legislación</a>
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            <ul class="right hide-on-med-and-down">
-              <li class="active"><a href="{% url 'lista_legislacion' %}"></i>Regresar</a></li>
-            </ul>
-          </div>
-        </nav>
-    </div>
-  
-    
-    <ul class="sidenav" id="mobile-demo">
-        <li class="active" ><a href="{% url 'lista_legislacion' %}"></i>Regresar</a></li>
-    </ul>
-
-    <div><h6 style="color:black;background-color: gold;width: 200px;margin-left: 20px;border-radius: 25px;height:30px;padding-top:2px;padding-left:10px;text-align: center;box-shadow: 10px 5px 5px black;
-      ">Usuario:{{request.user.username}}</h6>
-    </div>
    
-  
-    <div class="container-activos" tyle="padding-top: 20px;margin-left:2vw;margin-right: 2vw ;margin:auto;width:80%;" >
+<body>
+  <div style="padding-top: 20px;margin-left:2vw;margin-right: 2vw ;margin:auto;width:100%;" >
+    <div style="display:flex;align-items:center;justify-content:center;flex-direction:column;justify-content: space-between;padding-left: 2px;padding-right: 2px;"> 
+    
       <div style="display:flex;align-items:center;justify-content:center;flex-direction:row;justify-content: space-between;background-color:azure;">  
-          <div style="display:flex;align-items:center;justify-content:flex-start;color:darkred;width:180px;margin-top:10px" ><h6>Usuario: {{user}}</h6></div>
-          <a style="display:flex;font-size: calc(5px + 1vw);margin: auto;color:black;transform:translate(-7vh,0)" type="button" type="submit" href="#" value="autoriza" ><span>LEGISLACION</span></a>
-      <!--     <div style="transform:translate(-2vh,0)">Nueva Legislación</div><a id ="btnNuevo" type="submit" style="transform:translate(-20vh,0)" class="btn-floating btn-short waves-effect waves-light blue" href="{% url 'crear_legislacion' %}" value="crear" ><i class="material-icons">add</i></a>         -->
+          <a style="display:flex;font-size: calc(5px + 1vw);margin: auto;color:black;transform:translate(-7vh,0)" type="button" type="submit" href="#" value="autoriza" ><span>LEGISLACION DETALLE</span></a>
       </div>
       <hr width=50% style="color:black;size:20">
       
-  </div>      
+    </div>      
     <hr width=50% style="color:black;size:20">
     <div class="container" style="background-color:aliceblue">
-            
-  
+          
       
           {% for legislacion in legislacion %}
             <div class="row mt-3">

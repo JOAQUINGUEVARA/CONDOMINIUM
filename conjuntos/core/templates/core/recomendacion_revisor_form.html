@@ -67,7 +67,7 @@
 {% block javascript %}
 <script>
     $(document).on("click","#btnSalir", function(e) {
-        window.location.href = "{% url 'lista_informes_revisor' %}";
+        window.location.href = "{% url 'direcciona_informe_revisor' %}";
     })
     $(document).ready(function(){
     $('#id_fecha_cumplido').datepicker();

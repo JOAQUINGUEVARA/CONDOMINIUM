@@ -58,7 +58,7 @@
 {% block javascript %}
 <script>
     $(document).on("click","#btnSalir", function(e) {
-          window.location.href = "{% url 'lista_proyectos' %}";
+          window.location.href = "{% url 'direcciona_proyecto' %}";
     })
     $(document).ready(function(){
     $('#id_fecha').datepicker();

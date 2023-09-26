@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang='es'>
+    {% extends "core/base_sin_material.html" %}
+    {% load crispy_forms_tags %}
+    {% load static %}
+    {% block content %}
+    
+    {% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+    {% bootstrap_css %}         {# Embed Bootstrap CSS #}
+    {% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+    {{ form.media }}            {# Adds date-picker required JS and CSS #}
+    {% load humanize %}
+    
+    <head>
+    
+    </head>
+           
+    <style>
+   
+           
+    
+    
+    </style>
+    <main role="main">
+      <div class="container-doc">
+          <div class="col-md-6 mx-auto mb-6">
+                <div class="titulo">
+                    <h2>ACTIVOS FIJOS</h2>
+                </div>
+                </br>
+                <div class="container">
+                  <form role="form" method="post">
+                    </br>
+                    {% csrf_token %}
+                  
+
+                    <div style="display:flex;flex-direction:column;">
+                        <div style="display:flex;margin-left:20px">{{ form.nombre|as_crispy_field }}</div>
+                        <div style="display:flex;flex-direction:row;align-items: center;">
+                            <div style="display:flex;margin-left:20px;">{{ form.tipo_activo|as_crispy_field }}</div>
+                            <div style="display:flex;margin-left:20px;transform:translate(0,5px)"><a id="btnGuardaTipoActivo" type="button" href="{% url 'crear_tipo_activo' %}" class="btn btn-primary" value="nuevo" >Crear Tipo Activo</a></div>
+                        </div>
+                        <div style="display:flex;margin-left:20px;">{{ form.descripcion|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.marca|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.serial|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.valor_libros|as_crispy_field|intcomma }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.cantidad|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.mantenimiento|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.frecuencia_mantenimiento|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.ultimo_mantenimiento|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.placa_numero|as_crispy_field }}</div>
+                        <div style="display:flex;margin-left:20px;">{{ form.prestado|as_crispy_field }}</div>
+                    </div> 
+                    <button id="btnGuardar" type="submit" class="btn btn-primary">Guardar</button>
+                    <button id="btnSalir" class="btn btn-warning" data-dismiss="modal">Salir</button>
+                  </form>
+                </div>
+                
+          </div> 
+      </div>
+    </main>
+    <div style="width:30%;height: 50%;" class="modal fade" id="datosServicioModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <!-- <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5> -->
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              
+            </div>
+            <div class="modal-footer">
+              
+            </div>
+          </div>
+        </div>
+    </div>
+    
+    {% block javascript %}
+    <script>
+         $(document).on("click","#btnSalir", function(e) {
+          window.location.href = "{% url 'activos_fijos_lista' %}";
+        })
+
+        $("#id_nombre").change(function () {
+        const nombre_activo = $(this).val();
+        $.ajax({
+          url: "{% url 'guarda_nombre_activo' %}",
+          data: {'nombre_activo': nombre_activo},
+          type: 'GET',
+          dataType: 'json',
+              
+        });
+        });
+
+    </script> 
+    {% endblock %}             
+    {% endblock %}

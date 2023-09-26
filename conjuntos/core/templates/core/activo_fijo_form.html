@@ -12,7 +12,18 @@
     {% load humanize %}
     
     <head>
-    
+      <script src="//jonthornton.github.io/jquery-timepicker/jquery.timepicker.js"></script>
+
+      <link href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet"/>
+      <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet"/>
+      <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet"/>
+      <link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet"/>
+
+
+      <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     </head>
            
     <style>
@@ -41,15 +52,23 @@
                             <div style="display:flex;margin-left:20px;transform:translate(0,5px)"><a id="btnGuardaTipoActivo" type="button" href="{% url 'crear_tipo_activo' %}" class="btn btn-primary" value="nuevo" >Crear Tipo Activo</a></div>
                         </div>
                         <div style="display:flex;margin-left:20px;">{{ form.descripcion|as_crispy_field }}</div>
-                        <div style="display:flex;margin-left:20px;">{{ form.marca|as_crispy_field }}</div>
-                        <div style="display:flex;margin-left:20px;">{{ form.serial|as_crispy_field }}</div>
-                        <div style="display:flex;margin-left:20px;">{{ form.valor_libros|as_crispy_field|intcomma }}</div>
-                        <div style="display:flex;margin-left:20px;">{{ form.cantidad|as_crispy_field }}</div>
-                        <div style="display:flex;margin-left:20px;">{{ form.mantenimiento|as_crispy_field }}</div>
-                        <div style="display:flex;margin-left:20px;">{{ form.frecuencia_mantenimiento|as_crispy_field }}</div>
-                        <div style="display:flex;margin-left:20px;">{{ form.ultimo_mantenimiento|as_crispy_field }}</div>
-                        <div style="display:flex;margin-left:20px;">{{ form.placa_numero|as_crispy_field }}</div>
-                        <div style="display:flex;margin-left:20px;">{{ form.prestado|as_crispy_field }}</div>
+                        <div style="display:flex;flex-direction:row;align-items: center;">
+                          <div style="display:flex;margin-left:20px;">{{ form.marca|as_crispy_field }}</div>
+                          <div style="display:flex;margin-left:20px;">{{ form.serial|as_crispy_field }}</div>
+                        </div>
+                        <div style="display:flex;flex-direction:row;align-items: center;">
+                          <div style="display:flex;margin-left:20px;">{{ form.valor_libros|as_crispy_field|intcomma }}</div>
+                          <div style="display:flex;margin-left:20px;">{{ form.cantidad|as_crispy_field }}</div>
+                        </div>
+                        <div style="display:flex;flex-direction:row;align-items: center;">
+                          <div style="display:flex;margin-left:20px;">{{ form.mantenimiento|as_crispy_field }}</div>
+                          <div style="display:flex;margin-left:20px;">{{ form.frecuencia_mantenimiento|as_crispy_field }}</div>
+                        </div>
+                        <div style="display:flex;flex-direction:row;align-items: center;">
+                          <div style="display:flex;margin-left:20px;">{{ form.ultimo_mantenimiento|as_crispy_field }}</div>
+                          <div style="display:flex;margin-left:20px;">{{ form.placa_numero|as_crispy_field }}</div>
+                          <div style="display:flex;margin-left:20px;">{{ form.prestado|as_crispy_field }}</div>
+                        </div>
                     </div> 
                     <button id="btnGuardar" type="submit" class="btn btn-primary">Guardar</button>
                     <button id="btnSalir" class="btn btn-warning" data-dismiss="modal">Salir</button>
@@ -80,6 +99,32 @@
     
     {% block javascript %}
     <script>
+        
+        
+        $(document).ready(function(){
+        $('#id_ultimo_mantenimiento').datepicker();
+        });
+        
+        jQuery(function ($) {
+        $.datepicker.regional['es'] = {
+        closeText: 'Cerrar',
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+        'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié;', 'Juv', 'Vie', 'Sáb'],
+        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+        weekHeader: 'Sm',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+        };
+        $.datepicker.setDefaults($.datepicker.regional['es']);
+        });
+        
          $(document).on("click","#btnSalir", function(e) {
           window.location.href = "{% url 'activos_fijos_lista' %}";
         })

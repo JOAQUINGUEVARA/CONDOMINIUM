@@ -13,7 +13,7 @@ from django.dispatch import receiver
 from datetime import datetime,timezone,tzinfo,date,timedelta
 
 
-from sqlalchemy import Integer 
+#from sqlalchemy import Integer 
 #from django.contrib.auth import get_user_model
 #UserPerfil = get_user_model()
 #from django.utils import timezone
@@ -683,6 +683,7 @@ class PrestamoActivoFijo(models.Model):
 	cantidad = models.IntegerField(null=False,blank=False,default=0,verbose_name='Cantidad')
 	dias = models.CharField(null=False,blank=False,max_length=20,default='',verbose_name='Dias')
 	devuelto = models.BooleanField(default=False,verbose_name='Devuelto')
+	fecha_devuelto = models.DateField(null=True,blank=True,default=None,verbose_name='Fecha Devuelto')
 	
 	class Meta:
 		ordering=["id"]
@@ -971,7 +972,7 @@ class ReunionConsejo(models.Model):
 	numero_acta = models.CharField(max_length=10,blank=True,default='',verbose_name='Número Acta')
 	hora_inicio =  models.TimeField(blank=True,default=datetime.time(datetime.now()),verbose_name='Hora Inicio')
 	hora_final =  models.TimeField(blank=True,default=datetime.time(datetime.now()),verbose_name='Hora Final')
-
+	
 	class Meta:
 		ordering=["id"]
 		verbose_name='Reunion Consejo'

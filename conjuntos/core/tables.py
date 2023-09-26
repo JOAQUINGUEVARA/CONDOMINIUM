@@ -270,10 +270,10 @@ class ResidenteTable(tables.Table):
             "id": lambda record: record.pk
         }
      
-    Editar = tables.TemplateColumn(
+    """ Editar = tables.TemplateColumn(
         '{% csrf_token %}'
         '''<a id= "BtnEditar" type="button" class="btn-floating btn-short waves-effect waves-light orange" href="{% url 'editar_residente' record.id %}" value="editar" ><i class="material-icons">edit</i></a>'''
-    )
+    ) """
     Detalle = tables.TemplateColumn(
         '{% csrf_token %}'
         '''<a id="BtnDetalle" type="button" class="btn-floating btn-short waves-effect waves-light brown" href="{% url "informacion_residente_detalle" record.id %}" value="detalle" ><i class="material-icons">view_headline</i></a>'''
@@ -287,7 +287,8 @@ class CorreosResidentesTable(tables.Table):
 
     envio_email = tables.Column(
         attrs={"td": {"id": "envio_email"}})
-          
+    id = tables.Column(
+        attrs={"td": {"id": "id"}})      
     class Meta:
         model = Residente
         fields = ('interior','apartamento','identificacion','nombre','email','envio_email')
@@ -300,7 +301,8 @@ class TokensResidentesTable(tables.Table):
 
     envio_token = tables.Column(
         attrs={"td": {"id": "envio_token"}})
-          
+    id = tables.Column(
+        attrs={"td": {"id": "id"}})       
     class Meta:
         model = Residente
         fields = ('interior','apartamento','identificacion','nombre','token','envio_token')
@@ -394,6 +396,7 @@ class ActivoFijoTable(tables.Table):
         row_attrs = {
             "id": lambda record: record.pk
         }
+
     Editar = tables.TemplateColumn(
         '{% csrf_token %}'
         '''<a id="BtnEditarActivo" type="button" class="btn-floating btn-short waves-effect waves-light orange" href="{% url "edita_activo_fijo" pk=record.id %}" value="editar"><i class="material-icons">edit</i></a>'''
@@ -402,7 +405,7 @@ class ActivoFijoTable(tables.Table):
         '{% csrf_token %}'
         '''<a id="BtnBorrarActivo" type="button" class="btn-floating btn-short waves-effect waves-light brown" href="{% url "borra_activo_fijo" pk=record.id %}" value="editar"><i class="material-icons">delete</i><</a>'''
     )
-    Adic_Mant = tables.TemplateColumn(
+    """ Adic_Mant = tables.TemplateColumn(
         '{% csrf_token %}'
         '''<a id="BtnCreaMantenimiento" type="button" class="btn-floating btn-short waves-effect waves-light blue" href="{% url 'crea_mantenimiento' %}" value="crear"><i class="material-icons">add</i></a>'''
     )
@@ -413,7 +416,7 @@ class ActivoFijoTable(tables.Table):
     Adic_Baja = tables.TemplateColumn(
         '{% csrf_token %}'
         '''<a id="BtnCreaPrestamo" type="button" class="btn-floating btn-short waves-effect waves-light cyan" href="{% url 'crea_baja_activo' %}" value="crear"><i class="material-icons">add</i></a>'''
-    )
+    ) """
     Foto = tables.TemplateColumn(
         '{% csrf_token %}'
         '''<a id="BtnUpload" type="button" class="btn-floating btn-short waves-effect waves-light Red" href="{% url "carga_foto_activo_fijo" record.id %}" value="borrar" style="color:red"><i class="material-icons">portrait</i></a>'''
@@ -442,7 +445,7 @@ class ActivoFijo1Table(tables.Table):
     ) """
     Detalle = tables.TemplateColumn(
         '{% csrf_token %}'
-        '''<a id="BtnDetalle" type="button" class="btn-floating btn-short waves-effect waves-light blue" href="{% url "activos_fijos_detalle" record.id %}" value="detalle" ><i class="material-icons">view_headline</i></a>'''
+        '''<a id="BtnDetalle" type="button" class="btn-floating btn-short waves-effect waves-light brown" href="{% url "activos_fijos_detalle" record.id %}" value="detalle" ><i class="material-icons">view_headline</i></a>'''
     )
     Foto = tables.TemplateColumn(
         '{% csrf_token %}'
@@ -464,7 +467,7 @@ class PrestamosActivosFijosTable(tables.Table):
         attrs={"td": {"id": "id"}})      
     class Meta:
         model = PrestamoActivoFijo
-        fields = ('fecha','activo_fijo','responsable','cantidad','devuelto')
+        fields = ('fecha','activo_fijo','responsable','cantidad','fecha_devuelto','devuelto')
         template_name = 'django_tables2/semantic.html'
         attrs = {"class": "table table-hover table-sm"}
         row_attrs = {
@@ -473,6 +476,10 @@ class PrestamosActivosFijosTable(tables.Table):
     Borrar = tables.TemplateColumn(
         '{% csrf_token %}'
         '''<a id="BtnBorrarActivo" type="button" class="btn-floating btn-short waves-effect waves-light red" href="{% url "borra_prestamo_activo_fijo" pk=record.id %}" value="editar"><i class="material-icons">delete</i><</a>'''
+    )
+    Devolucion = tables.TemplateColumn(
+        '{% csrf_token %}'
+        '''<a id="BtnDevolucionActivo" type="button" class="btn-floating btn-short waves-effect waves-light purple" href="{% url "devolucion_activo_fijo" pk=record.id %}" value="editar"><i class="material-icons">replay</i><</a>'''
     )
     PDF = tables.TemplateColumn(
         '{% csrf_token %}'
@@ -521,7 +528,7 @@ class ProveedoresTable(tables.Table):
           
     class Meta:
         model = Proveedor
-        fields = ('cc_nit','tipo_identificacion','servicio_provee','nombre','telefono','celular','direccion','email','persona_contacto','telefono_contacto','celular_contacto','email_contacto','calificacion')
+        fields = ('cc_nit','tipo_identificacion','servicio_provee','nombre','telefono','celular','direccion','email','calificacion')
         template_name = 'django_tables2/semantic.html'
         attrs = {"class": "table table-hover table-sm"}
         row_attrs = {
@@ -557,14 +564,6 @@ class ProponentesTable(tables.Table):
         row_attrs = {
             "id": lambda record: record.pk
         }
-    """ Editar = tables.TemplateColumn(
-        '{% csrf_token %}'
-        '''<a id="BtnEditar" type="button" class="btn-floating btn-short waves-effect waves-light orange" type="edit" href="{% url "edita_proponente" pk=record.id %}" value="editar" style="color:red"><i class="material-icons">edit</i></a>'''
-    ) """
-    """ Borrar = tables.TemplateColumn(
-        '{% csrf_token %}'
-        '''<a id="BtnBorrar" type="button" class="btn-floating btn-short waves-effect waves-light red" href="{% url "borra_proponente" pk=record.id %}" value="editar" style="color:red"><i class="material-icons">delete</i></a>'''
-    )     """	
     Detalle = tables.TemplateColumn(
         '{% csrf_token %}'
         '''<a id="BtnDetalle" type="button" class="btn-floating btn-short waves-effect waves-light brown" href="{% url "proponente_detalle" record.id %}" value="detalle" ><i class="material-icons">view_headline</i></a>'''

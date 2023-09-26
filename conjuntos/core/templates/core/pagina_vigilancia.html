@@ -81,7 +81,7 @@
       {% get_vigilancia_list as vigilancia_list %}
       {% for vigilancia in vigilancia_list %}
       {% if vigilancia.email == request.user.email %}
-      <div class="image-box" data-type="image" itemprop="image"><img src="{{vigilancia.foto.url}}" alt="..." width='300' height="200"></div>
+      <div class="image-box" data-type="image" itemprop="image"><img src="{{vigilancia.foto.url}}" alt="..." width='250' height="250"></div>
       {% endif %}
       {% endfor %}
       <div class="container-buttons">
@@ -91,7 +91,7 @@
               <a class="waves-effect waves-light btn-large" href="{% url 'acceso_vehicular' %}" style="height:150px;background: no-repeat;background-image: url({% static 'core/img/Vehiculo.jpg' %});background-size: contain;width='30' height='20'"><i class="material-icons center"><span class="material-symbols-outlined" style="font-size: calc(15px + 1vw);"></i></a>
             </div>  
           
-            <a class="waves-effect waves-light btn-large" style="font-size: calc(.4rem + .5vw);">CORRESPONDENCIA</a>
+            <a class="waves-effect waves-light btn-large" style="font-size: calc(.4rem + .35vw);">CORRESPONDENCIA</a>
             <a class="waves-effect waves-light btn-large" href="{% url 'lista_correspondencia' %}" style="height:150px;background: no-repeat;background-image: url({% static 'core/img/Correspondencia.png' %});background-size: contain;width='30' height='20'"><i class="material-icons center"><span class="material-symbols-outlined" style="font-size: calc(15px + 1vw);"></i></a>  
           
             <a class="waves-effect waves-light btn-large" style="font-size: calc(.4rem + 1vw);">ALERTAS</a>

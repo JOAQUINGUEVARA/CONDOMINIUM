@@ -1,0 +1,106 @@
+{% extends "core/base.html" %}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% load static %}
+{% block content %}
+{% load humanize %}
+{{ form.media }}
+
+<style>
+.table{
+        background-color: rgb(255, 254, 254);
+    }
+    table, th, td {
+        border: 1px solid rgb(193, 175, 243);
+    }
+    
+    .sidebar{
+    width:20%;
+    background-color: rgb(4, 83, 161);
+    margin-top: 5px;
+    margin-left: 10px;
+    }
+    
+   .main-box{display: flex;
+    flex-direction: row; 
+
+   }
+   .container-filter{
+        display:flex;
+        flex-direction:row;
+        justify-content: center;
+        padding-top: 20px;
+        margin-left:2vw;
+        margin-right: 2vw ;
+        margin:auto;
+        width:80%;
+        background-color: aliceblue;
+    }     
+
+@media screen and (max-width: 600px) {
+  .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+    .sidebar a {float: left;}
+    
+    div.content {margin-left: 0;}
+    
+    .main-box{
+        display: flex;
+        flex-direction: column; 
+    }
+    .navbar-container{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-content: center; 
+    }
+    }
+    @media screen and (max-width: 400px) {
+    .sidebar a {
+      width: 100%;
+      text-align: center;
+      float: none;
+    }
+</style>
+
+<div class="main-box">
+    <head> 
+        
+        <div class="sidebar" >
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                <div class="py-2 px-3 mb-20 " style="background-color: white;">
+                <div style="color:rgb(8, 8, 8);">Menu Re´prtes Reuniones Consejo</div>
+                </div>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                    <br>
+                    <li>
+                        <a  href="{% url 'lista_reuniones_consejo' %}" class="nav-link px-0 align-middle" style="color:rgb(188, 245, 174)">
+                        <i class="material-icons">undo</i><span class="ms-1 d-none d-sm-inline">Regresar</a>
+                    </li>
+                </ul>     
+            </div>    
+        </div>
+    </head>
+
+
+    <ul class="sidenav" id="mobile-demo">
+    <li  class="active"><a href="{% url 'lista_reuniones_consejo' %}" >Regresar</a></li>
+    </ul>
+
+    </div>
+    <div style="padding-top: 20px;margin-left:2vw;margin-right: 2vw ;margin:auto;width:80%;" class="container-activos">
+        <div style="display:flex;align-items:center;justify-content:center;flex-direction:row;justify-content: space-between;background-color:azure;">  
+            <div style="display:flex;align-items:center;justify-content:flex-start;color:darkred;width:180px;margin-top:10px" ><h6>Usuario: {{user}}</h6></div>
+        </div>
+        <div class="container1" style="width: 20%;font-size:larger;margin-left: auto;margin-right: auto;">
+        <ul>
+            <li><a href="{% url 'reporte_reuniones_consejo_xls' tipo=3 estado=0 %}"  style="color:black;">Reuniones</a></li>
+            <li><a href="{% url 'reporte_reuniones_consejo_xls' tipo=1 estado=1 %}"  style="color:black;">Compromisos Cumplido</a></li>
+            <li><a href="{% url 'reporte_reuniones_consejo_xls' tipo=1 estado=0 %}"  style="color:black;">Compromisos Pendientes</a></li>
+            <li><a href="{% url 'reporte_reuniones_consejo_xls' tipo=2 estado=0 %}"  style="color:black;">Decisiones</a></li>
+        </ul>
+    </div>
+
+{% endblock %}

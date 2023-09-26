@@ -86,9 +86,12 @@
                         
                         
                         <div style="display:flex;margin-left:20px;">{{ form.persona_contacto|as_crispy_field }}</div>
+                        
+                        <div style="display:flex;flex-direction:row;align-items: center;">
                         <div style="display:flex;margin-left:20px;">{{ form.telefono_contacto|as_crispy_field }}</div>
-                       
                         <div style="display:flex;margin-left:20px;">{{ form.celular_contacto|as_crispy_field }}</div>
+                        </div>
+
                         <div style="display:flex;margin-left:20px;">{{ form.email_contacto|as_crispy_field }}</div>
                         
                         <div style="display:flex;margin-left:20px;">{{ form.calificacion|as_crispy_field }}</div>
@@ -123,7 +126,9 @@
     
     {% block javascript %}
     <script>
-        
+        $(document).on("click","#btnSalir", function(e) {
+          window.location.href = "{% url 'lista_proveedores' %}";
+        })
         $("#id_cc_nit").change(function () {
         const cc_nit = $(this).val();
         let posicion = cc_nit.indexOf('.');

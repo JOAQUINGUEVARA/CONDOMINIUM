@@ -64,7 +64,7 @@
 {% block javascript %}
 <script>
     $(document).on("click","#btnSalir", function(e) {
-        window.location.href = "{% url 'informacion_residentes' %}";
+        window.location.href = "{% url 'direcciona_informacion_residente_detalle' %}";
     })
     
     $("#id_placa" ).change(function() {

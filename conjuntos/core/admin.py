@@ -3,20 +3,20 @@ from .models import Apartamento,Interior,Parqueadero,Deposito,Inmobiliaria,Resid
 from .models import IngresoVehiculo,Vehiculo,Vigilante,Visitante,Mascota,Correspondencia,Conjunto,ZonaComun,UserPerfil,TipoIdentificacion,Proveedor,ServicioProveedor,MiembroConsejo
 from .models import Contrato,Mantenimiento,TipoContrato,Parqueadero,Vehiculo,VisitanteVehiculo,AutorizacionVehiculo,PrestamoActivoFijo,Proponente,Contrato,Reparacion,TipoProyecto
 from .models import TipoAutoriza,TipoPlataformaWeb,PlataformaWebVehiculo,PlataformaWebPeatonal,AvanceObra,ReunionConsejo,CompromisoConsejo,DecisionConsejo,MiembroStaff,InformeRevisor
-from .models import MiembroComiteConvivencia,RecomendacionRevisor,TipoProceso,ProcesoJuridico,GestionProcesoJuridico,TipoAsamblea,Asamblea,DecisionAsamblea
-
+from .models import MiembroComiteConvivencia,RecomendacionRevisor,TipoProceso,ProcesoJuridico,GestionProcesoJuridico,TipoAsamblea,Asamblea,DecisionAsamblea,Reservas
 from .models import ProponenteProyecto,Obra
-from pages.models import Clasificado,Pqr,TipoPqr
 from import_export.admin import ImportExportModelAdmin
 from import_export import fields,resources
-
+from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
 from django.conf.locale.es import formats as es_formats
 es_formats.DATE_FORMAT = 'd-m-y'
 
 # Register your models here.
 
 class ConjuntoAdmin(admin.ModelAdmin):
-    list_display= ('id','razon_social','direccion','telefono','nombre_administrador','numero_unidades','estrato','email','pagina_web','foto')
+    list_display= ('id','nombre','razon_social','direccion','telefono','nombre_administrador','numero_unidades','estrato','email','pagina_web','foto')
 
 admin.site.register(Conjunto,ConjuntoAdmin)
 
@@ -99,42 +99,92 @@ class Residente(ImportExportModelAdmin):
     list_per_page = 15
 
 
-class TipoIngresoAdmin(admin.ModelAdmin):
+class TipoIngresoResource(resources.ModelResource):
+    class Meta:
+        model = TipoIngreso
+        skip_unchanged = True
+        report_skipped = True
+        fields = ('id','descripcion')
+        exclude = ('id')
+
+@ admin.register (TipoIngreso)
+class TipoIngreso(ImportExportModelAdmin):
     list_display= ('id','descripcion',)
     list_filter=('descripcion',)
+    list_per_page = 15
 
-admin.site.register(TipoIngreso, TipoIngresoAdmin)
 
-class AutorizadoAdmin(admin.ModelAdmin):
+class AutorizadoResource(resources.ModelResource):
+    class Meta:
+        model = Autorizado
+        skip_unchanged = True
+        report_skipped = True
+        fields = ('id','identificacion','nombre','tipo_autoriza','foto','interior','apartamento',)
+        exclude = ('id')
+
+@ admin.register (Autorizado)
+class Autorizado(ImportExportModelAdmin):
     list_display= ('id','identificacion','nombre','tipo_autoriza','foto','interior','apartamento',)
     list_filter=('identificacion','nombre','tipo_autoriza','interior','apartamento',)
+    list_per_page = 15
 
-admin.site.register(Autorizado, AutorizadoAdmin)
+class IngresoPeatonalResource(resources.ModelResource):
+    class Meta:
+        model = IngresoPeatonal
+        skip_unchanged = True
+        report_skipped = True
+        fields = ('id','identificacion','tipoingreso','vigilante','hora_ingreso','hora_salida','interior','apartamento',)
+        exclude = ('id')
 
-class IngresoPeatonalAdmin(admin.ModelAdmin):
+@ admin.register (IngresoPeatonal)
+class IngresoPeatonal(ImportExportModelAdmin):
     list_display= ('id','identificacion','tipoingreso','vigilante','hora_ingreso','hora_salida','interior','apartamento',)
     list_filter=('identificacion','tipoingreso','vigilante','hora_ingreso','hora_salida','interior','apartamento',)
+    list_per_page = 15
 
-admin.site.register(IngresoPeatonal, IngresoPeatonalAdmin)
 
-class VigilanteAdmin(admin.ModelAdmin):
+class VigilanteResource(resources.ModelResource):
+    class Meta:
+        model = Vigilante
+        skip_unchanged = True
+        report_skipped = True
+        fields = ('id','nombre')
+        exclude = ('id')
+
+@ admin.register (Vigilante)
+class Vigilante(ImportExportModelAdmin):
     list_display= ('id','nombre',)
     list_filter=('nombre',)
+    list_per_page = 15
 
-admin.site.register(Vigilante, VigilanteAdmin)
+class VisitanteResource(resources.ModelResource):
+    class Meta:
+        model = Visitante
+        skip_unchanged = True
+        report_skipped = True
+        fields = ('id','identificacion','nombre','foto',)
+        exclude = ('id')
 
-class VisitanteAdmin(admin.ModelAdmin):
+@ admin.register (Visitante)
+class Visitante(ImportExportModelAdmin):
     list_display= ('id','identificacion','nombre','foto',)
     list_filter=('identificacion','nombre',)
+    list_per_page = 15
 
-admin.site.register(Visitante, VisitanteAdmin)
 
-class IngresoVehiculoAdmin(admin.ModelAdmin):
+class IngresoVehiculoResource(resources.ModelResource):
+    class Meta:
+        model = IngresoVehiculo
+        skip_unchanged = True
+        report_skipped = True
+        fields = ('id','placa','tipo_autoriza','foto','vigilante','hora_ingreso','hora_salida','interior','apartamento',)
+        exclude = ('id')
+
+@ admin.register (IngresoVehiculo)
+class IngresoVehiculo(ImportExportModelAdmin):
     list_display= ('id','placa','tipo_autoriza','foto','vigilante','hora_ingreso','hora_salida','interior','apartamento',)
     list_filter=('placa','tipo_autoriza','foto','vigilante','hora_ingreso','hora_salida','interior','apartamento',)
-
-admin.site.register(IngresoVehiculo, IngresoVehiculoAdmin)
-
+    list_per_page = 15
 
 class VehiculoResource(resources.ModelResource):
     class Meta:
@@ -164,39 +214,56 @@ class Mascota(ImportExportModelAdmin):
     search_fields = ['tipo_mascota','raza','edad','interior','apartamento']
     list_per_page = 15
 
+class CorrespondenciaResource(resources.ModelResource):
+    class Meta:
+        model = Correspondencia
+        skip_unchanged = True
+        report_skipped = True
+        fields = ('id','remitente','destinatario','clase_correspondencia','tipo_correspondencia','vigilante','fechahora_recibo','fechahora_entrega','interior','apartamento',)
+        exclude = ('id')
 
-class CorrespondenciaAdmin(admin.ModelAdmin):
+@ admin.register (Correspondencia)
+class Correspondencia(ImportExportModelAdmin):
     list_display= ('id','remitente','destinatario','clase_correspondencia','tipo_correspondencia','vigilante','fechahora_recibo','fechahora_entrega','interior','apartamento',)
     list_filter=('remitente','destinatario','clase_correspondencia','tipo_correspondencia','vigilante','fechahora_recibo','fechahora_entrega','interior','apartamento',)
+    list_per_page = 15
 
-admin.site.register(Correspondencia, CorrespondenciaAdmin)
+class ZonaComunResource(resources.ModelResource):
+    class Meta:
+        model = ZonaComun
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('id','foto','descripcion','observaciones')
+        exclude = ('id')
 
-
-class ZonaComunAdmin(admin.ModelAdmin):
+@ admin.register (ZonaComun)
+class ZonaComun(ImportExportModelAdmin):
     list_display= ('id','foto','descripcion','observaciones')
     list_filter=('descripcion',)
+    list_per_page = 15
 
-admin.site.register(ZonaComun, ZonaComunAdmin)
 
-class ClasificadoAdmin(admin.ModelAdmin):
-    list_display= ('id','foto','title','content','user','created','updated')
-    list_filter=('user','created','updated')
-
-admin.site.register(Clasificado, ClasificadoAdmin)
-
-class UserPerfilAdmin(admin.ModelAdmin):
+""" class UserPerfilAdmin(admin.ModelAdmin):
     list_display= ('id','interior','apartamento')
     list_filter=('interior','apartamento')
 
-admin.site.register(UserPerfil, UserPerfilAdmin)
+admin.site.register(UserPerfil, UserPerfilAdmin) """
 
-class TipoAutorizaAdmin(admin.ModelAdmin):
+class TipoAutorizaResource(resources.ModelResource):
+    class Meta:
+        model = TipoAutoriza
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('id','descripcion',)
+        exclude = ('id')
+
+@ admin.register (TipoAutoriza)
+class TipoAutoriza(ImportExportModelAdmin):
     list_display= ('id','descripcion',)
     list_filter=('descripcion',)
+    list_per_page = 15
 
-admin.site.register(TipoAutoriza, TipoAutorizaAdmin)
-
-class PlataformaWebPeatonalAdmin(admin.ModelAdmin):
+""" class PlataformaWebPeatonalAdmin(admin.ModelAdmin):
     list_display= ('id','identificacion','nombre','fecha_inicial','fecha_final','interior','apartamento','tipo_plataforma')
     list_filter=('identificacion','nombre','fecha_inicial','fecha_final','interior','apartamento','tipo_plataforma')
 
@@ -206,73 +273,144 @@ class PlataformaWebVehiculoAdmin(admin.ModelAdmin):
     list_display= ('id','placa','nombre','fecha_inicial','fecha_final','interior','apartamento','tipo_plataforma')
     list_filter=('placa','nombre','fecha_inicial','fecha_final','interior','apartamento','tipo_plataforma')
 
-admin.site.register(PlataformaWebVehiculo, PlataformaWebVehiculoAdmin)
+admin.site.register(PlataformaWebVehiculo, PlataformaWebVehiculoAdmin) """
 
-class TipoIdentificacionAdmin(admin.ModelAdmin):
+class TipoIdentificacionResource(resources.ModelResource):
+    class Meta:
+        model = TipoIdentificacion
+        skip_unchanged = True
+        report_skipped = True
+        fields = ('id','descripcion')
+        exclude = ('id')
+
+@ admin.register (TipoIdentificacion)
+class TipoIdentificacion(ImportExportModelAdmin):
     list_display= ('id','descripcion',)
     list_filter=('descripcion',)
+    list_per_page = 15
 
-admin.site.register(TipoIdentificacion,TipoIdentificacionAdmin)
+class TipoActivoResource(resources.ModelResource):
+    class Meta:
+        model = TipoActivo
+        skip_unchanged = True
+        report_skipped = True
+        fields = ('id','descripcion')
+        exclude = ('id')
 
-class TipoActivoAdmin(admin.ModelAdmin):
+@ admin.register (TipoActivo)
+class TipoActivo(ImportExportModelAdmin):
     list_display= ('id','descripcion',)
     list_filter=('descripcion',)
+    list_per_page = 15
 
-admin.site.register(TipoActivo,TipoActivoAdmin)
 
-class ActivoFijoAdmin(admin.ModelAdmin):
+class ActivoFijoResource(resources.ModelResource):
+    class Meta:
+        model = ActivoFijo
+        skip_unchanged = True
+        report_skipped = True
+        fields = ('id','nombre','tipo_activo','descripcion','marca','serial','foto','valor_libros','cantidad','mantenimiento','frecuencia_mantenimiento','ultimo_mantenimiento','placa_numero')
+        exclude = ('id')
+
+@ admin.register (ActivoFijo)
+class ActivoFijo(ImportExportModelAdmin):
     list_display= ('id','nombre','tipo_activo','descripcion','marca','serial','foto','valor_libros','cantidad','mantenimiento','frecuencia_mantenimiento','ultimo_mantenimiento','placa_numero')
     list_filter=('nombre','tipo_activo','marca','serial','mantenimiento','ultimo_mantenimiento','placa_numero')
+    list_per_page = 15
 
-admin.site.register(ActivoFijo,ActivoFijoAdmin)
 
-class ProveedorAdmin(admin.ModelAdmin):
+class ProveedorResource(resources.ModelResource):
+    class Meta:
+        model = Proveedor
+        skip_unchanged = True
+        report_skipped = True
+        fields = ('id','cc_nit','tipo_identificacion','servicio_provee','nombre','telefono','celular','direccion','email','persona_contacto','telefono_contacto','celular_contacto','email_contacto')
+        exclude = ('id')
+
+@ admin.register (Proveedor)
+class Proveedor(ImportExportModelAdmin):
     list_display= ('id','cc_nit','tipo_identificacion','servicio_provee','nombre','telefono','celular','direccion','email','persona_contacto','telefono_contacto','celular_contacto','email_contacto')
     list_filter=('nombre','servicio_provee')
+    list_per_page = 15
 
-admin.site.register(Proveedor,ProveedorAdmin)
+class ServicioProveedorResource(resources.ModelResource):
+    class Meta:
+        model = ServicioProveedor
+        skip_unchanged = True
+        report_skipped = True
+        fields = ('id','descripcion')
+        exclude = ('id')
 
-class ServicioProveedorAdmin(admin.ModelAdmin):
+@ admin.register (ServicioProveedor)
+class ServicioProveedor(ImportExportModelAdmin):
     list_display= ('id','descripcion',)
     list_filter=('descripcion',)
+    list_per_page = 15
 
-admin.site.register(ServicioProveedor,ServicioProveedorAdmin)
+class MantenimientoResource(resources.ModelResource):
+    class Meta:
+        model = Mantenimiento
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('id','fecha','activo_fijo','proveedor','descripcion','contrato','calificacion','terminado')
+        exclude = ('id')
 
-class MantenimientoAdmin(admin.ModelAdmin):
+@ admin.register (Mantenimiento)
+class Mantenimiento(ImportExportModelAdmin):
     list_display= ('id','fecha','activo_fijo','proveedor','descripcion','contrato','calificacion','terminado')
     list_filter=('fecha','activo_fijo','proveedor','descripcion','contrato','calificacion','terminado')
+    list_per_page = 15
 
-admin.site.register(Mantenimiento,MantenimientoAdmin)
 
-class ContratoAdmin(admin.ModelAdmin):
+class ContratoResource(resources.ModelResource):
+    class Meta:
+        model = Contrato
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('id','proveedor','objeto','fecha_contrato','valor','descripcion','vigencia','activo')
+        exclude = ('id')
+
+@ admin.register (Contrato)
+class Contrato(ImportExportModelAdmin):
     list_display= ('id','proveedor','objeto','fecha_contrato','valor','descripcion','vigencia','activo')
     list_filter=('proveedor','objeto','fecha_contrato','valor','descripcion','vigencia','activo')
+    list_per_page = 15
 
-admin.site.register(Contrato,ContratoAdmin)
+class MiembroConsejoResource(resources.ModelResource):
+    class Meta:
+        model = MiembroConsejo
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('id','interior','apartamento','nombre','cargo','email','envio','activo','contenido','orden')
+        exclude = ('id')
 
-class MiembroConsejoAdmin(admin.ModelAdmin):
+@ admin.register (MiembroConsejo)
+class MiembroConsejo(ImportExportModelAdmin):
     list_display= ('id','interior','apartamento','nombre','cargo','email','envio','activo','contenido','orden')
     list_filter=('nombre',)
+    list_per_page = 15
 
-admin.site.register(MiembroConsejo, MiembroConsejoAdmin)
 
-class TipoContratoAdmin(admin.ModelAdmin):
-    list_display= ('id','descripcion',)
+class TipoContratoResource(resources.ModelResource):
+    class Meta:
+        model = TipoContrato
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('id','descripcion',)
+        exclude = ('id')
+
+@ admin.register (TipoContrato)
+class TipoContrato(ImportExportModelAdmin):
+    list_display= ('descripcion',)
     list_filter=('descripcion',)
+    list_per_page = 15
 
-admin.site.register(TipoContrato,TipoContratoAdmin)
 
 class TipoPlataformaWebAdmin(admin.ModelAdmin):
     list_display= ('id','descripcion',)
     list_filter=('descripcion',)
 
 admin.site.register(TipoPlataformaWeb,TipoPlataformaWebAdmin)
-
-
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import User
-
 
 """ class PerfilInline(admin.StackedInline):
     model = UserPerfil
@@ -296,148 +434,332 @@ admin.site.register(User, UserAdmin) """
     #filter_horizontal=('solicitante',)
     #raw_id_fields=('solicitud',)
 
-class PqrAdmin(admin.ModelAdmin):
-    list_display= ('title','content','interior','apartamento','foto','order','created','updated','recibida','fecha_respuesta')
-    list_filter=('title','content','interior','apartamento','recibida','fecha_respuesta')
+class VisitanteVehiculoResource(resources.ModelResource):
+    class Meta:
+        model = VisitanteVehiculo
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('placa','identificacion','nombre')
+        exclude = ('id')
 
-admin.site.register(Pqr, PqrAdmin)
-
-class TipoPqrAdmin(admin.ModelAdmin):
-    list_display= ('id','descripcion',)
-    list_filter=('descripcion',)
-
-admin.site.register(TipoPqr, TipoPqrAdmin)
-
-class VisitanteVehiculoAdmin(admin.ModelAdmin):
+@ admin.register (VisitanteVehiculo)
+class VisitanteVehiculo(ImportExportModelAdmin):
     list_display= ('placa','identificacion','nombre')
     list_filter=('placa','identificacion')
+    list_per_page = 15
 
-admin.site.register(VisitanteVehiculo,VisitanteVehiculoAdmin)
+class AutorizacionVehiculoResource(resources.ModelResource):
+    class Meta:
+        model = AutorizacionVehiculo
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('placa','identificacion','nombre','fecha_inicial','fecha_final','interior','apartamento','tipo_autoriza')
+        exclude = ('id')
 
-class AutorizacionVehiculoAdmin(admin.ModelAdmin):
+@ admin.register (AutorizacionVehiculo)
+class AutorizacionVehiculo(ImportExportModelAdmin):
     list_display= ('placa','identificacion','nombre','fecha_inicial','fecha_final','interior','apartamento','tipo_autoriza')
     list_filter=('placa','identificacion','fecha_inicial','fecha_final','interior','apartamento',)
+    list_per_page = 15
 
-admin.site.register(AutorizacionVehiculo,AutorizacionVehiculoAdmin)
+class ProponenteResource(resources.ModelResource):
+    class Meta:
+        model = Proponente
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('cc_nit','tipo_identificacion','servicio_provee','nombre','telefono','celular','direccion','email','persona_contacto','telefono_contacto','celular_contacto','email_contacto','calificacion')
+        exclude = ('id')
 
-class ProponenteAdmin(admin.ModelAdmin):
+@ admin.register (Proponente)
+class Proponente(ImportExportModelAdmin):
     list_display= ('cc_nit','tipo_identificacion','servicio_provee','nombre','telefono','celular','direccion','email','persona_contacto','telefono_contacto','celular_contacto','email_contacto','calificacion')
     list_filter=('cc_nit','tipo_identificacion','servicio_provee','nombre','persona_contacto','calificacion')
+    list_per_page = 15
 
-admin.site.register(Proponente,ProponenteAdmin)
+class ReparacionResource(resources.ModelResource):
+    class Meta:
+        model = Reparacion
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('descripcion','valor','valor_anticipo','observacion','calificacion','fecha_terminacion','terminado')
+        exclude = ('id')
 
-class ReparacionAdmin(admin.ModelAdmin):
+@ admin.register (Reparacion)
+class Reparacion(ImportExportModelAdmin):
     list_display= ('descripcion','valor','valor_anticipo','observacion','calificacion','fecha_terminacion','terminado')
     list_filter=('fecha','proveedor','descripcion','observacion','calificacion','fecha_terminacion','terminado')
+    list_per_page = 15
 
-admin.site.register(Reparacion,ReparacionAdmin)
+class TipoProyectoResource(resources.ModelResource):
+    class Meta:
+        model = TipoProyecto
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('descripcion',)
+        exclude = ('id')
 
-class TipoProyectoAdmin(admin.ModelAdmin):
+@ admin.register (TipoProyecto)
+class TipoProyecto(ImportExportModelAdmin):
     list_display= ('descripcion',)
     list_filter=('descripcion',)
+    list_per_page = 15
 
-admin.site.register(TipoProyecto,TipoProyectoAdmin)
+class ProyectoResource(resources.ModelResource):
+    class Meta:
+        model = Proyecto
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('fecha','tipo_proyecto','descripcion','aprobado','aprobado_por','fecha_aprobacion','presupuesto')
+        exclude = ('id')
 
-class ProyectoAdmin(admin.ModelAdmin):
+@ admin.register (Proyecto)
+class Proyecto(ImportExportModelAdmin):
     list_display= ('fecha','tipo_proyecto','descripcion','aprobado','aprobado_por','fecha_aprobacion','presupuesto')
     list_filter=('fecha','tipo_proyecto','descripcion','aprobado',)
+    list_per_page = 15
 
-admin.site.register(Proyecto,ProyectoAdmin)
+class ProponenteProyectoResource(resources.ModelResource):
+    class Meta:
+        model = ProponenteProyecto
+        skip_unchanged = True
+        report_skipped = True
+        ist_display= ('proyecto','proponente','descripcion','valor','seleccionado','fecha_seleccion','votos_favor','votos_contra')
+        exclude = ('id')
 
-class ProponenteProyectoAdmin(admin.ModelAdmin):
+@ admin.register (ProponenteProyecto)
+class ProponenteProyecto(ImportExportModelAdmin):
     list_display= ('proyecto','proponente','descripcion','valor','seleccionado','fecha_seleccion','votos_favor','votos_contra')
     list_filter=('proyecto','proponente','fecha','descripcion','seleccionado','fecha_seleccion','votos_favor','votos_contra',)
+    list_per_page = 15
 
-admin.site.register(ProponenteProyecto,ProponenteProyectoAdmin)
+class ObraResource(resources.ModelResource):
+    class Meta:
+        model = Obra
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('fecha','proveedor','interventor','descripcion','contrato','valor','valor_anticipo','valor_pagado','saldo_pagar','avance_obra','fecha_terminacion','calificacion','terminada')
+        exclude = ('id')
 
-class ObraAdmin(admin.ModelAdmin):
+@ admin.register (Obra)
+class Obra(ImportExportModelAdmin):
     list_display= ('fecha','proveedor','interventor','descripcion','contrato','valor','valor_anticipo','valor_pagado','saldo_pagar','avance_obra','fecha_terminacion','calificacion','terminada')
     list_filter=('fecha','proveedor','interventor','descripcion','contrato','saldo_pagar','avance_obra','fecha_terminacion','calificacion','terminada',)
+    list_per_page = 15
 
-admin.site.register(Obra,ObraAdmin)
+class AvanceObraResource(resources.ModelResource):
+    class Meta:
+        model = AvanceObra
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('obra','fecha','descripcion','valor','porcentaje_avance')
+        exclude = ('id')
 
-class AvanceObraAdmin(admin.ModelAdmin):
+@ admin.register (AvanceObra)
+class AvanceObra(ImportExportModelAdmin):
     list_display= ('obra','fecha','descripcion','valor','porcentaje_avance')
     list_filter=('obra','fecha','descripcion','valor','porcentaje_avance',)
+    list_per_page = 15
 
-admin.site.register(AvanceObra,AvanceObraAdmin)
+class ReunionConsejoResource(resources.ModelResource):
+    class Meta:
+        model = ReunionConsejo
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('fecha','contenido','numero_acta','hora_inicio','hora_final')
+        exclude = ('id')
 
-class ReunionConsejoAdmin(admin.ModelAdmin):
+@ admin.register (ReunionConsejo)
+class ReunionConsejo(ImportExportModelAdmin):
     list_display= ('fecha','contenido','numero_acta','hora_inicio','hora_final')
     list_filter=('fecha','contenido','numero_acta',)
+    list_per_page = 15
 
-admin.site.register(ReunionConsejo,ReunionConsejoAdmin)
 
-class CompromisoConsejoAdmin(admin.ModelAdmin):
+class CompromisoConsejoResource(resources.ModelResource):
+    class Meta:
+        model = CompromisoConsejo
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('reunion_consejo','compromiso','cumplido','fecha_cumplido')
+        exclude = ('id')
+
+@ admin.register (CompromisoConsejo)
+class CompromisoConsejo(ImportExportModelAdmin):
     list_display= ('reunion_consejo','compromiso','cumplido','fecha_cumplido')
     list_filter=('reunion_consejo','compromiso','cumplido','fecha_cumplido',)
+    list_per_page = 15
 
-admin.site.register(CompromisoConsejo,CompromisoConsejoAdmin)
+class DecisionConsejoResource(resources.ModelResource):
+    class Meta:
+        model = DecisionConsejo
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('reunion_consejo','decision','numero_votos_favor','numero_votos_contra','numero_votos_abstencion')
+        exclude = ('id')
 
-class DecisionConsejoAdmin(admin.ModelAdmin):
+@ admin.register (DecisionConsejo)
+class DecisionConsejo(ImportExportModelAdmin):
     list_display= ('reunion_consejo','decision','numero_votos_favor','numero_votos_contra','numero_votos_abstencion')
     list_filter=('reunion_consejo','decision','numero_votos_favor','numero_votos_contra','numero_votos_abstencion',)
+    list_per_page = 15
 
-admin.site.register(DecisionConsejo,DecisionConsejoAdmin)
 
-class ComiteConvivenciaAdmin(admin.ModelAdmin):
+class MiembroComiteConvivenciaResource(resources.ModelResource):
+    class Meta:
+        model = MiembroComiteConvivencia
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('id','nombre','email','envio','publicar','comunidad')
+        exclude = ('id')
+
+@ admin.register (MiembroComiteConvivencia)
+class MienbroComiteConvivencia(ImportExportModelAdmin):
     list_display= ('id','nombre','email','envio','publicar','comunidad')
     list_filter=('nombre','email',)
+    list_per_page = 15
 
-admin.site.register(MiembroComiteConvivencia,ComiteConvivenciaAdmin)
+class MiembroStaffResource(resources.ModelResource):
+    class Meta:
+        model = MiembroStaff
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('nombre','email','envio','publicar','comunidad','foto','orden')
+        exclude = ('id')
 
-class MiembroStaffAdmin(admin.ModelAdmin):
-    list_display= ('nombre','email','envio','publicar','comunidad','foto','orden')
+@ admin.register (MiembroStaff)
+class MienbroStaff(ImportExportModelAdmin):
+    list_display= ('id','nombre','email','envio','publicar','comunidad')
     list_filter=('nombre','orden',)
+    list_per_page = 15
 
-admin.site.register(MiembroStaff,MiembroStaffAdmin)
+class InformeRevisorResource(resources.ModelResource):
+    class Meta:
+        model = InformeRevisor
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('fecha','contenido')
+        exclude = ('id')
 
-class InformeRevisorAdmin(admin.ModelAdmin):
+@ admin.register (InformeRevisor)
+class InformeRevisor(ImportExportModelAdmin):
     list_display= ('fecha','contenido')
     list_filter=('fecha','contenido',)
+    list_per_page = 15
+    
+class RecomendacionRevisorResource(resources.ModelResource):
+    class Meta:
+        model = RecomendacionRevisor
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('informe_revisor','recomendacion','cumplido','fecha_cumplido')
+        exclude = ('id')
 
-admin.site.register(InformeRevisor,InformeRevisorAdmin)
-
-class RecomendacionRevisorAdmin(admin.ModelAdmin):
+@ admin.register (RecomendacionRevisor)
+class RecomendacionRevisor(ImportExportModelAdmin):
     list_display= ('informe_revisor','recomendacion','cumplido','fecha_cumplido')
     list_filter=('informe_revisor','cumplido','fecha_cumplido')
+    list_per_page = 15
 
-admin.site.register(RecomendacionRevisor,RecomendacionRevisorAdmin)
+class TipoProcesoResource(resources.ModelResource):
+    class Meta:
+        model = TipoProceso
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('descripcion',)
+        exclude = ('id')
 
-
-class TipoProcesoAdmin(admin.ModelAdmin):
+@ admin.register (TipoProceso)
+class TipoProceso(ImportExportModelAdmin):
     list_display= ('descripcion',)
     list_filter=('descripcion',)
+    list_per_page = 15
 
-admin.site.register(TipoProceso,TipoProcesoAdmin)
+class ProcesoJuridicoResource(resources.ModelResource):
+    class Meta:
+        model = ProcesoJuridico
+        skip_unchanged = True
+        report_skipped = True
+        list_display= ('proceso_numero','tipo_proceso','fecha_inicial','abogado','demandante','demandado','juzgado','contenido','interior','apartamento','fecha_final','valor_demanda','activo')
+        exclude = ('id')
 
-fields = ['proceso_numero','tipo_proceso','fecha_inicial','abogado','demandante','demandado','juzgado','contenido','interior','apartamento','fecha_final','valor_demanda','activo']
-
-class ProcesoJuridicoAdmin(admin.ModelAdmin):
+@ admin.register (ProcesoJuridico)
+class ProcesoJuridico(ImportExportModelAdmin):
     list_display= ('proceso_numero','tipo_proceso','fecha_inicial','abogado','demandante','demandado','juzgado','contenido','interior','apartamento','fecha_final','valor_demanda','activo')
     list_filter=('proceso_numero','tipo_proceso','fecha_inicial','demandado')
+    list_per_page = 15
 
-admin.site.register(ProcesoJuridico,ProcesoJuridicoAdmin)
+class GestionProcesoJuridicoResource(resources.ModelResource):
+    class Meta:
+        model = GestionProcesoJuridico
+        skip_unchanged = True
+        report_skipped = True
+        list_display=('fecha','titulo','proceso_juridico','gestion')
+        exclude = ('id')
 
-class GestionProcesoJuridicoAmin(admin.ModelAdmin):
+@ admin.register (GestionProcesoJuridico)
+class GestionProcesoJuridico(ImportExportModelAdmin):
     list_display=('fecha','titulo','proceso_juridico','gestion')
     list_filter=('proceso_juridico','fecha','titulo')
+    list_per_page = 15
 
-admin.site.register(GestionProcesoJuridico,GestionProcesoJuridicoAmin)   
 
-class TipoAsambleaAdmin(admin.ModelAdmin):
+class TipoAsambleaResource(resources.ModelResource):
+    class Meta:
+        model = TipoAsamblea
+        skip_unchanged = True
+        report_skipped = True
+        list_display=('descripcion',)
+        exclude = ('id')
+
+@ admin.register (TipoAsamblea)
+class TipoAsamblea(ImportExportModelAdmin):
     list_display=('descripcion',)
     list_filter=('descripcion',)
+    list_per_page = 15
 
-admin.site.register(TipoAsamblea,TipoAsambleaAdmin)
 
-class AsambleaAdmin(admin.ModelAdmin):
+class AsambleaResource(resources.ModelResource):
+    class Meta:
+        model = Asamblea
+        skip_unchanged = True
+        report_skipped = True
+        list_display=('fecha','tipo_asamblea','contenido','hora_inicio','hora_final','numero_acta')
+        exclude = ('id')
+
+@ admin.register (Asamblea)
+class Asamblea(ImportExportModelAdmin):
     list_display=('fecha','tipo_asamblea','contenido','hora_inicio','hora_final','numero_acta')
     list_filter=('fecha','tipo_asamblea','numero_acta')
+    list_per_page = 15
 
-admin.site.register(Asamblea,AsambleaAdmin)
+class DecisionAsambleaResource(resources.ModelResource):
+    class Meta:
+        model = DecisionAsamblea
+        skip_unchanged = True
+        report_skipped = True
+        list_display=('asamblea','decision','numero_votos_favor','numero_votos_contra')
+        exclude = ('id')
 
-class DecisionAsambleaAdmin(admin.ModelAdmin):
+@ admin.register (DecisionAsamblea)
+class DecisionAsamblea(ImportExportModelAdmin):
     list_display=('asamblea','decision','numero_votos_favor','numero_votos_contra')
     list_filter=('asamblea','decision')
-admin.site.register(DecisionAsamblea,DecisionAsambleaAdmin)    
+    list_per_page = 15
+
+class ReservasResource(resources.ModelResource):
+    class Meta:
+        model = Reservas
+        skip_unchanged = True
+        report_skipped = True
+        list_display=('fecha','zona_comun','hora_inicio','hora_final','estado','anexo_pago','confirmada')
+        exclude = ('id')
+
+@ admin.register (Reservas)
+class Reservas(ImportExportModelAdmin):
+    list_display=('fecha','zona_comun','hora_inicio','hora_final','estado','anexo_pago','confirmada')
+    list_filter=('fecha','zona_comun','estado','anexo_pago','confirmada')
+    list_per_page = 15
+
+
+
+ 

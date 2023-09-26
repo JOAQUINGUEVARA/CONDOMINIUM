@@ -20,16 +20,16 @@ urlpatterns = [
     path('home/',view.BaseHomePageView.as_view(), name="home"),
     path('',view.UserHomeView,name='user_home'),
     path('user_home/<int:tipo_usuario>/',view.UserHomeView,name='user_home'),
-    #path("pwa", include("pwa.urls")),
     path('main/',view.MainView, name="main" ),
     path('registro/',views.login_request, name="registro" ),
     path('registro_residentes/',views.RegistroResidenteView, name="registro_residentes" ),
-    #path('registro_vigilante/',views.RegistroVigilanteView, name="registro_vigilante" ),
-    path('solicitud_token/',views.SolicitudTokenView, name="solicitud_token" ),
+    path('registro_vigilante/',views.RegistroVigilanteView, name="registro_vigilante" ),
+    path('solicitud_token_residente/',views.SolicitudTokenResidenteView, name="solicitud_token_residente" ),
+    path('solicitud_token_vigilante/',views.SolicitudTokenVigilanteView, name="solicitud_token_vigilante" ),
     path('sign_up_residente/<int:id>/',view.SignUpResidenteView.as_view(),name='sign_up_residente'),
-    path('sign_up_vigilante/',view.SignUpVigilanteView.as_view(),name='sign_up_vigilante'),
+    path('sign_up_vigilante/<int:id>/',view.SignUpVigilanteView.as_view(),name='sign_up_vigilante'),
     #path('', include(('accounts.urls', 'accounts'), namespace='accounts')),
-    path('accounts/', include('django.contrib.auth.urls')),
+    #path('accounts/', include('django.contrib.auth.urls')),
     #path('accounts/', include ('accounts.urls', namespace='accounts')),
     #path('profiles/', include('profiles.urls')),
     #path('sign_in', SignInView.as_view(), name='sign_in'),
@@ -148,8 +148,10 @@ urlpatterns = [
 
    path('informacion_general',view.InformacionGeneralView.as_view(), name="informacion_general"),
     
-    path('activos_fijos_lista',view.ActivosFijosListaView, name="activos_fijos_lista"),
+    path('activos_fijos_lista/',view.ActivosFijosListaView, name="activos_fijos_lista"),
     path('crea_activo_fijo',view.CreaActivoFijoView.as_view(), name="crea_activo_fijo"),
+    #path('guarda_datos_activos_fijos',view.GuardaDatosActivosFijosView, name="guarda_datos_activos_fijos"),
+    #path('datos_activos_fijos',view.DatosActivosFijos, name="datos_activos_fijos"),
     path('edita_activo_fijo/<int:pk>/',view.EditaActivoFijoView.as_view(), name="edita_activo_fijo"),
     path('borra_activo_fijo/<int:pk>/',view.BorraActivoFijoView.as_view(), name="borra_activo_fijo"),
     #path('activos_fijos_uno/<int:id>/',view.ActivosFijosUnoView, name="activos_fijos_uno"),
@@ -168,9 +170,12 @@ urlpatterns = [
     
     path('crea_baja_activo/',view.CreaBajaActivoView.as_view(),name='crea_baja_activo'),
     path('bajas_activos_lista',view.BajasActivosListaView, name="bajas_activos_lista"),
+    path('direcciona_crea_bajas/',view.DireccionaCreaBajasView,name='direcciona_crea_bajas'),
     path('reporte_bajas_activos_fijos_pdf/<int:id>/<int:tipo_rep>',view.ReporteBajasActivosFijosPdfView,name='reporte_bajas_activos_fijos_pdf'),
     path('paginas_reporte_bajas_pdf_activos_fijos/<int:pagina>',view.PaginasReporteBajasActivosFijosPdfView,name='paginas_reporte_bajas_pdf_activos_fijos'),
     path('borra_baja_activo_fijo/<int:pk>/',view.BorraBajaActivoFijoView.as_view(), name="borra_baja_activo_fijo"),
+    path('devolucion_activo_fijo/<int:pk>/',view.DevolucionActivoFijoView.as_view(),name='devolucion_activo_fijo'),
+    path('direcciona_devolucion_activo',view.DireccionaDevolucionActivosView,name='direcciona_devolucion_activo'),
 
     
     #path('reporte_prestamos_activos_fijos_xls',view.ReportePrestamosActivosXLSView, name="reportes_prestamos_activos_fijos_xls"),
@@ -178,6 +183,7 @@ urlpatterns = [
     path('lista_mantenimientos',view.MantenimientosListaView,name='lista_mantenimientos'),
     path('mantenimientos_detalle/<int:id>/',view.MantenimientosDetalleView,name='mantenimientos_detalle'),
     path('crea_mantenimiento/',view.CreaMantenimientoView.as_view(),name='crea_mantenimiento'),
+    path('direcciona_crea_mantenimiento/',view.DireccionaCreaMantenimientoView,name='direcciona_crea_mantenimiento'),
     path('edita_mantenimiento/<int:pk>/',view.EditaMantenimientoView.as_view(),name='edita_mantenimiento'),
     path('borra_mantenimiento/<int:pk>/',view.BorraMantenimientoView.as_view(),name='borra_mantenimiento'),
     path('activo_mantenimientos/<int:pk>/',view.ActivoMantenimientos,name='activo_mantenimientos'),
@@ -208,6 +214,8 @@ urlpatterns = [
     path('reporte_proyectos_xls',view.ReporteProyectosXlsView,name='reporte_proyectos_xls'),
     path('reporte_proyectos_pdf',view.ReporteProyectosPdfView,name='reporte_proyectos_pdf'),
     path('paginas_reporte_proyectos_pdf/<int:pagina>',view.PaginasReporteProyectosPdfView,name='paginas_reporte_proyectos_pdf'),
+    path('direcciona_proyecto',view.DireccionaProyectoView,name='direcciona_proyecto'),
+    
     
     #path('pasa_proponente_a_proveedor/'.view.PasaProponenteProveedorView,name='pasa_proponente_a_proveedor'),
 
@@ -358,16 +366,16 @@ urlpatterns = [
     path('importar_xls_residentes',views.import_xls_residentes,name='importar_xls_residentes'),
     path('importar_xls_parqueaderos',views.import_xls_parqueaderos,name='importar_xls_parqueaderos'),
     
-    path('crea_parqueadero/<int:idinterior>/<int:idapartamento>/',view.CrearParqueaderoView.as_view(),name='crea_parqueadero'),
+    path('crea_parqueadero/',view.CrearParqueaderoView.as_view(),name='crea_parqueadero'),
     path('borrar_parqueadero/<int:id>/',view.BorrarParqueaderoView,name='borrar_parqueadero'),
     path('editar_parqueadero/<int:pk>/',view.EditarParqueaderoView.as_view(),name='editar_parqueadero'),
     
-    path('crea_vehiculo/<int:idinterior>/<int:idapartamento>/',view.CrearVehiculoView.as_view(),name='crea_vehiculo'),
+    path('crea_vehiculo/',view.CrearVehiculoView.as_view(),name='crea_vehiculo'),
     path('borrar_vehiculo/<int:id>',view.BorraVehiculoView,name='borrar_vehiculo'),
     path('editar_vehiculo/<int:pk>/',view.EditarVehiculoView.as_view(),name='editar_vehiculo'),
 
-    path('crea_mascota/<int:idinterior>/<int:idapartamento>/',view.CrearMascotaView.as_view(),name='crea_mascota'),
-    path('borrar_mascota/<int:id>/',view.BorrarParqueaderoView,name='borrar_mascota'),
+    path('crea_mascota/',view.CrearMascotaView.as_view(),name='crea_mascota'),
+    path('borrar_mascota/<int:id>/',view.BorraMascotaView,name='borrar_mascota'),
     path('editar_mascota/<int:pk>/',view.EditarMascotaView.as_view(),name='editar_mascota'),
 
     path('pagina_informacion_residentes',views.PaginaInformacionResidentesView.as_view(),name='pagina_informacion_residentes'),
@@ -377,6 +385,7 @@ urlpatterns = [
     path('solicitudes_residentes_uno/<int:id>/',views.SolicitudesResidentesUnoView,name='solicitudes_residentes_uno'),
     #path('informacion_solicitudes_residentes',views.InformacionSolicitudesResidentesView,name='informacion_solicitudes_residentes'),
     path('informacion_residente_detalle/<int:id>/',views.InformacionResidenteDetalleView,name='informacion_residente_detalle'),
+    path('direcciona_informacion_residente_detalle/',views.DireccionaInformacionResidenteDetalleView,name='direcciona_informacion_residente_detalle'),
     #path('informacion_residente/<int:id>',view.InformacionResidenteView.as_view(),name='informacion_residente'),ajax_switch_envio_staff
     #path('crear_residente_uno',view.CrearResidenteUnoView.as_view(),name='crear_residente_uno'),
     path('crea_residente',view.CrearResidenteView.as_view(),name='crea_residente'),
@@ -386,6 +395,7 @@ urlpatterns = [
     path('borrar_residente/<int:id>/',view.BorrarResidenteView,name='borrar_residente'),
     path('seleccion_filtro_apartamento_residentes',view.SeleccionParametroApartamentoResidentesView,name='seleccion_filtro_apartamento_residentes'),
     path('informacion_residentes_filtro_apartamento/',view.InformacionResidentesFiltroApartamentoView,name='informacion_residentes_filtro_apartamento'),
+    path('redirecciona_informacion_residentes',view.RedireccionaInformacionResidentesView,name='redirecciona_informacion_residentes'),
     
     path('seleccion_email_anexo/<int:id>/<int:tipomail>',view.SeleccionEmailAnexoView,name='seleccion_email_anexo'),
     path('envio_email_residentes_filtro',view.EnvioEmailResidentesFiltroView.as_view(),name='envio_email_residentes_filtro'),
@@ -439,10 +449,10 @@ urlpatterns = [
     
     #path('guardar_foto',view.GuardarFoto, name="guardar_foto"),
     #path('ver_foto',view.VerFoto, name="ver_foto"),
-    path('ver_foto_vehiculo',view.VerFotoVehiculo, name="ver_foto_vehiculo"),
+    #path('ver_foto_vehiculo',view.VerFotoVehiculo, name="ver_foto_vehiculo"),
     
     path('pagina_consejo',view.PaginaConsejoView.as_view(),name='pagina_consejo'),
-    path('lista_reuniones_consejo',view.ListaReunionConsejoView,name='lista_reuniones_consejo'),
+    path('lista_reuniones_consejo/<int:page>/',view.ListaReunionesConsejoView,name='lista_reuniones_consejo'),
     path('crea_reunion_consejo/',view.CreaReunionConsejoView.as_view(),name='crea_reunion_consejo'),
     path('edita_reunion_consejo/<int:pk>/',view.EditaReunionConsejoView.as_view(),name='edita_reunion_consejo'),
     path('borra_reunion_consejo/<int:pk>/',view.BorraReunionConsejoView.as_view(),name='borra_reunion_consejo'),
@@ -472,8 +482,12 @@ urlpatterns = [
     path('crea_compromiso_consejo/<int:id>/',view.CreaCompromisoConsejoView.as_view(),name='crea_compromiso_consejo'),
     path('borra_compromiso_consejo/<int:pk>/',view.BorraCompromisoConsejoView.as_view(),name='borra_compromiso_consejo'),
     path('edita_compromiso_consejo/<int:pk>/',view.EditaCompromisoConsejoView.as_view(),name='edita_compromiso_consejo'),
-    path('compromiso_detalle/<int:id>/',view.CompromisoDetalleView,name='compromiso_detalle'),
+    #path('compromiso_detalle/<int:id>/',view.CompromisoDetalleView,name='compromiso_detalle'),
     path('aplica_compromiso_consejo/<int:pk>/',view.AplicaCompromisoConsejoView.as_view(),name='aplica_compromiso_consejo'),
+    path('direcciona_reunion_consejo_compromiso',view.DireccionaReunionConsejoCompromiso,name='direcciona_reunion_consejo_compromiso'),
+    path('direcciona_reunion_consejo_decision',view.DireccionaReunionConsejoDecision,name='direcciona_reunion_consejo_decision'),
+    path('ajax_guarda_id_decision_reunion_consejo',view.GuardaIdDecisionReunionConsejo,name='ajax_guarda_id_decision_reunion_consejo'),
+    path('ajax_guarda_id_compromiso_reunion_consejo',view.GuardaIdCompromisoReunionConsejo,name='ajax_guarda_id_compromiso_reunion_consejo'),
 
 
     path('borra_anexo_reunion_consejo/<int:pk>/',view.BorraAnexoReunionConsejoView.as_view(),name='borra_anexo_reunion_consejo'),
@@ -502,10 +516,11 @@ urlpatterns = [
     path('ajax_switch_publicar_consejero/',view.ajaxSwitchPublicarConsejeroView,name='ajax_switch_publicar_consejero'),
     path('ajax_switch_comunidad_consejero/',view.ajaxSwitchComunidadConsejeroView,name='ajax_switch_comunidad_consejero'),
     
-    path('lista_informes_revisor',view.ListaInformesRevisorView,name='lista_informes_revisor'),
+    path('lista_informes_revisor/<int:page>/',view.ListaInformesRevisorView,name='lista_informes_revisor'),
     path('informe_revisor_detalle/<int:id>/',view.InformeRevisorDetalleView,name='informe_revisor_detalle'),
     path('informe_revisor_contenido/<int:id>/',view.InformeRevisorContenidoView,name='informe_revisor_contenido'),
     path('crea_informe_revisor',view.CreaInformeRevisorView.as_view(),name='crea_informe_revisor'),
+    path('direcciona_informe_revisor',view.DireccionaInformeRevisorView,name='direcciona_informe_revisor'),
     path('edita_informe_revisor/<int:pk>/',view.EditaInformeRevisorView.as_view(),name='edita_informe_revisor'),
     path('borra_informe_revisor/<int:pk>/',view.BorraInformeRevisorView.as_view(),name='borra_informe_revisor'),
     #path('imprimir_informe_revisor/<int:id>/',view.MensajePaginaEnConstruccionView,name='imprimir_informe_revisor'),
@@ -514,11 +529,11 @@ urlpatterns = [
     path('recomendacion_detalle/<int:id>/',view.RecomendacionDetalleView,name='recomendacion_detalle'),
     path('reporte_informe_revisor_xls',view.ReporteInformeRevisorXlsView,name='reporte_informe_revisor_xls'),
     path('reportes_informe_revisor_pdf/',view.ReportesInformeRevisorPdfView.as_view(),name='reportes_informe_revisor_pdf'),
-    path('reporte_informe_revisor_pdf/<int:tipo>/',view.ReporteInformeRevisorPdfView,name='reporte_informe_revisor_pdf'),
+    path('reporte_informe_revisor_pdf/<int:tipo>/<int:estado>',view.ReporteInformeRevisorPdfView,name='reporte_informe_revisor_pdf'),
     path('paginas_informe_revisor_pdf/<int:pagina>/<int:tipo>/',view.PaginasReporteInformeRevisorPdfView,name='paginas_informe_revisor_pdf'),
     path('ajax_guarda_id_informe',view.AjaxGuardaIdInformeView,name='ajax_guarda_id_informe'),
 
-    path('lista_asambleas',view.ListaAsambleaView,name='lista_asambleas'),
+    path('lista_asambleas/<int:page>/',view.ListaAsambleaView,name='lista_asambleas'),
     path('crea_asamblea/',view.CreaAsambleaView.as_view(),name='crea_asamblea'),
     path('edita_asamblea/<int:pk>/',view.EditaAsambleaView.as_view(),name='edita_asamblea'),
     path('borra_asamblea/<int:pk>/',view.BorraAsambleaView.as_view(),name='borra_asamblea'),
@@ -534,15 +549,14 @@ urlpatterns = [
     path('edita_decision_asamblea/<int:pk>/',view.EditaDecisionAsambleaView.as_view(),name='edita_decision_asamblea'),
     path('borra_decision_asamblea/<int:pk>/',view.BorraDecisionAsambleaView.as_view(),name='borra_decision_asamblea'),
     path('borra_anexo_asamblea/<int:pk>/',view.BorraAnexoAsambleaView.as_view(),name='borra_anexo_asamblea'),
-    path('publicar_asamblea/<int:id>/',view.PublicaAsambleaView,name='publicar_asamblea'),
-
+   
 
     path('crea_recomendacion_revisor/<int:id>/',view.CreaRecomendacionView.as_view(),name='crea_recomendacion_revisor'),
     path('borra_recomendacion_revisor/<int:pk>/',view.BorraRecomendacionView.as_view(),name='borra_recomendacion_revisor'),
     path('edita_recomendacion_revisor/<int:pk>/',view.EditaRecomendacionView.as_view(),name='edita_recomendacion_revisor'),
     path('aplica_recomendacion_revisor/<int:pk>/',view.AplicaRecomendacionView.as_view(),name='aplica_recomendacion_revisor'),
 
-    path('lista_procesos_juridicos',view.ListaProcesosJuridicosView,name='lista_procesos_juridicos'),
+    path('lista_procesos_juridicos/<int:page>/',view.ListaProcesosJuridicosView,name='lista_procesos_juridicos'),
     path('proceso_juridico_detalle/<int:id>/',view.ProcesoJuridicoDetalleView,name='proceso_juridico_detalle'),
     path('crea_proceso_juridico',view.CreaProcesoJuridicoView.as_view(),name='crea_proceso_juridico'),
     path('edita_proceso_juridico/<int:pk>/',view.EditaProcesoJuridicoView.as_view(),name='edita_proceso_juridico'),

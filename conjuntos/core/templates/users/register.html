@@ -1,11 +1,58 @@
-<h2>Registrar usuario</h2>
+<!DOCTYPE html>
+<html lang='es'>
+    
+{% extends "core/base_sin_material.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
 
-<form method="POST">
-    {{ form.as_p }}
-    {% csrf_token %}
-    <button type="submit">Registrar</button>
-</form>
+{% block content %}
+{{ form.media }}            {# Adds date-picker required JS and CSS #}
+{% load bootstrap4 %}       {# import bootstrap4/bootstrap3 #}
+{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
 
-<hr />
+{% load static %}    
 
-<a href="/login">Iniciar sesión</a>
+<style>
+    
+    label{color: black;
+        font-size: 1.5em;    
+    }
+    .form-text{
+        font-size: 1em;
+    }
+</style>
+<!DOCTYPE html>
+<html lang='es'>
+
+<head>
+    <link href="{% static 'core/css/main.css' %}" rel="stylesheet">
+</head>
+
+    <div style="margin-top:20px" class="container-doc">
+        <div class="col-md-6 mx-auto mb-6">
+            <div class="titulo">
+                <h3>REGISTRO</h3>
+            </div>
+            </br>
+            <div class="container">
+                <form role="form" method="post" href = "{% url 'user_home' tipo_usuario=0 %}">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <!-- <a id='bntGuardar' class="btn btn-primary btn-xl">Regresar</a> -->
+                    <button id="btnGuardar" type="submit" class="btn btn-primary" value="Submit" >Guardar</button>
+                    <button id="btnSalir" class="btn btn-warning" data-dismiss="modal">Salir</button>
+                </form>
+            </div>
+        </div>    
+    </div>
+
+{% block javascript %}
+    <script>
+        $(document).on("click","#btnSalir", function(e) {
+              window.location.href = "{% url 'user_home' tipo_usuario=0 %}";
+        })
+    </script>
+
+{% endblock %}
+{% endblock %}

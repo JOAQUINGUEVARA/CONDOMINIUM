@@ -55,12 +55,13 @@
             </div>
         </div>    
     </div>
-</main>        
+</main>
+        
 {% block javascript %}
 <script>
 
     $(document).on("click","#btnSalir", function(e) {
-    window.location.href = "{% url 'lista_mantenimientos' %}";
+    window.location.href = "{% url 'direcciona_crea_mantenimiento' %}";
               })
     $(document).ready(function(){
     $('#id_fecha').datepicker();
